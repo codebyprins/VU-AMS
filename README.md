@@ -7,6 +7,13 @@ Herontwerpen en verbeteren van de bestaande website.
 - Vite
 - Docker/localWP
 
+## WordPress plugins
+- Classic editor
+- ACF
+- Fastest WP cache
+- Post Types Order
+- Duplicator
+
 ### Branches
 
 main – Deze wordt op een live omgeving gezet.
@@ -19,7 +26,7 @@ hotfix/xyz – Snelle fixes van features.
 
 ### Workflow
 npm run build
-Feature -> testen -> Develop -> testen -> Main -> testen
+Feature -> testen -> Develop -> testen -> Main -> testen -> edit app.css versie nummer -> live
 
 ### Branch Naming Convention:
 
