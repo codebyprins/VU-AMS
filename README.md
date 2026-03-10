@@ -2,6 +2,10 @@
 Herontwerpen en verbeteren van de bestaande website.
 
 ## Languages and Tools
+- WordPress
+- Tailwind v3
+- Vite
+- Docker/localWP
 
 ### Branches
 
@@ -48,4 +52,4 @@ navigeer naar de folder
 npm install
 
 ### Local Development
-npm run watch
+npm run dev
