@@ -1,25 +1,26 @@
 # VU-AMS
 Herontwerpen en verbeteren van de bestaande website.
 
-## WordPress Project
-
-This repository contains a WordPress project. Use it to manage your site development, themes, and plugins.
+## Languages and Tools
 
 ### Branches
 
-main – Stable production-ready version
+main – Deze wordt op een live omgeving gezet.
 
-develop – Ongoing development
+develop – Hier komen de branches bij elkaar om getest te worden
 
-feature/xyz – New features or improvements (replace xyz with feature name)
+feature/xyz – Individuele functies (denk aan secties en algemene functies)
 
-hotfix/xyz – Quick fixes for production issues
+hotfix/xyz – Snelle fixes van features.
+
+### Workflow
+npm run build
+Feature -> testen -> Develop -> testen -> Main -> testen
 
 ### Branch Naming Convention:
 
 feature/short-description
 hotfix/short-description
-Usage
 
 ### Clone the repository:
 
@@ -31,18 +32,20 @@ Check out the branch you want to work on:
 
 git checkout develop
 
+git checkout -b <branch name>
+
 ### Make changes, commit, and push:
 
 git add .
 git commit -m "Brief description of changes"
 git push origin feature/your-feature
 
-Create a pull request to merge changes into develop or main as appropriate.
+Maak een pull request om naar Develop of Main te pushen, voeg er tenminste 1 andere developer aan om het te reviewen.
 
-### Notes
+### Project setup
+git clone in de theme folder van een WordPress project
+navigeer naar de folder
+npm install
 
-Keep main stable; never commit directly.
-
-Use descriptive commit messages.
-
-Regularly pull updates from develop to stay up-to-date.
+### Local Development
+npm run watch
