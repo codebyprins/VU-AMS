@@ -1,0 +1,9 @@
+{
+  "apiVersion": 2,
+  "name": "vu-ams/header-hero",
+  "title": "Header Hero",
+  "category": "design",
+  "icon": "layout",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

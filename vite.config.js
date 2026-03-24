@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     watch: { usePolling: true },
-    cors: true, // allow WordPress (localhost:8000) to access HMR
+    cors: true,
     hmr: {
       host: 'localhost',
       port: 5173,

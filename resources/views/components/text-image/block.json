@@ -1,0 +1,15 @@
+{
+  "apiVersion": 2,
+  "name": "vu-ams/text-image",
+  "title": "Text Image",
+  "category": "vu-ams",
+  "icon": "layout",
+  "description": "Custom text image block",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "attributes": {
+    "title": { "type": "string" },
+    "text": { "type": "string" },
+    "image": { "type": "string" }
+  }
+}

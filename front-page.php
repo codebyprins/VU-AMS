@@ -1,14 +1,17 @@
-<?php get_header(); 
+<?php get_header();
 ?>
+<!-- wp:group {"templateLock":"all"} -->
 
-<section class="max-w-4xl mx-auto p-10">
-    <h1 class="text-3xl text-red-400 font-bold mb-4">
-        Hello Tailwind + WordPress
-    </h1>
-
-    <p class="text-blue">
-        It works. Meep
-    </p>
-</section>
-
-<?php get_footer(); ?>
+<div class="wp-block-group">
+    Content for the front page goes here. You can edit this file at <code>front-page.php</code> in your theme. You can also create custom blocks and add them here using the block editor.
+    <!-- Your blocks go here -->
+    <?php
+    while (have_posts()) :
+        the_post();
+        the_content();
+    endwhile;
+    ?>
+</div>
+<!-- /wp:group -->
+<?php
+get_footer(); ?>

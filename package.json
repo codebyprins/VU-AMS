@@ -6,9 +6,10 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "tailwindcss": "^3.3.3",
-    "vite": "^7.3.1",
+    "@wordpress/scripts": "^31.7.0",
+    "autoprefixer": "^10.4.27",
     "postcss": "^8.5.8",
-    "autoprefixer": "^10.4.27"
+    "tailwindcss": "^3.3.3",
+    "vite": "^7.3.1"
   }
 }
