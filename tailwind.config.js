@@ -4,6 +4,7 @@ module.exports = {
     './**/*.php',
     './resources/scripts/**/*.js',
     './resources/styles/**/*.css',
+    './blocks/**/*.php',
   ],
   theme: {
     extend: {},
