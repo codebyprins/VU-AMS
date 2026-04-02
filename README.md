@@ -3,16 +3,16 @@ Herontwerpen en verbeteren van de bestaande website.
 
 ## Languages and Tools
 - WordPress
-- Tailwind v3
+- Tailwind v3.4
 - Vite
 - Docker/localWP
 
 ## WordPress plugins
-- Classic editor
-- ACF
 - Fastest WP cache
 - Post Types Order
 - Duplicator
+- Genesis Custom Blocks
+- Yoast SEO
 
 ## Branches
 main – Deze wordt op een live omgeving gezet.
