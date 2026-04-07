@@ -11,7 +11,8 @@ Herontwerpen en verbeteren van de bestaande website.
 - Fastest WP cache
 - Post Types Order
 - Duplicator
-- Genesis Custom Blocks
+- ACF (free)
+- ACF Fontawesome
 - Yoast SEO
 
 ## Branches
