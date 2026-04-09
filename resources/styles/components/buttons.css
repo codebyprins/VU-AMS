@@ -1,4 +1,4 @@
-@layer components {
+
   .btn-primary {
     @apply inline-flex items-center px-4 py-2 rounded-lg font-medium transition bg-primary text-white hover:opacity-90;
   }
@@ -6,4 +6,3 @@
   .btn-secondary {
     @apply inline-flex items-center px-4 py-2 rounded-lg font-medium transition bg-secondary text-white hover:opacity-90;
   }
-}

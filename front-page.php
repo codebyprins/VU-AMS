@@ -1,6 +1,21 @@
 <?php get_header(); ?>
+<?php get_template_part('resources/views/sections/vb-section'); ?>
+<?php if (have_rows('flexible_blocks')): ?>
+    <?php while (have_rows('flexible_blocks')): the_row(); ?>
 
-<h1 class="text-3xl font-bold">Hello World</h1>
-<button class="btn btn-primary">Click me</button>
+        <?php
+        $layout = get_row_layout();
+
+        if ($layout == 'voorbeeld_1') :
+          get_template_part('assets/blocks/voorbeeld_1');
+
+        elseif ($layout == 'voorbeeld_2') :
+          get_template_part('assets/blocks/voorbeeld_2');
+
+        endif;
+        ?>
+
+    <?php endwhile; ?>
+<?php endif; ?>
 
 <?php get_footer(); ?>
