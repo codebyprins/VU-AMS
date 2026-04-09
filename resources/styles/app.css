@@ -1,7 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-h1 {
-  color: pink;
-}
+@import "tailwindcss";
+
+/* Design tokens */
+@import "./base/theme.css";
+
+/* Base styles */
+@import "./base/fonts.css";
+@import "./base/reset.css";
+
+/* Components */
+@import "./components/buttons.css";
+@import "./components/cards.css";

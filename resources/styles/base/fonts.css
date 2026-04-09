@@ -1,0 +1,17 @@
+@layer base {
+  @font-face {
+    font-family: "Heebo";
+    src: url("../fonts/Heebo-VariableFont_wght.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Heebo", sans-serif;
+    color: lightgreen;
+  }
+
+  p, a, span, li {
+    font-family: "Heebo", sans-serif;
+  }
+}
