@@ -10,6 +10,30 @@
     font-family: "Heebo", sans-serif;
   }
 
+  h1 {
+    @apply text-5xl;
+  }
+
+  h2 {
+    @apply text-4xl;
+  }
+
+  h3 {
+    @apply text-[28px];
+  }
+
+  h4 {
+    @apply text-[22px];
+  }
+
+  h5 {
+    @apply text-lg;
+  }
+
+  h6 {
+    @apply text-base;
+  }
+
   p, a, span, li {
     font-family: "Heebo", sans-serif;
   }
