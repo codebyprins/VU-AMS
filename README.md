@@ -44,9 +44,9 @@ git checkout develop
 git checkout -b <branch name>
 
 ## Make changes, commit, and push:
-git add .
-git commit -m "Brief description of changes"
-git push origin feature/your-feature
+git add .  
+  git commit -m "Brief description of changes"
+  git push origin feature/your-feature
 
 Maak een pull request om naar Develop of Main te pushen, voeg er tenminste 1 andere developer aan om het te reviewen.
 
