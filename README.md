@@ -29,7 +29,7 @@ npm run build
 Feature -> testen -> Develop -> testen -> Main -> testen -> edit app.css versie nummer -> live
 
 ## Branch Naming Convention:
-feature/short-description
+feature/short-description  
 hotfix/short-description
 
 ## Clone the repository:
@@ -45,7 +45,7 @@ git checkout -b <branch name>
 
 ## Make changes, commit, and push:
 git add .  
-  git commit -m "Brief description of changes"
+  git commit -m "Brief description of changes"  
   git push origin feature/your-feature
 
 Maak een pull request om naar Develop of Main te pushen, voeg er tenminste 1 andere developer aan om het te reviewen.
