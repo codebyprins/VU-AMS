@@ -20,14 +20,17 @@ module.exports = {
       },
       padding: {
         section_base: '80px',
-        section_medium: '40px',
-        section_small: '20px',
+        section_md: '40px',
+        section_sm: '20px',
         container_base: '60px',
-        container_small: '40px',
-        container_large: '80px',
+        container_sm: '40px',
+        container_lg: '80px',
       },
       borderRadius: {
         'base': '12px',
+      },
+      backgroundImage: {
+        'primary-gradient': 'linear-gradient(90deg, #00B6CB 0%, #101935 100%)',
       },
     },
   },
