@@ -25,7 +25,8 @@ feature/xyz – Individuele functies (denk aan secties en algemene functies)
 hotfix/xyz – Snelle fixes van features.
 
 ## Workflow
-npm run build
+npm run build  
+Commit feature/something  
 Feature -> testen -> Develop -> testen -> Main -> testen -> edit app.css versie nummer -> live
 
 ## Branch Naming Convention:
