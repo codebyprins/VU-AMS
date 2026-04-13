@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        'base': '16px',
+        'h1': '48px', 
       colors: {
         primary: '#00B6CB',
         primary_light: '#ABE0E6',
@@ -31,6 +34,16 @@ module.exports = {
       },
       backgroundImage: {
         'primary-gradient': 'linear-gradient(90deg, #00B6CB 0%, #101935 100%)',
+      },
+      container: {
+        center: true,
+        screens: {
+          sm: '640px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
+          '2xl': '1280px',
+        },
       },
     },
   },
