@@ -12,4 +12,7 @@
     <header>
         
     </header>
+
+    <?php get_template_part('resources/views/components/popup-bar'); ?>
+
     <main>

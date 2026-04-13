@@ -1,1 +1,1 @@
-/* empty css   */console.log(`VU-AMS theme JS loaded!`);
+/* empty css   */document.addEventListener(`DOMContentLoaded`,()=>{let e=document.getElementById(`popup`);e&&requestAnimationFrame(()=>{e.classList.remove(`opacity-0`,`translate-y-4`),e.classList.add(`opacity-100`,`translate-y-0`)})});function e(){let e=document.getElementById(`popup`);e&&(e.classList.add(`opacity-0`,`translate-y-4`),e.classList.remove(`opacity-100`,`translate-y-0`),setTimeout(()=>{e.style.display=`none`},500))}window.closePopup=e,console.log(`VU-AMS theme JS loaded!`);
