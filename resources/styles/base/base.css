@@ -1,3 +1,14 @@
-  .section {
-    @apply mx-4;
+.section {
+  @apply mx-4;
+}
+
+
+.rich-editor {
+  ul {
+    @apply py-2 list-disc list-inside;
   }
+
+  li {
+    @apply pl-2;
+  }
+}
