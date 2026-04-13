@@ -31,6 +31,13 @@
         elseif ($layout == 'history') :
             get_template_part('resources/views/sections/history');
 
+        elseif ($layout == 'yt_iframe') :
+            get_template_part('resources/views/sections/yt_iframe');
+
+        elseif ($layout == 'product_information') :
+            get_template_part('resources/views/sections/product_information');
+
+
         endif;
         ?>
 
