@@ -31,6 +31,9 @@
         elseif ($layout == 'history') :
             get_template_part('resources/views/sections/history');
 
+        elseif ($layout == 'publications_overview') :
+            get_template_part('resources/views/sections/publications_overview');
+
         endif;
         ?>
 
