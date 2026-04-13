@@ -10,6 +10,12 @@ module.exports = {
       fontSize: {
         'base': '16px',
         'h1': '48px', 
+        'h2': '36px',
+        'h3': '30px',
+        'h4': '24px',
+        'h5': '20px',
+        'h6': '18px',
+      },
       colors: {
         primary: '#00B6CB',
         primary_light: '#ABE0E6',
@@ -17,6 +23,7 @@ module.exports = {
         secondary: '#F7C80C',
         secondary_light: '#EDE1B4',
         accent: '#101935',
+        surface: '#F3F3F3',
       },
       fontFamily: {
         sans: ['Heebo', 'sans-serif'],
