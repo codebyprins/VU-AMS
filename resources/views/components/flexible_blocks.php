@@ -36,6 +36,8 @@
         elseif ($layout == 'history') :
             get_template_part('resources/views/sections/history');
 
+        elseif ($layout == 'team-carrousel') :
+            get_template_part('resources/views/sections/team-carrousel');
         elseif ($layout == 'text_button') :
             get_template_part('resources/views/sections/text_button');
 
