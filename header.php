@@ -104,6 +104,10 @@
 
         </div>
     </header>
+
+    <?php get_template_part('resources/views/components/popup-bar'); ?>
+
+    <main>
     <div id="mobile-overlay" class="fixed inset-0 z-40 bg-gradient-to-r from-black/60 to-transparent hidden lg:hidden" aria-hidden="true"></div>
     <div id="mobile-menu" class="fixed top-0 right-0 z-50 h-full w-4/5 max-w-sm bg-gradient-to-b from-[#01B4C9] to-[#0F1733] shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col lg:hidden">
         <div class="flex items-center justify-between px-6 py-5 border-b border-white/20">
