@@ -1,2 +1,6 @@
 import '../styles/app.css';
-console.log('VU-AMS theme JS loaded!')
+import './popup-bar.js';
+import './mobile_menu.js';
+import './faq_dropdown.js';
+
+console.log('VU-AMS theme JS loaded!');
