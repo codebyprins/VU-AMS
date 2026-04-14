@@ -159,3 +159,4 @@
         </div>
     </div>
     <main>
+    <main class="min-h-full">
