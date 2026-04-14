@@ -1,11 +1,16 @@
 <?php if (have_rows('flexible_blocks')): ?>
-    <?php while (have_rows('flexible_blocks')): the_row(); ?>
+  <?php while (have_rows('flexible_blocks')): the_row(); ?>
 
-        <?php
-        $layout = get_row_layout();
+    <?php
+    $layout = get_row_layout();
+// Zorg ervoor dat de bestandnaam overeenkomt met de layout naam in ACF, bijv. 'vb_section' voor 'vb-section.php'
+    $file = "resources/views/sections/{$layout}.php";
 
-        if ($layout == 'banner') :
-            get_template_part('resources/views/sections/banner');
+    if (locate_template($file)) {
+        get_template_part("resources/views/sections/{$layout}");
+    } else {
+        echo "<strong>MISSING TEMPLATE:</strong> {$file}";
+    }
 
         elseif ($layout == 'slider') :
             get_template_part('resources/views/sections/slider');
@@ -30,6 +35,17 @@
 
         elseif ($layout == 'history') :
             get_template_part('resources/views/sections/history');
+
+        elseif ($layout == 'team-carrousel') :
+            get_template_part('resources/views/sections/team-carrousel');
+        elseif ($layout == 'text_button') :
+            get_template_part('resources/views/sections/text_button');
+
+        elseif ($layout == 'page_cards') :
+            get_template_part('resources/views/sections/page_cards');
+
+        elseif ($layout == 'product_cards') :
+            get_template_part('resources/views/sections/product_cards');
 
         elseif ($layout == 'productUSBS') :
             get_template_part('resources/views/sections/productUSBS');
