@@ -1,41 +1,51 @@
 <?php
-$f   = fn($k) => function_exists('get_field') ? get_field($k) : null;
-$img = $f('contact_image');
 
-$contact = wp_parse_args($args ?? [], [
-    'title'      => $f('contact_title')      ?: 'Lorem ipsum dolor sit amet',
-    'text'       => $f('contact_text')       ?: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    'button'     => $f('contact_button')     ?: 'Get in contact',
-    'button_url' => $f('contact_button_url') ?: '#',
-    'image_url'  => $img['url'] ?? get_template_directory_uri() . '/resources/images/contact-default.jpg',
-    'image_alt'  => $img['alt'] ?? 'Contact image',
-]);
+$img = function_exists('get_field') ? get_field('hero_image') : null;
+$acf = function_exists('get_field') ? get_field('hero_highlights') : null;
 
-$external = preg_match('#^https?://#i', $contact['button_url'])
-    && (!function_exists('home_url') || strpos($contact['button_url'], home_url()) !== 0);
+$hero = [
+    'title'     => (function_exists('get_field') && get_field('hero_title')) ?: 'Product Title',
+    'image_url' => $img['url'] ?? get_template_directory_uri() . '/resources/images/hero-default.jpg',
+    'image_alt' => $img['alt'] ?? 'Product image',
+];
+
+$lorem      = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+$fallback   = [
+    ['title' => 'Product highlight 1', 'description' => $lorem, 'icon' => 'fa-solid fa-bolt'],
+    ['title' => 'Product highlight 2', 'description' => $lorem, 'icon' => 'fa-solid fa-shield-halved'],
+    ['title' => 'Product highlight 3', 'description' => $lorem, 'icon' => 'fa-solid fa-chart-line'],
+    ['title' => 'Product highlight 4', 'description' => $lorem, 'icon' => 'fa-solid fa-headset'],
+];
+$highlights = array_slice(is_array($acf) && $acf ? $acf : $fallback, 0, 4);
+$last       = count($highlights) - 1;
 ?>
 
-<section class="py-20" aria-label="Contact">
+<section class="min-h-[78vh] bg-gradient-to-br from-slate-50 via-white to-emerald-50 py-20" aria-label="Product hero">
     <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 items-center gap-10 rounded-3xl bg-white p-6 shadow-lg ring-1 ring-slate-200/70 sm:p-8 md:grid-cols-12">
+        <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
 
-            <div class="md:col-span-5">
-                <div class="aspect-square w-full max-w-[340px] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-                    <img class="block h-full w-full object-cover"
-                         src="<?php echo esc_url($contact['image_url']); ?>"
-                         alt="<?php echo esc_attr($contact['image_alt']); ?>"
-                         loading="lazy" decoding="async">
+            <div class="space-y-8 md:pr-6">
+                <h1 class="text-4xl font-bold leading-[1.05] text-accent sm:text-5xl"><?php echo esc_html($hero['title']); ?></h1>
+                <div class="aspect-square w-full max-w-[380px] overflow-hidden rounded-3xl border-2 border-secondary bg-white p-4 shadow-lg">
+                    <img class="block h-full w-full object-contain"
+                         src="<?php echo esc_url($hero['image_url']); ?>"
+                         alt="<?php echo esc_attr($hero['image_alt']); ?>"
+                         loading="eager" fetchpriority="high" decoding="async">
                 </div>
             </div>
 
-            <div class="space-y-6 md:col-span-7">
-                <h2 class="text-3xl font-bold leading-tight text-accent sm:text-4xl"><?php echo esc_html($contact['title']); ?></h2>
-                <p class="text-base leading-relaxed text-slate-600"><?php echo esc_html($contact['text']); ?></p>
-                <a class="btn btn-primary-outline inline-flex items-center border-secondary text-secondary transition hover:bg-secondary hover:text-white"
-                   href="<?php echo esc_url($contact['button_url']); ?>"
-                   <?php echo $external ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>>
-                    <?php echo esc_html($contact['button']); ?>
-                </a>
+            <div>
+                <?php foreach ($highlights as $i => $h) : ?>
+                    <div class="py-5<?php echo $i < $last ? ' border-b border-secondary' : ''; ?>">
+                        <div class="flex items-start gap-3">
+                            <span class="<?php echo esc_attr($h['icon'] ?? 'fa-solid fa-circle-check'); ?> mt-1 text-primary" aria-hidden="true"></span>
+                            <h3 class="text-xl font-semibold text-accent"><?php echo esc_html($h['title'] ?? ''); ?></h3>
+                        </div>
+                        <?php if (!empty($h['description'])) : ?>
+                            <p class="mt-2 text-base leading-relaxed text-slate-600"><?php echo esc_html($h['description']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
         </div>
