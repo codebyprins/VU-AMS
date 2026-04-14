@@ -3,6 +3,7 @@
 
 /* Base & reset */
 @import "./base/reset.css";
+@import "./base/base.css";
 
 /* Components */
 @import "./components/buttons.css";
