@@ -40,9 +40,6 @@
         elseif ($layout == 'product_cards') :
             get_template_part('resources/views/sections/product_cards');
 
-        elseif ($layout == 'productUSBS') :
-            get_template_part('resources/views/sections/productUSBS');
-
         endif;
         ?>
 
