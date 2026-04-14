@@ -2,7 +2,6 @@
 
 $title   = get_sub_field('title_productUSBS');
 $projecthighlight    = get_sub_field('highlights_productUSBS');
-$button  = get_sub_field('button_productUSBS');
 $image = get_sub_field('image_productUSBS');
 
 ?>
