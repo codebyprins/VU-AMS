@@ -19,11 +19,11 @@
   }
 
   h3 {
-    @apply text-[28px];
+    @apply text-3xl;
   }
 
   h4 {
-    @apply text-[22px];
+    @apply text-2xl;
   }
 
   h5 {

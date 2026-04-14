@@ -12,4 +12,4 @@
     <header>
         
     </header>
-    <main>
+    <main class="min-h-full">
