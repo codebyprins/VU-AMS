@@ -11,7 +11,6 @@
     } else {
         echo "<strong>MISSING TEMPLATE:</strong> {$file}";
     }
-    ?>
 
         elseif ($layout == 'slider') :
             get_template_part('resources/views/sections/slider');
