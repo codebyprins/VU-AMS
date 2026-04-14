@@ -2,6 +2,11 @@
 $video = get_sub_field('video_file');
 $title = get_sub_field('title');
 $text  = get_sub_field('text_field');
+
+// skip hele section als alles leeg is
+if (!$video && empty($title) && empty($text)) {
+    return;
+}
 ?>
 
 <section class="relative w-screen h-screen overflow-hidden">
@@ -13,20 +18,22 @@ $text  = get_sub_field('text_field');
         </video>
     <?php endif; ?>
 
-    <div class="relative z-20 h-full flex flex-col justify-end p-10 text-white bg-gradient-to-t from-black/60 to-transparent">
+    <?php if ($title || $text): ?>
+        <div class="relative z-20 h-full flex flex-col justify-end p-10 text-white bg-gradient-to-t from-black/60 to-transparent">
 
-        <?php if ($title): ?>
-            <h1 class="text-4xl md:text-6xl font-bold">
-                <?php echo wp_kses_post($title); ?>
-            </h1>
-        <?php endif; ?>
+            <?php if ($title): ?>
+                <h1 class="text-4xl md:text-6xl font-bold">
+                    <?php echo wp_kses_post($title); ?>
+                </h1>
+            <?php endif; ?>
 
-        <?php if ($text): ?>
-            <div class="mt-4 text-base md:text-lg leading-relaxed">
-                <?php echo apply_filters('the_content', $text); ?>
-            </div>
-        <?php endif; ?>
+            <?php if ($text): ?>
+                <div class="mt-4 text-base md:text-lg leading-relaxed">
+                    <?php echo apply_filters('the_content', $text); ?>
+                </div>
+            <?php endif; ?>
 
-    </div>
+        </div>
+    <?php endif; ?>
 
 </section>
