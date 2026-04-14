@@ -1,4 +1,9 @@
 <?php
+/**
+ * Template part: Contact CTA
+ * ACF (optional): contact_title, contact_text, contact_button, contact_button_url, contact_image
+ */
+
 $f   = fn($k) => function_exists('get_field') ? get_field($k) : null;
 $img = $f('contact_image');
 
