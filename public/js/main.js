@@ -1,1 +1,1 @@
-/* empty css   */console.log(`VU-AMS theme JS loaded!`);
+/* empty css   */var e=document.getElementsByClassName(`accordion-item`);for(let t=0;t<e.length;t++)e[t].querySelector(`.accordion-header`).addEventListener(`click`,function(){let e=this.parentElement,t=e.querySelector(`.panel`),n=e.querySelector(`.icon`);e.classList.toggle(`active`),t.style.maxHeight?(t.style.maxHeight=null,n.innerHTML=`+`):(t.style.maxHeight=t.scrollHeight+`px`,n.innerHTML=`−`)});console.log(`VU-AMS theme JS loaded!`);
