@@ -10,12 +10,13 @@ $youtube_url = $link['url'];
             <iframe class="w-full h-full" src="<?php echo $youtube_url; ?>"></iframe>
         </div>
         <div class="w-full h-[190px] flex flex-col justify-center items-start mt-5">
-            <p class="w-[630px]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, sed est necessitatibus voluptatum rem sequi 
-                expedita quibusdam deleniti enim ratione quos autem adipisci, labore provident numquam. Ab illo quasi sapiente.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, sed est necessitatibus voluptatum rem sequi 
-                expedita quibusdam deleniti enim ratione quos autem adipisci, labore provident numquam. Ab illo quasi sapiente.</p>
-            <button class="border border-black rounded-lg bg-[#00B6CB] w-[150px] h-[35px] mt-3">
-                <a href="<?php echo $youtube_url; ?>" target="blank">Link to video</a>
+            <div class="w-[630px]">
+                <?php the_sub_field("text_field"); ?>
+            </div>
+            <button class="border border-black rounded-lg bg-[#00B6CB] h-[35px] mt-3 pl-2 pr-2">
+                <a href="<?php echo $youtube_url; ?>" target="_blank">
+                    <?php the_sub_field("button_text"); ?>
+                </a>
             </button>
         </div>
     </div>
