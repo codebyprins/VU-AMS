@@ -37,6 +37,8 @@
         elseif ($layout == 'product_information') :
             get_template_part('resources/views/sections/product_information');
 
+        elseif ($layout == 'video_background') :
+            get_template_part('resources/views/sections/video_background');
 
         endif;
         ?>
