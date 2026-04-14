@@ -31,6 +31,15 @@
         elseif ($layout == 'history') :
             get_template_part('resources/views/sections/history');
 
+        elseif ($layout == 'text_button') :
+            get_template_part('resources/views/sections/text_button');
+
+        elseif ($layout == 'page_cards') :
+            get_template_part('resources/views/sections/page_cards');
+
+        elseif ($layout == 'product_cards') :
+            get_template_part('resources/views/sections/product_cards');
+
         elseif ($layout == 'productUSBS') :
             get_template_part('resources/views/sections/productUSBS');
 
