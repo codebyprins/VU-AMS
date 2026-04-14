@@ -1,23 +1,11 @@
 <?php
 
-$img = function_exists('get_field') ? get_field('hero_image') : null;
-$acf = function_exists('get_field') ? get_field('hero_highlights') : null;
+$title   = get_sub_field('title_productUSBS');
+$projecthighlight    = get_sub_field('text_text_button');
+$button  = get_sub_field('button_text-button');
+$image = get_sub_field('image_productUSBS');
+$highlights = get_sub_field('highlights_productUSBS') ?: [];
 
-$hero = [
-    'title'     => (function_exists('get_field') && get_field('hero_title')) ?: 'Product Title',
-    'image_url' => $img['url'] ?? get_template_directory_uri() . '/resources/images/hero-default.jpg',
-    'image_alt' => $img['alt'] ?? 'Product image',
-];
-
-$lorem      = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-$fallback   = [
-    ['title' => 'Product highlight 1', 'description' => $lorem, 'icon' => 'fa-solid fa-bolt'],
-    ['title' => 'Product highlight 2', 'description' => $lorem, 'icon' => 'fa-solid fa-shield-halved'],
-    ['title' => 'Product highlight 3', 'description' => $lorem, 'icon' => 'fa-solid fa-chart-line'],
-    ['title' => 'Product highlight 4', 'description' => $lorem, 'icon' => 'fa-solid fa-headset'],
-];
-$highlights = array_slice(is_array($acf) && $acf ? $acf : $fallback, 0, 4);
-$last       = count($highlights) - 1;
 ?>
 
 <section class="min-h-[78vh] bg-gradient-to-br from-slate-50 via-white to-emerald-50 py-20" aria-label="Product hero">
@@ -25,11 +13,11 @@ $last       = count($highlights) - 1;
         <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
 
             <div class="space-y-8 md:pr-6">
-                <h1 class="text-4xl font-bold leading-[1.05] text-accent sm:text-5xl"><?php echo esc_html($hero['title']); ?></h1>
+                <h1 class="text-4xl font-bold leading-[1.05] text-accent sm:text-5xl"><?php echo esc_html($title); ?></h1>
                 <div class="aspect-square w-full max-w-[380px] overflow-hidden rounded-3xl border-2 border-secondary bg-white p-4 shadow-lg">
                     <img class="block h-full w-full object-contain"
-                         src="<?php echo esc_url($hero['image_url']); ?>"
-                         alt="<?php echo esc_attr($hero['image_alt']); ?>"
+                         src="<?php echo esc_url($image['url'] ?? ''); ?>"
+                         alt="<?php echo esc_attr($image['alt'] ?? ''); ?>"
                          loading="eager" fetchpriority="high" decoding="async">
                 </div>
             </div>
