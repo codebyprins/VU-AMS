@@ -1,10 +1,9 @@
 <?php
 
 $title   = get_sub_field('title_productUSBS');
-$projecthighlight    = get_sub_field('text_text_button');
-$button  = get_sub_field('button_text-button');
+$projecthighlight    = get_sub_field('highlights_productUSBS');
+$button  = get_sub_field('button_productUSBS');
 $image = get_sub_field('image_productUSBS');
-$highlights = get_sub_field('highlights_productUSBS') ?: [];
 
 ?>
 
