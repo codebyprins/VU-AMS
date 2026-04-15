@@ -1,9 +1,8 @@
 <?php
-$title = get_sub_field('title_contactCTA') ?: 'Neem contact op';
-$text = get_sub_field('text_contactCTA') ?: 'Heb je vragen?';
-$button_text = get_sub_field('button_text_contactCTA') ?: 'Neem contact op';
-$button_url = get_sub_field('button_url_contactCTA') ?: '#';
-$image = get_sub_field('image_contactCTA');
+$title = get_sub_field('title_contactcta') ?: '';
+$text = get_sub_field('text_contactcta') ?: '';
+$button = get_sub_field('button_url_contactcta') ?: '';
+$image = get_sub_field('image_contactcta');
 
 $image_url = is_array($image) && !empty($image['url'])
     ? $image['url']
@@ -34,9 +33,15 @@ $image_alt = is_array($image) && !empty($image['alt'])
                 <p class="text-base leading-relaxed text-slate-600"><?php echo esc_html($text); ?></p>
                 <a
                     class="btn btn-primary-outline inline-flex items-center border-secondary text-secondary transition hover:bg-secondary hover:text-white"
-                    href="<?php echo esc_url($button_url); ?>"
+                    href="<?php
+                        $button_url = is_array($button) ? ($button['url'] ?? '') : $button;
+                        echo esc_url($button_url);
+                    ?>"
                 >
-                    <?php echo esc_html($button_text); ?>
+                    <?php
+                        $button_text = is_array($button) ? ($button['title'] ?? 'Contact') : 'Contact';
+                        echo esc_html($button_text);
+                    ?>
                 </a>
             </div>
         </div>
