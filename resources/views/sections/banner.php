@@ -7,7 +7,7 @@ $small = get_sub_field('small');
 <section>
   <?php if ($bigsmall) : ?>
 
-    <div class="relative flex flex-col md:flex-row items-center w-full"
+    <div class="container mx-auto relative flex flex-col md:flex-row items-center w-full"
          style="min-height: 491px;">
 
       <div class="w-full md:w-1/2 flex-shrink-0 px-6 pt-8 pb-6 md:pl-[140px] md:pt-[89px] md:pb-[91px] md:pr-8">
