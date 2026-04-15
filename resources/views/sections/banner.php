@@ -7,11 +7,9 @@ $small = get_sub_field('small');
 <section>
   <?php if ($bigsmall) : ?>
 
-    <!-- Big variant -->
-    <div class="relative flex flex-col md:flex-row items-center border border-gray-200 rounded-lg overflow-hidden"
+    <div class="relative flex flex-col md:flex-row items-center w-full"
          style="min-height: 491px;">
 
-      <!-- Tekst kolom -->
       <div class="w-full md:w-1/2 flex-shrink-0 px-6 pt-8 pb-6 md:pl-[140px] md:pt-[89px] md:pb-[91px] md:pr-8">
 
         <?php if ($big['subtitle']) : ?>
@@ -41,7 +39,6 @@ $small = get_sub_field('small');
 
       </div>
 
-      <!-- Afbeelding -->
       <?php if ($big['image']) : ?>
         <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
           <img class="max-h-[220px] md:max-h-[350px] w-auto object-contain"
@@ -54,8 +51,7 @@ $small = get_sub_field('small');
 
   <?php else : ?>
 
-    <!-- Small variant -->
-    <div class="border border-gray-200 rounded-lg px-6 py-8 md:pl-[140px] md:pt-[89px] md:pb-[91px] md:pr-8">
+    <div class="px-6 py-8 md:pl-[140px] md:pt-[89px] md:pb-[91px] md:pr-8">
 
       <?php if ($small['subtitle']) : ?>
         <p class="font-sans text-[16px] md:text-[24px] text-black mb-2">
