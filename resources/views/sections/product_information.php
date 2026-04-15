@@ -2,7 +2,7 @@
 
 <?php if (have_rows('product_items')): ?>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
 
         <?php while (have_rows('product_items')): the_row();
 
@@ -14,14 +14,14 @@
             }
         ?>
 
-            <div class="accordion-item border-2 border-yellow-400 rounded-lg overflow-hidden cursor-pointer transition-colors duration-300 bg-white">
+            <div class="accordion-item border-2 border-[#01B4C9] rounded-lg overflow-hidden cursor-pointer transition-colors duration-300 bg-white">
 
                 <?php if ($title): ?>
                     <div class="accordion-header bg-[#F3F3F3] px-[18px] py-3 flex justify-between items-center hover:bg-[#d6d6d6] transition-colors duration-300">
                         <h3 class="text-gray-700 text-[15px]">
                             <?php echo esc_html($title); ?>
                         </h3>
-                        <span class="icon font-bold text-lg text-[#01B4C9]">+</span>
+                        <span class="icon font-bold text-lg text-yellow-400">+</span>
                     </div>
                 <?php endif; ?>
 
