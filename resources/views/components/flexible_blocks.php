@@ -43,6 +43,10 @@
         elseif ($layout == 'productUSBS') :
             get_template_part('resources/views/sections/productUSBS');
 
+      elseif ($layout == 'contactform') :
+            get_template_part('resources/views/sections/contactform');
+
+
         endif;
         ?>
 
