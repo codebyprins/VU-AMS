@@ -6,7 +6,6 @@ $col2 = get_field('footer_column_2', 'option');
 $col3 = get_field('footer_column_3', 'option');
 $footer_col_4 = get_field('footer_column_4', 'option');
 $newsletter = get_field('newsletter_toggle', 'option');
-var_dump($newsletter);
 
 $footer_column = $footer_col_4['newsletter_toggle'] === true
   ? 'col-span-12 sm:col-span-6 md:col-span-4'
