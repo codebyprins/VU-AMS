@@ -38,7 +38,7 @@
                                     <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>
-                            <h2 class="whitespace-nowrap text-ellipsis overflow-hidden"><?php echo the_title(); ?></h2>
+                            <h4 class="whitespace-nowrap text-ellipsis overflow-hidden"><?php echo the_title(); ?></h4>
                             <div class="publication-bottom flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                                 <p><?php echo esc_html($authors); ?></p>
                                 <div class="flex gap-5 items-center">
