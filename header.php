@@ -26,7 +26,7 @@
     <?php endif; ?>
 
     <header class="bg-gradient-to-r from-[#01B4C9] from-[62%] to-[#0F1733]">
-        <div class="container mx-auto px-6 py-6 flex items-center gap-8">
+        <div class="container mx-auto px-4 py-6 flex items-center gap-8">
             <?php
             $logo = get_field('logo', 'option');
             $logo_url = $logo ? esc_url($logo['url']) : esc_url(site_url('/wp-content/uploads/2026/04/image-1.png'));
