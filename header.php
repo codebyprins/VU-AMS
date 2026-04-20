@@ -26,7 +26,7 @@
     <?php endif; ?>
 
     <header class="bg-gradient-to-r from-[#01B4C9] from-[62%] to-[#0F1733]">
-        <div class="container mx-auto px-6 py-6 flex items-center gap-8">
+        <div class="container mx-auto px-4 py-6 flex items-center gap-8">
             <?php
             $logo = get_field('logo', 'option');
             $logo_url = $logo ? esc_url($logo['url']) : esc_url(site_url('/wp-content/uploads/2026/04/image-1.png'));
@@ -104,6 +104,9 @@
 
         </div>
     </header>
+
+    <?php get_template_part('resources/views/components/popup-bar'); ?>
+
     <div id="mobile-overlay" class="fixed inset-0 z-40 bg-gradient-to-r from-black/60 to-transparent hidden lg:hidden" aria-hidden="true"></div>
     <div id="mobile-menu" class="fixed top-0 right-0 z-50 h-full w-4/5 max-w-sm bg-gradient-to-b from-[#01B4C9] to-[#0F1733] shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col lg:hidden">
         <div class="flex items-center justify-between px-6 py-5 border-b border-white/20">
@@ -158,5 +161,4 @@
             <a href="/contact" class="block text-center btn btn-primary w-full">Get in contact</a>
         </div>
     </div>
-    <main>
     <main class="min-h-full">
