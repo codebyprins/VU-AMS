@@ -58,7 +58,7 @@ $prc_cards         = get_sub_field('product_cards');
                     transition duration-300 ease-in-out">
 
 
-              <div class="<?php echo esc_attr($is_horizontal ? 'flex flex-row' : 'flex flex-col'); ?> justify-center items- center gap-4 mb-8">
+              <div class="<?php echo esc_attr($is_horizontal ? 'flex flex-row' : 'flex flex-col'); ?> my-auto gap-4 mb-8">
 
 
                 <?php if ($has_image) : ?>
