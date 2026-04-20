@@ -9,7 +9,7 @@ const initFaqAccordion = () => {
             return;
         }
 
-        header.style.cursor = 'pointer';
+            header.style.cursor = 'pointer';
         header.setAttribute('role', 'button');
         header.setAttribute('tabindex', '0');
         header.setAttribute('aria-expanded', 'false');
@@ -39,27 +39,6 @@ const initFaqAccordion = () => {
         };
 
         const openFaq = () => {
-            faqItems.forEach((otherItem) => {
-                if (otherItem !== item) {
-                    const otherContent = otherItem.querySelector('.faq_content');
-                    const otherHeader = otherItem.querySelector('.faq_header');
-                    const otherPlus = otherItem.querySelector('.faq_icon--plus');
-                    const otherMinus = otherItem.querySelector('.faq_icon--minus');
-
-                    if (otherContent && otherHeader) {
-                        otherContent.style.maxHeight = '0';
-                        otherContent.style.opacity = '0';
-                        otherHeader.setAttribute('aria-expanded', 'false');
-                        otherItem.classList.remove('faq_open');
-
-                        if (otherPlus && otherMinus) {
-                            otherPlus.classList.remove('hidden');
-                            otherMinus.classList.add('hidden');
-                        }
-                    }
-                }
-            });
-
             const fullHeight = content.scrollHeight;
             content.style.maxHeight = `${fullHeight}px`;
             content.style.opacity = '1';
