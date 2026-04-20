@@ -40,7 +40,7 @@ module.exports = {
         'base': '12px',
       },
       backgroundImage: {
-        'primary-gradient': 'linear-gradient(90deg, #00B6CB 0%, #101935 100%)',
+        'primary-gradient': 'linear-gradient(90deg, #00B6CB 62%, #101935 100%)',
       },
       container: {
         center: true,
