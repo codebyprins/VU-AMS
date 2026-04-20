@@ -10,8 +10,7 @@
         get_template_part("resources/views/sections/{$layout}");
     } else {
         echo "<strong>MISSING TEMPLATE:</strong> {$file}";
-    }
-    ?>
+    }?>
 
     <?php endwhile; ?>
 <?php endif; ?>
