@@ -26,7 +26,7 @@ hotfix/xyz – Snelle fixes van features.
 
 ## Workflow
 npm run build  
-Commit feature/something  
+Commit feature/something > merge develop in feature/something > pull request (> fix comments)  
 Feature -> testen -> Develop -> testen -> Main -> testen -> edit app.css versie nummer -> live
 
 ## Branch Naming Convention:
