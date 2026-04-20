@@ -7,7 +7,7 @@ function custom_pagination($query) {
     $current_page = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
     $base = str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999)));
 
-    echo '<div class="pagination mt-8 flex justify-center items-center gap-2">';
+    echo '<div class="pagination md:mt-8 mt-5 flex justify-center items-center gap-2">';
 
     if ($current_page > 1) {
         $prev_link = str_replace('%#%', $current_page - 1, $base);
