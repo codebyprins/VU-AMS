@@ -30,18 +30,19 @@
         <?php foreach ($left_items as $item): ?>
             <div class="accordion-item cursor-pointer">
 
-                <div class="accordion-header px-[18px] py-4 flex justify-between items-center hover:bg-[#e1e1e1] bg-[#f3f3f3] rounded-md">
+                <div class="accordion-header px-[18px] py-4 flex justify-between items-center hover:bg-[#f3f3f3] bg-[#f3f3f3] rounded-md m-[6px]">
                     <h3 class="text-gray-700 text-[15px]">
                         <?php echo esc_html($item['title']); ?>
                     </h3>
-                    <span class="icon font-bold text-lg text-yellow-400">+</span>
+                    <span class="icon font-bold text-lg text-[#00B6CB]">+</span>
                 </div>
 
                 <?php if (!empty($item['content'])): ?>
-                    <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300">
-                        <p class="pt-2 px-[18px] pb-4 text-sm text-gray-600">
+                    <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300 m-[6px] pl-[5px]">
                             <?php echo $item['content']; ?>
-                        </p>
+<!-- 
+                        <p class="pt-2 px-[18px] pb-4 text-sm text-gray-600 bg-orange-600">
+                        </p> -->
                     </div>
                 <?php endif; ?>
 
@@ -50,28 +51,30 @@
     </div>
 
     <!-- RECHTER KOLOM -->
-    <div class="divide-y divide-yellow-400">
+<div class="divide-y divide-yellow-400">
         <?php foreach ($right_items as $item): ?>
             <div class="accordion-item cursor-pointer">
 
-                <div class="accordion-header px-[18px] py-4 flex justify-between items-center hover:bg-[#f3f3f3]">
+                <div class="accordion-header px-[18px] py-4 flex justify-between items-center hover:bg-[#f3f3f3] bg-[#f3f3f3] rounded-md m-[6px]">
                     <h3 class="text-gray-700 text-[15px]">
                         <?php echo esc_html($item['title']); ?>
                     </h3>
-                    <span class="icon font-bold text-lg text-yellow-400">+</span>
+                    <span class="icon font-bold text-lg text-[#00B6CB]">+</span>
                 </div>
 
                 <?php if (!empty($item['content'])): ?>
-                    <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300">
-                        <p class="pt-2 px-[18px] pb-4 text-sm text-gray-600">
+                    <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300 m-[6px] pl-[5px]">
                             <?php echo $item['content']; ?>
-                        </p>
+<!-- 
+                        <p class="pt-2 px-[18px] pb-4 text-sm text-gray-600 bg-orange-600">
+                        </p> -->
                     </div>
                 <?php endif; ?>
 
             </div>
         <?php endforeach; ?>
     </div>
+
 
 </div>
 
