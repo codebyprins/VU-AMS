@@ -13,16 +13,16 @@
     <?php
     $topbar_content = get_field('content', 'option');
     if ($topbar_content) : ?>
-    <div class="hidden lg:block bg-[#ABE0E6] text-black text-xs py-3.5 overflow-hidden">
-        <div id="topbar-marquee-wrap" class="flex">
-            <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0"><?php
-                $clean = wp_strip_all_tags($topbar_content);
-                for ($i = 0; $i < 30; $i++) {
-                    echo '<span class="px-12">' . esc_html($clean) . '</span>';
-                }
-            ?></span>
+        <div class="hidden lg:block bg-[#ABE0E6] text-black text-xs py-3.5 overflow-hidden">
+            <div id="topbar-marquee-wrap" class="flex">
+                <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0"><?php
+                                                                                    $clean = wp_strip_all_tags($topbar_content);
+                                                                                    for ($i = 0; $i < 30; $i++) {
+                                                                                        echo '<span class="px-12">' . esc_html($clean) . '</span>';
+                                                                                    }
+                                                                                    ?></span>
+            </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <header class="bg-gradient-to-r from-[#01B4C9] from-[62%] to-[#0F1733]">
@@ -45,13 +45,16 @@
                     'item_spacing'   => 'preserve',
                     'walker'         => new class($chevron_url) extends Walker_Nav_Menu {
                         private string $chevron;
-                        public function __construct(string $chevron_url) {
+                        public function __construct(string $chevron_url)
+                        {
                             $this->chevron = $chevron_url;
                         }
-                        public function start_lvl( &$output, $depth = 0, $args = null ) {
+                        public function start_lvl(&$output, $depth = 0, $args = null)
+                        {
                             $output .= '<ul class="absolute left-0 top-full min-w-[200px] bg-white border border-[#F7C80C] rounded-[12px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2">' . "\n";
                         }
-                        public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+                        public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+                        {
                             $classes      = empty($item->classes) ? [] : (array) $item->classes;
                             $has_children = in_array('menu-item-has-children', $classes);
                             $is_active    = in_array('current-menu-item', $classes) || in_array('current-menu-ancestor', $classes);
@@ -78,16 +81,17 @@
 
                             $output .= '</a>';
                         }
-                        public function end_el( &$output, $item, $depth = 0, $args = null ) {
+                        public function end_el(&$output, $item, $depth = 0, $args = null)
+                        {
                             $output .= "</li>\n";
                         }
                     },
                 ]);
                 ?>
             </nav>
-            <button type="button" aria-label="Zoeken" class="hidden lg:block text-white hover:text-[#F7C80C] transition-colors">
+            <button id="search-popup_open" type="button" aria-label="Zoeken" class="hidden lg:block text-white hover:text-[#F7C80C] transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
                 </svg>
             </button>
             <a href="/contact" class="hidden lg:inline-flex btn btn-primary">
@@ -95,10 +99,10 @@
             </a>
             <button id="mobile-menu-toggle" type="button" aria-label="Menu openen" class="lg:hidden ml-auto text-white">
                 <svg id="icon-hamburger" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
                 <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 
@@ -115,7 +119,7 @@
             </a>
             <button id="mobile-menu-close" type="button" aria-label="Menu sluiten" class="text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
@@ -126,10 +130,12 @@
                 'container'      => false,
                 'menu_class'     => 'flex flex-col gap-1',
                 'walker'         => new class extends Walker_Nav_Menu {
-                    public function start_lvl( &$output, $depth = 0, $args = null ) {
+                    public function start_lvl(&$output, $depth = 0, $args = null)
+                    {
                         $output .= '<ul class="pl-4 mt-1 flex flex-col gap-1 hidden" data-submenu>' . "\n";
                     }
-                    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+                    public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+                    {
                         $classes      = empty($item->classes) ? [] : (array) $item->classes;
                         $has_children = in_array('menu-item-has-children', $classes);
                         $is_active    = in_array('current-menu-item', $classes) || in_array('current-menu-ancestor', $classes);
@@ -150,7 +156,8 @@
                             $output .= "<li><a href=\"$href\" class=\"$a_class\">$title</a>";
                         }
                     }
-                    public function end_el( &$output, $item, $depth = 0, $args = null ) {
+                    public function end_el(&$output, $item, $depth = 0, $args = null)
+                    {
                         $output .= "</li>\n";
                     }
                 },
@@ -159,6 +166,27 @@
         </nav>
         <div class="px-6 py-6 border-t border-white/20">
             <a href="/contact" class="block text-center btn btn-primary w-full">Get in contact</a>
+        </div>
+    </div>
+    <div class="search-popup fixed inset-0 z-50 opacity-0 pointer-events-none transition-all duration-300">
+
+        <div class="absolute inset-0 bg-black/50 transition-opacity duration-300"></div>
+
+        <div id="search-modal" class="absolute top-1/2 left-1/2 w-full max-w-xl p-4 z-10 bg-white rounded-xl transform -translate-x-1/2 -translate-y-[40%] opacity-0 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+            <h3 class="text-black font-semibold mb-4">Search:</h3>
+            <form role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>" class="flex items-center gap-2 bg-white px-2 py-2 border-b border-black w-[95%]">
+                <button type="submit" class="text-gray-800 hover:text-[#F7C80C] transition-colors" aria-label="Submit search">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                    </svg>
+                </button>
+                <input type="search" name="s" placeholder="Search..." value="<?php echo get_search_query(); ?>" class="flex-1 text-gray-800 text-sm focus:outline-none">
+            </form>
+            <button id="search-popup_close" type="button" class="absolute top-2 right-2 hover:opacity-50 transition-opacity">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 24L16 16M16 16L8 8M16 16L24 8M16 16L8 24" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
         </div>
     </div>
     <main class="min-h-full">
