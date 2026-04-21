@@ -23,6 +23,7 @@ module.exports = {
         section_md: '40px',
         section_sm: '20px',
         container_base: '60px',
+        container_xs: '20px',
         container_sm: '40px',
         container_lg: '80px',
       },

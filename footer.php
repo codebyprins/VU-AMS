@@ -8,8 +8,8 @@ $footer_col_4 = get_field('footer_column_4', 'option');
 $newsletter = get_field('newsletter_toggle', 'option');
 
 $footer_column = $footer_col_4['newsletter_toggle'] === true
-  ? 'col-span-12 sm:col-span-6 md:col-span-4'
-  : 'col-span-12 sm:col-span-6 md:col-span-5';
+  ? 'col-span-12 sm:col-span-6 lg:col-span-4'
+  : 'col-span-12 sm:col-span-6 lg:col-span-5';
 
 // Contact details from general optionpage
 $contact = [
@@ -24,27 +24,34 @@ $contact = [
 // function to render the content per column
 function render_footer_column($col, $contact = [])
 {
-  if (!is_array($col)) return;
+  if (!is_array($col))
+    return;
 
   $type = $col['footer_column_options'] ?? '';
 
   switch ($type) {
 
     case 'Contact':
-      echo '<div class="text-white flex flex-col gap-2">';
-      echo '<h2 class="text-lg">Contact</h2>';
+      echo '<div class="text-white flex flex-col gap-1">';
+      echo '<h3 class="text-lg">Contact</h3>';
 
-      echo '<div class="flex flex-col md:flex-row gap-4">';
+      echo '<div class="flex gap-4">';
       echo '<div class="flex-1">';
-      if (!empty($contact['address'])) echo '<p>' . esc_html($contact['address']) . '</p>';
-      if (!empty($contact['postcode_city'])) echo '<p>' . esc_html($contact['postcode_city']) . '</p>';
-      if (!empty($contact['country'])) echo '<p>' . esc_html($contact['country']) . '</p>';
+      if (!empty($contact['address']))
+        echo '<p>' . esc_html($contact['address']) . '</p>';
+      if (!empty($contact['postcode_city']))
+        echo '<p>' . esc_html($contact['postcode_city']) . '</p>';
+      if (!empty($contact['country']))
+        echo '<p>' . esc_html($contact['country']) . '</p>';
       echo '</div>';
 
-      echo '<div class="flex-1  ">';
-      if (!empty($contact['phone'])) echo '<p>' . esc_html($contact['phone']) . '</p>';
-      if (!empty($contact['email'])) echo '<p>' . esc_html($contact['email']) . '</p>';
-      if (!empty($contact['kvk'])) echo '<p>' . esc_html($contact['kvk']) . '</p>';
+      echo '<div class="flex-1">';
+      if (!empty($contact['phone']))
+        echo '<p>' . esc_html($contact['phone']) . '</p>';
+      if (!empty($contact['email']))
+        echo '<p>' . esc_html($contact['email']) . '</p>';
+      if (!empty($contact['kvk']))
+        echo '<p>' . esc_html($contact['kvk']) . '</p>';
       echo '</div>';
       echo '</div>';
       echo '</div>';
@@ -53,19 +60,18 @@ function render_footer_column($col, $contact = [])
     case 'Title text':
       $data = $col['footer_title_text'] ?? [];
 
-      echo '<h3 class="text-white text-lg">' . esc_html($data['footer_title_text_title'] ?? '') . '</h3>';
+      echo '<h3 class="text-white text-lg ">' . esc_html($data['footer_title_text_title'] ?? '') . '</h3>';
       echo '<p class="text-white">' . esc_html($data['footer_title_text_text'] ?? '') . '</p>';
       break;
 
     case 'Title Image':
       $data = $col['footer_title_image'] ?? [];
-      echo '<h3 class="text-white text-lg">' . esc_html($data['footer_title_image_title'] ?? '') . '</h3>';
-      echo '<div class="flex gap-2">';
+      echo '<h3 class="text-white text-lg mb-1 ">' . esc_html($data['footer_title_image_title'] ?? '') . '</h3>';
+      echo '<div class="flex gap-4">';
       if (!empty($data['footer_title_image_images'])) {
         foreach ($data['footer_title_image_images'] as $img) {
-          // var_dump($img);
-          echo '<figure class="min-w-[100px] w-1/2 max-h-[150px]">';
-          echo '<img class="w-full h-full object-cover object-center" src="' . esc_url($img['footer_title_image_image']) . '" alt="">';
+          echo '<figure class="min-w-[100px] w-1/2 max-h-[150px] max-w-[180px]">';
+          echo '<img class="w-full h-full object-contain object-center" src="' . esc_url($img['footer_title_image_image']['url']) . '" alt="">';
           echo '</figure>';
         }
       }
@@ -93,41 +99,47 @@ function render_footer_column($col, $contact = [])
 </main>
 
 <footer class="bg-primary-gradient px-section_sm sm:px-section_md md:px-section_base">
-  <div class="container py-container_sm grid grid-cols-12 gap-6">
-    <!-- Column 1 is fixed -->
-    <div class="col-span-12 sm:col-span-6 md:col-span-2">
-      <figure class="max-w-[200px]">
-        <?php if (!empty($logo['url'])): ?>
-          <img class="w-full h-auto"
-            src="<?php echo esc_url($logo['url']); ?>"
-            alt="<?php echo esc_attr($logo['alt'] ?? ''); ?>">
-        <?php endif; ?>
-
-        <?php if (!empty($company)): ?>
-          <h2 class="text-white text-base mt-4">
-            <?php echo esc_html($company); ?>
-          </h2>
-        <?php endif; ?>
-      </figure>
-    </div>
-
-    <!-- Column 2 -->
-    <div class="<?php echo esc_attr($footer_column); ?>">
-      <?php render_footer_column($col2, $contact); ?>
-    </div>
-
-    <!-- Column 3 -->
-    <div class="<?php echo esc_attr($footer_column); ?>">
-      <?php render_footer_column($col3, $contact); ?>
-    </div>
-
-    <!-- Column 4 is optional -->
-    <?php if ($footer_col_4['newsletter_toggle'] === true): ?>
-      <div class="col-span-12 sm:col-span-6 md:col-span-2 flex flex-col gap-4 items-center justify-center">
-        <h3 class="mb-4 text-white text-lg"><?php echo esc_html($footer_col_4['newsletter_title'] ?? 'Newsletter'); ?></h3>
-        <button class="btn btn-secondary"><?php echo esc_html($footer_col_4['newsletter_button_text'] ?? 'Sign up'); ?></button>
-      </div>
+  <div class="container py-container_sm flex flex-col gap-2">
+    <?php if (!empty($company)): ?>
+      <h2 class="text-white text-lg">
+        <?php echo esc_html($company); ?>
+      </h2>
     <?php endif; ?>
+
+    <div class="grid grid-cols-12 gap-6">
+
+
+      <!-- Column 1 is fixed -->
+      <div class="col-span-12 sm:col-span-6 lg:col-span-2">
+        <figure class="max-w-[200px]">
+          <?php if (!empty($logo['url'])): ?>
+            <img class="w-full h-auto" src="<?php echo esc_url($logo['url']); ?>"
+              alt="<?php echo esc_attr($logo['alt'] ?? ''); ?>">
+          <?php endif; ?>
+
+        </figure>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="<?php echo esc_attr($footer_column); ?>">
+        <?php render_footer_column($col2, $contact); ?>
+      </div>
+
+      <!-- Column 3 -->
+      <div class="<?php echo esc_attr($footer_column); ?>">
+        <?php render_footer_column($col3, $contact); ?>
+      </div>
+
+      <!-- Column 4 is optional -->
+      <?php if ($footer_col_4['newsletter_toggle'] === true): ?>
+        <div class="col-span-12 sm:col-span-6 lg:col-span-2 flex flex-col gap-1">
+          <h3 class="text-white text-lg"><?php echo esc_html($footer_col_4['newsletter_title'] ?? 'Newsletter'); ?>
+          </h3>
+          <button
+            class="btn btn-secondary"><?php echo esc_html($footer_col_4['newsletter_button_text'] ?? 'Sign up'); ?></button>
+        </div>
+      <?php endif; ?>
+    </div>
   </div>
 
   <!-- Sub footer -->
