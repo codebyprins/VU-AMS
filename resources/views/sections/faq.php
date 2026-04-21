@@ -5,8 +5,8 @@ $faq_items = get_sub_field('faq_items');
 ?>
 
 <section class="bg-white py-10">
-    <div class="container mx-auto px-4">
-        <div class="faq_items">
+    <div class="container mx-auto px-4 flex justify-center items-center">
+        <div class="faq_items max-w-[600px]">
             <?php foreach ($faq_items as $faq_item) : ?>
                 <div class="faq_item mb-5 border-b border-black">
                     <div class="faq_header flex items-center justify-between">

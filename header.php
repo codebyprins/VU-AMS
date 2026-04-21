@@ -17,7 +17,7 @@
         <div id="topbar-marquee-wrap" class="flex">
             <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0"><?php
                 $clean = wp_strip_all_tags($topbar_content);
-                for ($i = 0; $i < 8; $i++) {
+                for ($i = 0; $i < 30; $i++) {
                     echo '<span class="px-12">' . esc_html($clean) . '</span>';
                 }
             ?></span>
