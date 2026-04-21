@@ -1,26 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const wrap  = document.getElementById('topbar-marquee-wrap');
-    const inner = document.getElementById('topbar-marquee-inner');
-    if (wrap && inner) {
-        const clone = inner.cloneNode(true);
-        clone.removeAttribute('id');
-        wrap.appendChild(clone);
-        const itemWidth = inner.offsetWidth;
-        let pos  = 0;
-        let last = null;
-        const speed = 40;
-        function tick(ts) {
-            if (!last) last = ts;
-            const dt = Math.min((ts - last) / 1000, 0.05);
-            last = ts;
-            pos -= speed * dt;
-            if (pos <= -itemWidth) pos += itemWidth;
-            wrap.style.transform = `translateX(${pos}px)`;
-            requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-    }
-
     const toggle        = document.getElementById('mobile-menu-toggle');
     const closeBtn      = document.getElementById('mobile-menu-close');
     const menu          = document.getElementById('mobile-menu');
