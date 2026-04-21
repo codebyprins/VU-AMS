@@ -1,12 +1,13 @@
 <?php
-$title   = get_sub_field('title_text_button');
-$text    = get_sub_field('text_text_button');
-$button  = get_sub_field('button_text-button');
-$reverse = get_sub_field('reverse-text-button');
+$title     = get_sub_field('title_text_button');
+$text      = get_sub_field('text_text_button');
+$button    = get_sub_field('button_text-button');
+$reverse   = get_sub_field('reverse-text-button');
+$darklight = get_sub_field('darklight');
 ?>
 
 
-<section class="section">
+<section class="section" <?php if ($darklight) : ?>style="background-color: #F8F8F8;"<?php endif; ?>>
     <div class="container mx-auto py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             <div class="container col-span-1 flex flex-col gap-4 py-[10px] justify-center <?php echo $reverse ? 'order-1 md:order-2' : 'order-2 md:order-1'; ?>">
