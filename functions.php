@@ -1,6 +1,6 @@
 <?php
 
-$theme_files = ['setup', 'menus', 'enqueue', 'acf'];
+$theme_files = ['setup', 'menus', 'enqueue', 'acf', 'pagination'];
 
 foreach ($theme_files as $file) {
     $path = "functions/{$file}.php";
