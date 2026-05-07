@@ -142,6 +142,8 @@ function render_footer_column($col, $contact = [])
   </div>
 </footer>
 
+<?php get_template_part('resources/views/components/cookie-consent'); ?>
+
 <?php wp_footer(); ?>
 </body>
 
