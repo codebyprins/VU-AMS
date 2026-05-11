@@ -10,25 +10,25 @@ $blog_posts = new WP_Query([
   'order'          => 'DESC',
 ]);
 ?>
+<?php if ($blog_posts->have_posts()) : ?>
+  <section class="px-5">
+    <div class="container mx-auto py-10 xl:py-14">
 
-<section class="px-5">
-  <div class="container mx-auto py-10 xl:py-14">
+      <?php if ($banner_title): ?>
+        <h2 class="mb-8"><?php echo esc_html($banner_title); ?></h2>
+      <?php endif; ?>
 
-    <?php if ($banner_title): ?>
-      <h2 class="mb-8"><?php echo esc_html($banner_title); ?></h2>
-    <?php endif; ?>
 
-    <?php if ($blog_posts->have_posts()) : ?>
       <div class="swiper w-full h-[400px]">
         <div class="swiper-wrapper">
-          <?php 
+          <?php
           $slide_count = 0;
           while ($blog_posts->have_posts()) : $blog_posts->the_post();
             $slide_count++;
             $featured_image = get_the_post_thumbnail_url(get_the_ID(), 'large');
             $featured_image = $featured_image ?: '';
           ?>
-            <div class="swiper-slide bg-primary relative overflow-hidden rounded-lg !w-full !h-full flex items-end">
+            <div class="swiper-slide bg-primary relative overflow-hidden rounded-base !w-full !h-full flex items-end">
               <!-- Background Image -->
               <div
                 class="absolute inset-0 bg-cover bg-center"
@@ -62,10 +62,12 @@ $blog_posts = new WP_Query([
           </svg>
         </div>
       </div>
-
-    <?php else : ?>
+    </div>
+  </section>
+<?php else : ?>
+  <section class="px-5">
+    <div class="container mx-auto py-10 xl:py-14">
       <p>No posts found.</p>
-    <?php endif; ?>
-
-  </div>
-</section>
+    </div>
+  </section>
+<?php endif; ?>
