@@ -1,23 +1,17 @@
-.swiper {
-  @apply w-full h-full;
-}
+.swiper .swiper-pagination-bullet {
+  background-color: rgba(255,255,255,0.5) !important;
+  opacity: 1 !important;
 
-.swiper-pagination-bullet {
-  @apply bg-white/50 opacity-100 transition-all duration-300 ease-in-out;
   width: 12px !important;
   height: 12px !important;
-  margin: 0 8px !important;
-  border-radius: 50% !important;
+
+  margin: 0 6px !important;
+  border-radius: 9999px !important;
+
+  transition: all 0.3s ease;
 }
 
-.swiper-pagination-bullet:hover {
-  @apply bg-white/70;
-}
-
-.swiper-pagination-bullet-active {
-  @apply bg-secondary opacity-100;
-}
-
-.swiper-pagination-bullet-active:hover {
-  @apply bg-secondary;
+.swiper .swiper-pagination-bullet-active {
+  background-color: #F7C80C !important;
+  transform: scale(1.2);
 }

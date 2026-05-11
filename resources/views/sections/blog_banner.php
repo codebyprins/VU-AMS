@@ -1,6 +1,6 @@
 <?php
-$banner_title  = get_field('blog_banner_title');
-$banner_amount = get_field('blog_banner_amount');
+$banner_title  = get_sub_field('blog_banner_title');
+$banner_amount = get_sub_field('blog_banner_amount');
 
 $blog_posts = new WP_Query([
   'post_type'      => 'post',
@@ -21,7 +21,10 @@ $blog_posts = new WP_Query([
     <?php if ($blog_posts->have_posts()) : ?>
       <div class="swiper w-full h-[400px]">
         <div class="swiper-wrapper">
-          <?php while ($blog_posts->have_posts()) : $blog_posts->the_post();
+          <?php 
+          $slide_count = 0;
+          while ($blog_posts->have_posts()) : $blog_posts->the_post();
+            $slide_count++;
             $featured_image = get_the_post_thumbnail_url(get_the_ID(), 'large');
             $featured_image = $featured_image ?: '';
           ?>
