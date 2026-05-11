@@ -5,5 +5,6 @@ import './popup-bar.js';
 import './mobile_menu.js';
 import './faq_dropdown.js';
 import './map.js';
+import './popup.js';
 
 console.log('VU-AMS theme JS loaded!');
