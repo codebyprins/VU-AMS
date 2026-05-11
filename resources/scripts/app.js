@@ -7,5 +7,6 @@ import './faq_dropdown.js';
 import './cookie-consent.js';
 import './numerical_counter.js';
 import './map.js';
+import './popup.js';
 
 console.log('VU-AMS theme JS loaded!');
