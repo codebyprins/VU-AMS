@@ -1,6 +1,7 @@
 <?php
 
-function custom_pagination($query) {
+function custom_pagination($query)
+{
     $total_pages = $query->max_num_pages;
     if ($total_pages <= 1) return;
 
