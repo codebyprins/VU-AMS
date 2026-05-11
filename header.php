@@ -16,22 +16,13 @@
         <div class="hidden lg:block bg-[#ABE0E6] text-black text-xs py-3.5 overflow-hidden">
             <div id="topbar-marquee-wrap" class="flex">
                 <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0"><?php
-                                                                                    $clean = wp_strip_all_tags($topbar_content);
-                                                                                    for ($i = 0; $i < 30; $i++) {
-                                                                                        echo '<span class="px-12">' . esc_html($clean) . '</span>';
-                                                                                    }
-                                                                                    ?></span>
+                    $clean = wp_strip_all_tags($topbar_content);
+                    for ($i = 0; $i < 30; $i++) {
+                        echo '<span class="px-12">' . esc_html($clean) . '</span>';
+                    }
+                    ?>
+                </span>
             </div>
-    $hide_slider    = get_field('hide_slider', 'option');
-    if ($topbar_content && !$hide_slider) : ?>
-    <div class="hidden lg:block bg-[#ABE0E6] text-black text-xs py-3.5 overflow-hidden">
-        <div id="topbar-marquee-wrap" class="flex">
-            <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0"><?php
-                $clean = wp_strip_all_tags($topbar_content);
-                for ($i = 0; $i < 30; $i++) {
-                    echo '<span class="px-12">' . esc_html($clean) . '</span>';
-                }
-            ?></span>
         </div>
     <?php endif; ?>
 
@@ -200,26 +191,27 @@
         </div>
     </div>
     <main class="min-h-full">
-    <script>
-        const wrap  = document.getElementById('topbar-marquee-wrap');
-    const inner = document.getElementById('topbar-marquee-inner');
-    if (wrap && inner) {
-        const clone = inner.cloneNode(true);
-        clone.removeAttribute('id');
-        wrap.appendChild(clone);
-        const itemWidth = inner.offsetWidth;
-        let pos  = 0;
-        let last = null;
-        const speed = <?php echo get_field('speed_range', 'option') ?? 50; ?>;
-        function tick(ts) {
-            if (!last) last = ts;
-            const dt = Math.min((ts - last) / 1000, 0.05);
-            last = ts;
-            pos -= speed * dt;
-            if (pos <= -itemWidth) pos += itemWidth;
-            wrap.style.transform = `translateX(${pos}px)`;
-            requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-    }
-    </script>
+        <script>
+            const wrap = document.getElementById('topbar-marquee-wrap');
+            const inner = document.getElementById('topbar-marquee-inner');
+            if (wrap && inner) {
+                const clone = inner.cloneNode(true);
+                clone.removeAttribute('id');
+                wrap.appendChild(clone);
+                const itemWidth = inner.offsetWidth;
+                let pos = 0;
+                let last = null;
+                const speed = <?php echo get_field('speed_range', 'option') ?? 50; ?>;
+
+                function tick(ts) {
+                    if (!last) last = ts;
+                    const dt = Math.min((ts - last) / 1000, 0.05);
+                    last = ts;
+                    pos -= speed * dt;
+                    if (pos <= -itemWidth) pos += itemWidth;
+                    wrap.style.transform = `translateX(${pos}px)`;
+                    requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+            }
+        </script>
