@@ -1,5 +1,5 @@
 .btn {
-  @apply inline-flex items-center px-4 py-2 rounded-base text-base transition;
+  @apply inline-flex items-center px-4 py-2 rounded-base text-base transition w-max;
 }
 
 .btn-primary {
