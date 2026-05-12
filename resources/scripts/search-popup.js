@@ -6,17 +6,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const overlay = searchPopup.querySelector('.absolute.inset-0');
 
     function openPopup() {
-        searchPopup.classList.remove('opacity-0', 'pointer-events-none');
+        searchPopup.classList.remove('hidden', 'pointer-events-none');
 
-        modal.classList.remove('opacity-0', '-translate-y-[40%]');
-        modal.classList.add('-translate-y-1/2');
+        modal.classList.remove('hidden', '-translate-y-[40%]');
+        modal.classList.add('-translate-y-1/2', 'block');
     }
 
     function closePopup() {
-        searchPopup.classList.add('opacity-0', 'pointer-events-none');
+        searchPopup.classList.add('hidden', 'pointer-events-none');
 
-        modal.classList.add('opacity-0', '-translate-y-[40%]');
-        modal.classList.remove('-translate-y-1/2');
+        modal.classList.add('hidden', '-translate-y-[40%]');
+        modal.classList.remove('-translate-y-1/2', 'block');
     }
 
     openBtn.addEventListener('click', openPopup);

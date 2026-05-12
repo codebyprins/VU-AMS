@@ -169,7 +169,7 @@
             <a href="/contact" class="block text-center btn btn-primary w-full">Get in contact</a>
         </div>
     </div>
-    <div class="search-popup fixed inset-0 z-50 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="search-popup fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300" aria-hidden="true">
 
         <div class="absolute inset-0 bg-black/50 transition-opacity duration-300"></div>
 
