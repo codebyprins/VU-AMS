@@ -50,9 +50,11 @@ if (is_object($icon) && !empty($icon->element)) {
 			</div>
 
 			<div class="flex flex-col justify-center px-0 py-2 lg:px-2 xl:px-4">
-				<h2 class="text-3xl font-medium leading-tight tracking-tight text-slate-700 sm:text-4xl lg:text-[2.1rem] lg:leading-[1.15]">
-					<?php echo esc_html($display_title); ?>
-				</h2>
+				<?php if (!empty($display_title)): ?>
+					<h2 class="text-3xl font-medium leading-tight tracking-tight text-slate-700 sm:text-4xl lg:text-[2.1rem] lg:leading-[1.15]">
+						<?php echo esc_html($display_title); ?>
+					</h2>
+				<?php endif; ?>
 
 				<?php if ($icon_markup || $date): ?>
 					<div class="mt-6 flex items-center">
