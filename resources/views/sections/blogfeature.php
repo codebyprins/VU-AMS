@@ -29,7 +29,7 @@ if (is_object($icon) && !empty($icon->element)) {
 		</div>
 
 		<div class="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:gap-8 xl:gap-10">
-			<div class="overflow-hidden bg-slate-100">
+			<div class="overflow-hidden bg-slate-100 max-h-[400px]">
 				<?php if ($image): ?>
 					<img
 						src="<?php echo esc_url(is_array($image) ? $image['url'] : $image); ?>"

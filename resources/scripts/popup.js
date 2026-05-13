@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const popup = document.getElementById("newsletter-popup");
     const closeBtn = document.getElementById("close-popup");
 
+    if (!popup || !closeBtn) return;
+
     // Show after 2 seconds
     setTimeout(() => {
         popup.classList.remove("hidden");
