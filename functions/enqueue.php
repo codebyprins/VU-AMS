@@ -56,3 +56,20 @@ function theme_enqueue_assets() {
     ');
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
+
+// Enqueue admin scripts
+function theme_enqueue_admin_assets() {
+    wp_enqueue_script(
+        'sync-publications',
+        get_template_directory_uri() . '/resources/scripts/api-sync.js',
+        ['jquery'],
+        filemtime(get_template_directory() . '/resources/scripts/api-sync.js'),
+        true
+    );
+    
+    wp_localize_script('sync-publications', 'syncSettings', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('sync_publications_nonce'),
+    ]);
+}
+add_action('admin_enqueue_scripts', 'theme_enqueue_admin_assets');
