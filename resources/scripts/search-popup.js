@@ -9,16 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const overlay = searchPopup.querySelector('.absolute.inset-0');
 
     function openPopup() {
-        searchPopup.classList.remove('hidden', 'pointer-events-none');
-
-        modal.classList.remove('hidden', '-translate-y-[40%]');
+        searchPopup.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+        modal.classList.remove('hidden', '-translate-y-[40%]', 'opacity-0');
         modal.classList.add('-translate-y-1/2', 'block');
     }
 
     function closePopup() {
-        searchPopup.classList.add('hidden', 'pointer-events-none');
-
-        modal.classList.add('hidden', '-translate-y-[40%]');
+        searchPopup.classList.add('hidden', 'pointer-events-none', 'opacity-0');
+        modal.classList.add('hidden', '-translate-y-[40%]', 'opacity-0');
         modal.classList.remove('-translate-y-1/2', 'block');
     }
 
