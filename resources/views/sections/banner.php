@@ -4,7 +4,7 @@ $big = get_sub_field('big');
 $small = get_sub_field('small');
 ?>
 
-<section>
+<section class="bg-[#F8F8F8] w-full h-full">
   <?php if ($bigsmall) : ?>
 
     <div class="container mx-auto relative flex flex-col md:flex-row items-center w-full"
@@ -39,7 +39,39 @@ $small = get_sub_field('small');
 
       </div>
 
-      <?php if ($big['image']) : ?>
+      <?php if ($big['image_or_bubbles'] && $big['image']) : ?>
+        <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
+          <img class="max-h-[220px] md:max-h-[350px] w-auto object-contain"
+            src="<?php echo esc_url($big['image']['url']); ?>"
+            alt="<?php echo esc_html($big['image']['alt']); ?>">
+        </div>
+      <?php elseif (!$big['image_or_bubbles'] && $big['bubbles']) : ?>
+        <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
+          <!-- Bubbles component here -->
+          <div class="bubble_container relative flex flex-col gap-5 mr-[80px]">
+            <div class="flex flex-col justify-center items-center gap-4 pl-[100px]">
+              <?php if ($big['bubbles']['text_top']) : ?>
+                <p class="text-top text-3xl"><?php echo esc_html($big['bubbles']['text_top']); ?></p>
+              <?php endif; ?>
+              <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
+                <?php if ($big['bubbles']['number_top']) : ?>
+                  <p class="number-top text-2xl text-white"><?php echo esc_html($big['bubbles']['number_top']); ?></p>
+                <?php endif; ?>
+              </div>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-4">
+              <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
+                <?php if ($big['bubbles']['number_bottom']) : ?>
+                  <p class="number-bottom text-2xl text-white"><?php echo esc_html($big['bubbles']['number_bottom']); ?></p>
+                <?php endif; ?>
+              </div>
+              <?php if ($big['bubbles']['text_bottom']) : ?>
+                <p class="text-bottom text-3xl"><?php echo esc_html($big['bubbles']['text_bottom']); ?></p>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+      <?php elseif ($big['image']) : ?>
         <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
           <img class="max-h-[220px] md:max-h-[350px] w-auto object-contain"
             src="<?php echo esc_url($big['image']['url']); ?>"
