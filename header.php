@@ -52,7 +52,7 @@
                         }
                         public function start_lvl(&$output, $depth = 0, $args = null)
                         {
-                            $output .= '<ul class="absolute left-0 top-full min-w-[200px] bg-white border border-[#F7C80C] rounded-[12px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2">' . "\n";
+                            $output .= '<ul class="absolute left-0 top-full min-w-[200px] bg-white border border-primary rounded-[12px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2">' . "\n";
                         }
                         public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
                         {
