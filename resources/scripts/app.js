@@ -12,10 +12,7 @@ import './team-accordion.js';
 import './cookie-consent.js';
 import './numerical_counter.js';
 import './map.js';
-<<<<<<< Updated upstream
 import './popup.js';
 import './imgcarousel.js';
 
 console.log('VU-AMS theme JS loaded!');
-=======
->>>>>>> Stashed changes
