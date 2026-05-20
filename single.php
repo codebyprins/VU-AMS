@@ -1,21 +1,25 @@
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+?>
+<?php get_header(); ?>
+...
+
 <?php get_header(); ?>
 
-<?php if (have_rows('flexible_blocks')): ?>
-    <?php while (have_rows('flexible_blocks')): the_row(); ?>
-
-        <?php
+<?php
+// Override the field name for posts
+if (have_rows('post_blocks')):
+    while (have_rows('post_blocks')): the_row();
         $layout = get_row_layout();
-
-        if ($layout == 'voorbeeld_1') :
-          get_template_part('assets/blocks/voorbeeld_1');
-
-        elseif ($layout == 'voorbeeld_2') :
-          get_template_part('assets/blocks/voorbeeld_2');
-
-        endif;
-        ?>
-
-    <?php endwhile; ?>
-<?php endif; ?>
+        $file = "resources/views/sections/{$layout}.php";
+        if (locate_template($file)) {
+            get_template_part("resources/views/sections/{$layout}");
+        } else {
+            echo "<strong>MISSING TEMPLATE:</strong> {$file}";
+        }
+    endwhile;
+endif;
+?>
 
 <?php get_footer(); ?>
