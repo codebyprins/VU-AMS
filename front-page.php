@@ -1,5 +1,4 @@
 <?php get_header(); ?>
-<?php get_template_part('resources/views/sections/vb-section'); ?>
 
 <?php get_template_part('resources/views/components/flexible_blocks'); ?>
 
