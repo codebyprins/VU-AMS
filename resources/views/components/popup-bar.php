@@ -13,18 +13,18 @@ $second_link = get_field('second_link', 'option');
     <div class="container max-auto flex">
         <div class="w-[95%] flex items-start justify-between lg:flex-row flex-col gap-2">
             <a href="<?php echo esc_url($first_link['link']['url']); ?>" <?php echo !empty($first_link['link']['target']) ? ' target="' . esc_attr($first_link['link']['target']) . '" rel="noopener noreferrer"' : ''; ?> class="w-full flex flex-col gap-1">
-                <div class="item-top flex items-center gap-3">
+                <div class="item-top flex items-center gap-2">
                     <div class="blue-bar w-20 h-5 rounded-full bg-[#01B4C9]"></div>
-                    <h4><?php echo esc_html($first_link['title'] ?? ''); ?></h4>
+                    <h5><?php echo esc_html($first_link['title'] ?? ''); ?></h5>
                 </div>
                 <div class="item-bottom md:block hidden">
                     <?php echo wp_kses_post($first_link['content'] ?? ''); ?>
                 </div>
             </a>
             <a href="<?php echo esc_url($second_link['link']['url']); ?>" <?php echo !empty($second_link['link']['target']) ? ' target="' . esc_attr($second_link['link']['target']) . '" rel="noopener noreferrer"' : ''; ?> class="w-full flex flex-col gap-1">
-                <div class="item-top flex items-center gap-3">
+                <div class="item-top flex items-center gap-2">
                     <div class="blue-bar w-20 h-5 rounded-full bg-[#01B4C9]"></div>
-                    <h4><?php echo esc_html($second_link['title'] ?? ''); ?></h4>
+                    <h5><?php echo esc_html($second_link['title'] ?? ''); ?></h5>
                 </div>
                 <div class="item-bottom md:block hidden pb-2">
                     <?php echo wp_kses_post($second_link['content'] ?? ''); ?>

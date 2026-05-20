@@ -1,0 +1,118 @@
+.support-form-section .wpcf7-form {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.support-form-section .wpcf7-form > p {
+  @apply m-0 flex flex-col;
+}
+
+.support-form-section .wpcf7-form > p:has(textarea),
+.support-form-section .wpcf7-form > p:last-of-type,
+.support-form-section .wpcf7-form .submit-row {
+  @apply col-span-full;
+}
+
+.support-form-section .wpcf7-form label {
+  @apply text-sm font-medium text-accent mb-1.5 flex flex-col gap-1.5;
+}
+
+.support-form-section .wpcf7-form .wpcf7-validates-as-required ~ .required-star,
+.support-form-section .wpcf7-form abbr[title="required"],
+.support-form-section .wpcf7-form span.required {
+  @apply text-primary;
+}
+
+.support-form-section .wpcf7-form input[type="text"],
+.support-form-section .wpcf7-form input[type="email"],
+.support-form-section .wpcf7-form input[type="tel"],
+.support-form-section .wpcf7-form input[type="url"],
+.support-form-section .wpcf7-form input[type="number"],
+.support-form-section .wpcf7-form select,
+.support-form-section .wpcf7-form textarea {
+  @apply w-full rounded-base text-accent text-base font-normal font-sans
+         bg-[#D9D9D9] outline-none py-[14px] px-4
+         transition duration-200 ease-in-out;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.support-form-section .wpcf7-form input[type="text"]:focus,
+.support-form-section .wpcf7-form input[type="email"]:focus,
+.support-form-section .wpcf7-form input[type="tel"]:focus,
+.support-form-section .wpcf7-form input[type="url"]:focus,
+.support-form-section .wpcf7-form input[type="number"]:focus,
+.support-form-section .wpcf7-form select:focus,
+.support-form-section .wpcf7-form textarea:focus {
+  @apply bg-[#C8C8C8] shadow-[0_0_0_2px_#00B6CB44] outline-none;
+}
+
+.support-form-section .wpcf7-form .wpcf7-form-control-wrap:has(select) {
+  @apply relative;
+}
+
+.support-form-section .wpcf7-form select {
+  @apply appearance-none cursor-pointer pr-11;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23101935' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 20px;
+}
+
+.support-form-section .wpcf7-form textarea {
+  @apply min-h-[200px] resize-y;
+}
+
+.support-form-section .wpcf7-form input[type="file"] {
+  @apply w-full rounded-base text-sm bg-[#D9D9D9] outline-none font-sans cursor-pointer;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+}
+
+.support-form-section .wpcf7-form input[type="file"]::file-selector-button {
+  @apply bg-primary text-white font-sans text-sm font-medium cursor-pointer rounded-l-base;
+  border: none;
+  padding: 16px 20px;
+  margin-right: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.support-form-section .wpcf7-form input[type="file"]::file-selector-button:hover {
+  @apply bg-primary_dark;
+}
+
+.support-form-section .wpcf7-form .wpcf7-form-control-wrap {
+  @apply block w-full;
+}
+
+.support-form-section .wpcf7-form .wpcf7-not-valid {
+  @apply !shadow-[0_0_0_2px_#ef4444] !bg-red-100;
+}
+
+.support-form-section .wpcf7-form .wpcf7-not-valid-tip {
+  @apply text-xs mt-1 text-red-500;
+}
+
+.support-form-section .wpcf7-form input[type="submit"],
+.support-form-section .wpcf7-form .wpcf7-submit {
+  @apply btn btn-primary block ml-auto px-8 py-3 text-base font-medium cursor-pointer;
+}
+
+.support-form-section .wpcf7-form > p:last-of-type {
+  @apply flex justify-end;
+}
+
+.support-form-section .wpcf7-response-output {
+  @apply rounded-base text-sm mt-4 p-4 col-span-full;
+}
+
+.support-form-section .wpcf7 .wpcf7-mail-sent-ok {
+  @apply bg-emerald-100 text-emerald-900 border-0;
+}
+
+.support-form-section .wpcf7 .wpcf7-validation-errors,
+.support-form-section .wpcf7 .wpcf7-mail-sent-ng,
+.support-form-section .wpcf7 .wpcf7-spam-blocked {
+  @apply bg-red-100 text-red-800 border-0;
+}

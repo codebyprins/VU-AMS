@@ -8,7 +8,7 @@ $teamleden = get_posts([
 ]);
 ?>
 
-<section class="px-4 md:px-0">
+<section class="px-4 lg:px-0 py-10">
     <div class="container mx-auto">
         <div class="relative overflow-hidden bg-primary rounded-lg pt-6 pb-8 md:overflow-visible md:bg-white md:border-[5px] md:border-primary md:px-[120px] md:pt-[80px] md:pb-[122px]">
 
@@ -33,7 +33,7 @@ $teamleden = get_posts([
                                              src="<?php echo esc_url($foto['url']); ?>"
                                              alt="<?php echo esc_html($lid->post_title); ?>">
                                     <?php else : ?>
-                                        <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full bg-white/40 mb-3 mx-auto"></div>
+                                        <div class="w-[100px] h-[100px] lg:w-[120px] lg:h-[120px] rounded-full bg-white/40 mb-3 mx-auto"></div>
                                     <?php endif; ?>
                                     <p class="carrousel-naam font-sans text-[16px] font-medium text-white md:text-black"><?php echo esc_html($lid->post_title); ?></p>
                                     <p class="carrousel-functie font-sans text-[14px] text-white/80 md:text-gray-500"><?php echo esc_html($functie); ?></p>
@@ -42,7 +42,7 @@ $teamleden = get_posts([
                         </div>
                     </div>
 
-                    <button class="carrousel-next text-4xl text-white flex-shrink-0 md:text-6xl md:text-primary px-2">&#8250;</button>
+                    <button class="carrousel-next text-4xl text-white flex-shrink-0 lg:text-6xl lg:text-primary px-2">&#8250;</button>
                 </div>
             <?php endif; ?>
         </div>
