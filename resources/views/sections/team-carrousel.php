@@ -1,33 +1,42 @@
 <?php
 $titel = get_sub_field('titel');
-$teamleden = get_sub_field('teamleden');
+
+$teamleden = get_posts([
+    'post_type'      => 'team-member',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+]);
 ?>
 
 <section class="px-4 md:px-0">
     <div class="container mx-auto">
-        <div class="relative overflow-hidden bg-primary rounded-lg pt-6 pb-8 md:overflow-visible md:bg-white md:border-[8px] md:border-primary md:px-[120px] md:pt-[80px] md:pb-[122px]">
+        <div class="relative overflow-hidden bg-primary rounded-lg pt-6 pb-8 md:overflow-visible md:bg-white md:border-[5px] md:border-primary md:px-[120px] md:pt-[80px] md:pb-[122px]">
 
             <?php if ($titel) : ?>
-                <h2 class="text-center font-sans text-2xl mb-6 text-white md:text-black"><?php echo esc_html($titel); ?></h2>
+                <h2 class="text-center font-sans text-2xl mb-8 text-white md:text-black"><?php echo esc_html($titel); ?></h2>
             <?php endif; ?>
 
             <?php if ($teamleden) : ?>
-                <div class="relative flex items-center gap-2">
+                <div class="relative flex items-center gap-4">
                     <button class="carrousel-prev text-4xl text-white flex-shrink-0 md:text-6xl md:text-primary px-2">&#8249;</button>
 
                     <div class="carrousel-window overflow-hidden flex-1">
                         <div class="carrousel-track flex">
                             <?php foreach ($teamleden as $lid) : ?>
+                                <?php
+                                $foto = get_field('foto', $lid->ID);
+                                $functie = get_field('functie', $lid->ID);
+                                ?>
                                 <div class="carrousel-item flex-shrink-0 flex flex-col items-center text-center">
-                                    <?php if ($lid['foto']) : ?>
+                                    <?php if ($foto) : ?>
                                         <img class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full object-cover mb-3 mx-auto"
-                                             src="<?php echo esc_url($lid['foto']['url']); ?>"
-                                             alt="<?php echo esc_html($lid['naam']); ?>">
+                                             src="<?php echo esc_url($foto['url']); ?>"
+                                             alt="<?php echo esc_html($lid->post_title); ?>">
                                     <?php else : ?>
                                         <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full bg-white/40 mb-3 mx-auto"></div>
                                     <?php endif; ?>
-                                    <p class="carrousel-naam font-sans text-[16px] font-medium text-white md:text-black"><?php echo esc_html($lid['naam']); ?></p>
-                                    <p class="carrousel-functie font-sans text-[14px] text-white/80 md:text-gray-500"><?php echo esc_html($lid['functie']); ?></p>
+                                    <p class="carrousel-naam font-sans text-[16px] font-medium text-white md:text-black"><?php echo esc_html($lid->post_title); ?></p>
+                                    <p class="carrousel-functie font-sans text-[14px] text-white/80 md:text-gray-500"><?php echo esc_html($functie); ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
