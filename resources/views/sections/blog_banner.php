@@ -29,18 +29,15 @@ $blog_posts = new WP_Query([
             $featured_image = $featured_image ?: '';
           ?>
             <div class="swiper-slide bg-primary relative overflow-hidden rounded-base !w-full !h-full flex items-end">
-              <!-- Background Image -->
               <div
                 class="absolute inset-0 bg-cover bg-center"
                 style="background-image: url('<?php echo esc_url($featured_image); ?>');">
               </div>
 
-              <!-- overlay -->
               <?php if (has_post_thumbnail()): ?>
                 <div class="absolute inset-0 bg-black/40"></div>
               <?php endif; ?>
 
-              <!-- Content -->
               <a href="<?php the_permalink(); ?>" class="relative h-full w-full flex flex-col justify-center items-center p-6 text-center text-white">
                 <h2 class="font-bold mb-2"><?php the_title(); ?></h2>
                 <p class="text-sm"><?php echo get_the_date(); ?></p>
@@ -49,7 +46,6 @@ $blog_posts = new WP_Query([
           <?php endwhile; ?>
         </div>
 
-        <!-- Navigation -->
         <div class="swiper-pagination"></div>
         <div class="swiper-button-next hidden sm:block text-white after:text-2xl w-10 h-10 bg-secondary rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

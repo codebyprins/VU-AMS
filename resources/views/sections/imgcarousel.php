@@ -7,7 +7,6 @@ if (!function_exists('vu_imgcarousel_slides')) {
 			return [];
 		}
 
-		// Een lijst (Galerij) heeft een index 0
 		$rows = (is_array($items) && isset($items[0])) ? $items : [$items];
 
 		$slides = [];
@@ -17,17 +16,14 @@ if (!function_exists('vu_imgcarousel_slides')) {
 			$link  = null;
 
 			if (is_array($row) && isset($row['image'])) {
-				// Repeater-rij { image, link }
 				$image = is_array($row['image'])
 					? $row['image']
 					: ['url' => (string) $row['image']];
 				$link = $row['link'] ?? null;
 			} elseif (is_array($row)) {
-				// image-array (Galerij / Afbeelding-veld)
 				$image = $row;
 				$link  = $row['link'] ?? null;
 			} elseif (is_numeric($row)) {
-				// attachment-ID
 				$attachment_id = (int) $row;
 				$src           = wp_get_attachment_image_src($attachment_id, 'large');
 
@@ -40,7 +36,6 @@ if (!function_exists('vu_imgcarousel_slides')) {
 					];
 				}
 			} else {
-				// losse URL-string
 				$image = ['url' => (string) $row];
 			}
 
@@ -75,12 +70,10 @@ $has_nav     = $total > 1;
 $carousel_id = wp_unique_id('imgcarousel-');
 $first_slide = $slides[0];
 
-// Verhouding van de eerste afbeelding (fallback 16/9).
 $ratio = ($first_slide['w'] > 0 && $first_slide['h'] > 0)
 	? $first_slide['w'] . ' / ' . $first_slide['h']
 	: '16 / 9';
 
-// knop afgerond met een rand
 $arrow_classes = 'imgcarousel__arrow flex items-center justify-center rounded-base border-[2px] border-primary text-primary bg-white transition hover:bg-primary hover:text-white';
 ?>
 

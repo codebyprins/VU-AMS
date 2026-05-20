@@ -7,7 +7,6 @@ $button_text = get_sub_field('button_text_contactcta') ?: 'Contact';
 
 $image = get_sub_field('image_contactcta');
 
-// Omdat jouw image return format = URL
 $image_url = $image ?: get_template_directory_uri() . '/resources/images/contact-default.jpg';
 $image_alt = 'Contact image';
 ?>
