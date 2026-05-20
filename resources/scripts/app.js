@@ -2,7 +2,6 @@ import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
 import '../styles/app.css';
 
-import './api-sync.js';
 import '../scripts/product_info.js'
 import './search-popup.js';
 import './popup-bar.js';
@@ -12,10 +11,7 @@ import './team-accordion.js';
 import './cookie-consent.js';
 import './numerical_counter.js';
 import './map.js';
-<<<<<<< Updated upstream
 import './popup.js';
 import './imgcarousel.js';
 
 console.log('VU-AMS theme JS loaded!');
-=======
->>>>>>> Stashed changes
