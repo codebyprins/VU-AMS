@@ -2,7 +2,6 @@ import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
 import '../styles/app.css';
 
-import './api-sync.js';
 import '../scripts/product_info.js'
 import './search-popup.js';
 import './popup-bar.js';

@@ -13,19 +13,16 @@ if (is_numeric($form)) {
 }
 
 if ($shortcode !== '') {
-	// Optioneel ACF-veld; valt terug op de standaardtekst als het niet bestaat of leeg is.
 	$contact_title = get_sub_field('contact_title') ?: 'Neem contact op';
 	?>
 	<section class="section bg-gradient-to-b from-surface to-white py-20 lg:py-28">
 		<div class="container px-4 sm:px-6 lg:px-8">
 
-			<!-- Header -->
 			<div class="mx-auto mb-12 max-w-2xl text-center lg:mb-16">
 				<h2 class="font-bold leading-[1.15] tracking-tight text-accent"><?php echo esc_html($contact_title); ?></h2>
 				<span class="mx-auto mt-6 block h-1 w-16 rounded-full bg-gradient-to-r from-primary to-primary_dark" aria-hidden="true"></span>
 			</div>
 
-			<!-- Formulierkaart -->
 			<div class="mx-auto max-w-2xl rounded-[1.75rem] bg-white p-8 shadow-2xl shadow-accent/10 sm:p-12 lg:p-16">
 				<div
 					id="contact-form-wrapper"
