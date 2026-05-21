@@ -1,6 +1,24 @@
 <?php
 function theme_enqueue_assets()
 {
+    
+    // Choices.js CSS
+    wp_enqueue_style(
+        'choices-css',
+        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css',
+        [],
+        null
+    );
+
+    // Choices.js JS
+    wp_enqueue_script(
+        'choices-js',
+        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js',
+        [],
+        null,
+        true
+    );
+    
     // Swiper CSS
     wp_enqueue_style(
         'swiper-style',
@@ -30,24 +48,6 @@ function theme_enqueue_assets()
         get_template_directory_uri() . '/public/js/main.js',
         ['swiper-script'],
         filemtime(get_template_directory() . '/public/js/main.js'),
-        true
-    );
-
-
-    // Choices.js CSS
-    wp_enqueue_style(
-        'choices-css',
-        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css',
-        [],
-        null
-    );
-
-    // Choices.js JS
-    wp_enqueue_script(
-        'choices-js',
-        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js',
-        [],
-        null,
         true
     );
 

@@ -125,7 +125,7 @@ $keywords = get_terms([
             </div>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
-                <p>Keyword</p>  
+                <p>Keyword</p>
                 <select
                     name="keyword[]"
                     class="w-full bg-white border border-black py-2 px-4"
@@ -150,11 +150,11 @@ $keywords = get_terms([
                 </select>
             </div>
 
-            <button
-                type="reset"
+            <a
+                href="<?= esc_url(remove_query_arg(['search', 'year', 'author', 'keyword'])); ?>"
                 class="btn btn-primary-outline w-full">
                 Reset Filters
-            </button>
+            </a>
 
             <button
                 type="submit"
