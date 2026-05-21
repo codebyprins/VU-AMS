@@ -31,3 +31,34 @@ add_action('acf/render_field/name=publications_api_sync', function () {
     </div>
 <?php
 });
+
+add_action('init', function () {
+
+    add_filter(
+        'acf/load_field/key=field_6a0eb3d7467a5',
+        'load_publication_keyword_choices'
+    );
+});
+
+function load_publication_keyword_choices($field)
+{
+    $field['choices'] = [];
+
+    $terms = get_terms([
+        'taxonomy'   => 'publication_keyword',
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+    ]);
+
+    if (is_wp_error($terms)) {
+        return $field;
+    }
+
+    foreach ($terms as $term) {
+
+        $field['choices'][$term->slug] = $term->name;
+    }
+
+    return $field;
+}

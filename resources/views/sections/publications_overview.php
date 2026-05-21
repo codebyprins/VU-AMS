@@ -1,4 +1,5 @@
 <?php
+$publications_tags_filter = get_field('publications_tags_filter', 'option') ?: [];
 
 $paged = max(
     1,
@@ -88,7 +89,7 @@ $keywords = get_terms([
             <h3 class="mb-6">Filters</h3>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
-                <p>Title/Keywords/Content</p>
+                <p>Title or Content</p>
                 <input
                     type="text"
                     name="search"
@@ -124,59 +125,36 @@ $keywords = get_terms([
             </div>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
-                <p>Keywords</p>
+                <p>Keyword</p>  
                 <select
                     name="keyword[]"
-                    id="multiSelect"
-                    multiple="multiple"
-                    class="w-full bg-white border border-black py-2 px-4">
-
-                    <?php
-                    $tagGroups = get_posts([
-                        'post_type'      => 'tag-group',
-                        'posts_per_page' => -1,
-                        'post_status'    => 'publish',
-                        'orderby'        => 'title',
-                        'order'          => 'ASC',
-                    ]);
-
-                    foreach ($tagGroups as $tagGroup) :
-                        $groupedTags = array_filter(array_map(
-                            'trim',
-                            explode(',', $tagGroup->post_content)
-                        ));
-
-                        if (empty($groupedTags)) {
-                            continue;
-                        }
-                    ?>
-                        <optgroup label="<?= esc_attr($tagGroup->post_title); ?>">
-                            <?php foreach ($groupedTags as $tagName) :
-
-                                $term = get_term_by(
-                                    'name',
-                                    $tagName,
-                                    'publication_keyword'
-                                );
-
+                    class="w-full bg-white border border-black py-2 px-4"
+                    multiple>
+                    <?php foreach ($publications_tags_filter as $filter) : ?>
+                        <optgroup label="<?= esc_attr($filter['publications_tags_category']); ?>">
+                            <?php foreach ($filter['publications_tags_tags'] as $tag_id) : ?>
+                                <?php
+                                $term = get_term($tag_id);
                                 if (!$term || is_wp_error($term)) {
                                     continue;
                                 }
-                            ?
+                                ?>
                                 <option
                                     value="<?= esc_attr($term->slug); ?>"
-                                    <?= in_array(
-                                        $term->slug,
-                                        $_GET['keyword'] ?? [],
-                                        true
-                                    ) ? 'selected' : ''; ?>>
-                                    <?= esc_html($term->name); ?>: <?= (int) $term->count; ?>
+                                    <?= (!empty($_GET['keyword']) && in_array($term->slug, (array) $_GET['keyword'])) ? 'selected' : ''; ?>>
+                                    <?= esc_html($term->name); ?>
                                 </option>
                             <?php endforeach; ?>
                         </optgroup>
                     <?php endforeach; ?>
                 </select>
             </div>
+
+            <button
+                type="reset"
+                class="btn btn-primary-outline w-full">
+                Reset Filters
+            </button>
 
             <button
                 type="submit"

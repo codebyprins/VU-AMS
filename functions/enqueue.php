@@ -1,5 +1,6 @@
 <?php
-function theme_enqueue_assets() {
+function theme_enqueue_assets()
+{
     // Swiper CSS
     wp_enqueue_style(
         'swiper-style',
@@ -32,6 +33,24 @@ function theme_enqueue_assets() {
         true
     );
 
+
+    // Choices.js CSS
+    wp_enqueue_style(
+        'choices-css',
+        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css',
+        [],
+        null
+    );
+
+    // Choices.js JS
+    wp_enqueue_script(
+        'choices-js',
+        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js',
+        [],
+        null,
+        true
+    );
+
     // Initialize Swiper
     wp_add_inline_script('theme-app', '
     document.addEventListener("DOMContentLoaded", function() {
@@ -57,7 +76,8 @@ function theme_enqueue_assets() {
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
-function theme_enqueue_admin_assets() {
+function theme_enqueue_admin_assets()
+{
     wp_enqueue_script(
         'publication-api-sync',
         get_template_directory_uri() . '/resources/scripts/api-sync.js',
