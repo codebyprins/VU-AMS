@@ -42,6 +42,7 @@ if ($shortcode !== '') {
 						[&_.wpcf7-form-control:not(.wpcf7-submit):hover]:border-primary/40 [&_.wpcf7-form-control:not(.wpcf7-submit):hover]:shadow-md
 						[&_.wpcf7-form-control:not(.wpcf7-submit):focus]:border-primary [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:bg-white [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:ring-[3px] [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:ring-primary/20
 						[&_textarea.wpcf7-form-control]:min-h-36 [&_textarea.wpcf7-form-control]:resize-y
+						[&_.wpcf7-form-control.wpcf7-file]:!text-[12px] [&_.wpcf7-form-control.wpcf7-select]:!text-[12px]
 						[&_.wpcf7-submit]:mt-1 [&_.wpcf7-submit]:flex [&_.wpcf7-submit]:w-full [&_.wpcf7-submit]:cursor-pointer [&_.wpcf7-submit]:items-center [&_.wpcf7-submit]:justify-center [&_.wpcf7-submit]:rounded-xl [&_.wpcf7-submit]:border-0 [&_.wpcf7-submit]:bg-gradient-to-br [&_.wpcf7-submit]:from-primary [&_.wpcf7-submit]:to-primary_dark [&_.wpcf7-submit]:px-8 [&_.wpcf7-submit]:py-4 [&_.wpcf7-submit]:text-base [&_.wpcf7-submit]:font-bold [&_.wpcf7-submit]:tracking-wide [&_.wpcf7-submit]:text-white [&_.wpcf7-submit]:shadow-lg [&_.wpcf7-submit]:shadow-primary/40 [&_.wpcf7-submit]:transition
 						[&_.wpcf7-submit:hover]:-translate-y-0.5 [&_.wpcf7-submit:hover]:brightness-105 [&_.wpcf7-submit:hover]:shadow-xl [&_.wpcf7-submit:hover]:shadow-primary/50
 						[&_.wpcf7-submit:active]:translate-y-0
@@ -56,9 +57,9 @@ if ($shortcode !== '') {
 						[&_form.failed_.wpcf7-response-output]:border-red-600 [&_form.failed_.wpcf7-response-output]:bg-red-50 [&_form.failed_.wpcf7-response-output]:text-red-700
 						[&_form.spam_.wpcf7-response-output]:border-red-600 [&_form.spam_.wpcf7-response-output]:bg-red-50 [&_form.spam_.wpcf7-response-output]:text-red-700
 						sm:[&_.wpcf7-form]:grid-cols-2
-						sm:[&_.wpcf7-form>p]:col-span-2
-						sm:[&_.wpcf7-form>p:has([data-name=your-name])]:col-span-1
-						sm:[&_.wpcf7-form>p:has([data-name=your-email])]:col-span-1
+						sm:[&_.wpcf7-form>p]:col-span-1
+						sm:[&_.wpcf7-form>p:has(textarea)]:col-span-2
+						sm:[&_.wpcf7-form>p:last-of-type]:col-span-2
 						sm:[&_.wpcf7-response-output]:col-span-2
 					"
 				>
