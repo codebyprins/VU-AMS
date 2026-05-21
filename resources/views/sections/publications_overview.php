@@ -20,16 +20,18 @@ if (!empty($_GET['year'])) {
     ];
 }
 
-
-if (!empty($_GET['keyword'])) {
+if (!empty($_GET['keyword']) && is_array($_GET['keyword'])) {
 
     $tax_query[] = [
         'taxonomy' => 'publication_keyword',
         'field'    => 'slug',
-        'terms'    => sanitize_text_field($_GET['keyword']),
+        'terms'    => array_map(
+            'sanitize_text_field',
+            $_GET['keyword']
+        ),
+        'operator' => 'IN',
     ];
 }
-
 $args = [
     'post_type'      => 'publication',
     'post_status'    => 'publish',
@@ -49,13 +51,10 @@ if (!empty($_GET['search'])) {
 // search by author
 if (!empty($_GET['author'])) {
 
-    $author_search = sanitize_text_field($_GET['author']);
-    $args['meta_query'] = [
-        [
-            'key'     => 'publication_author',
-            'value'   => $author_search,
-            'compare' => 'LIKE',
-        ]
+    $tax_query[] = [
+        'taxonomy' => 'publication_author',
+        'field'    => 'slug',
+        'terms'    => sanitize_text_field($_GET['author']),
     ];
 }
 
@@ -79,15 +78,6 @@ $keywords = get_terms([
     'orderby'    => 'name',
     'order'      => 'ASC',
 ]);
-
-$publication_query = new WP_Query([
-    'post_type' => 'publication',
-    'post_status' => 'publish',
-    'posts_per_page' => 4,
-    'paged' => $paged,
-    'orderby' => 'date',
-    'order' => 'DESC',
-]);
 ?>
 
 <section class="bg-white py-10">
@@ -96,6 +86,16 @@ $publication_query = new WP_Query([
             method="GET"
             class="xl:w-1/4 md:w-2/5 w-full bg-[#d4eff2] border-4 border-[#01B4C9] rounded-xl px-4 py-5 self-start md:block">
             <h3 class="mb-6">Filters</h3>
+
+            <div class="filter-item flex flex-col gap-1 mb-5">
+                <p>Title/Keywords/Content</p>
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search publications..."
+                    value="<?= esc_attr($_GET['search'] ?? ''); ?>"
+                    class="w-full bg-white border border-black py-2 px-4">
+            </div>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
                 <p>Year</p>
@@ -124,14 +124,60 @@ $publication_query = new WP_Query([
             </div>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
-                <p>Title/Keywords/Content</p>
-                <input
-                    type="text"
-                    name="search"
-                    placeholder="Search publications..."
-                    value="<?= esc_attr($_GET['search'] ?? ''); ?>"
+                <p>Keywords</p>
+                <select
+                    name="keyword[]"
+                    id="multiSelect"
+                    multiple="multiple"
                     class="w-full bg-white border border-black py-2 px-4">
+
+                    <?php
+                    $tagGroups = get_posts([
+                        'post_type'      => 'tag-group',
+                        'posts_per_page' => -1,
+                        'post_status'    => 'publish',
+                        'orderby'        => 'title',
+                        'order'          => 'ASC',
+                    ]);
+
+                    foreach ($tagGroups as $tagGroup) :
+                        $groupedTags = array_filter(array_map(
+                            'trim',
+                            explode(',', $tagGroup->post_content)
+                        ));
+
+                        if (empty($groupedTags)) {
+                            continue;
+                        }
+                    ?>
+                        <optgroup label="<?= esc_attr($tagGroup->post_title); ?>">
+                            <?php foreach ($groupedTags as $tagName) :
+
+                                $term = get_term_by(
+                                    'name',
+                                    $tagName,
+                                    'publication_keyword'
+                                );
+
+                                if (!$term || is_wp_error($term)) {
+                                    continue;
+                                }
+                            ?
+                                <option
+                                    value="<?= esc_attr($term->slug); ?>"
+                                    <?= in_array(
+                                        $term->slug,
+                                        $_GET['keyword'] ?? [],
+                                        true
+                                    ) ? 'selected' : ''; ?>>
+                                    <?= esc_html($term->name); ?>: <?= (int) $term->count; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
+                </select>
             </div>
+
             <button
                 type="submit"
                 class="btn btn-primary mt-6 w-full">
@@ -185,9 +231,13 @@ $publication_query = new WP_Query([
                             <?php if (!empty($publication_tags)) : ?>
                                 <div class="tags flex flex-wrap gap-2 mb-4">
                                     <?php foreach ($publication_tags as $tag) : ?>
-                                        <div class="tag bg-[#F6DD75] border border-black text-black px-3 py-1 rounded-full text-sm w-fit">
+                                        <a
+                                            href="?keyword=<?= esc_attr($tag->slug); ?>"
+                                            class="tag bg-primary_light border border-black text-black px-3 py-1 rounded-full text-sm w-fit hover:bg-[#01B4C9] transition">
+
                                             <?= esc_html($tag->name); ?>
-                                        </div>
+
+                                        </a>
                                     <?php endforeach; ?>
                                 </div>
                             <?php endif; ?>
@@ -214,7 +264,7 @@ $publication_query = new WP_Query([
                         </p>
                     </div>
                 <?php endif; ?>
-                <?php custom_pagination($publication_query); ?>
+                <?php custom_pagination($query); ?>
                 <?php wp_reset_postdata(); ?>
             </div>
         </div>

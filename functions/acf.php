@@ -21,8 +21,7 @@ add_action('acf/render_field/name=publications_api_sync', function () {
         <div id="sync-status" style="margin-top:10px;"></div>
         <hr>
         <strong>Last Sync Info</strong><br>
-        <p> Last Run Start: <?php echo esc_html($log['last_run_start'] ?? '-'); ?></p>
-        <p> Last Run End: <?php echo esc_html($log['last_run_end'] ?? '-'); ?></p>
+        <p> Last sync: <?php echo esc_html($log['last_run_end'] ?? '-'); ?></p>
         <p>Total in DB: <?php echo esc_html($log['total_posts'] ?? wp_count_posts('publication')->publish); ?></p><br>
 
         <p>Zotero Updated: <?php echo esc_html($log['zotero_updated'] ?? 0); ?></p>
