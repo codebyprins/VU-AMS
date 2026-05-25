@@ -1,126 +1,116 @@
 <?php
-$items = get_sub_field('testimonial_items');
+$items        = get_sub_field('testimonial_items');
 if (!$items) return;
-$total = count($items);
-$carousel_id = 'testimonial-carousel-' . get_the_ID();
+
+$groups       = array_chunk($items, 3);
+$carousel_id  = 'testimonial-carousel-' . get_the_ID();
+$has_multiple = count($groups) > 1;
 ?>
 
-<section class="container mx-auto px-4 py-10 flex-center">
-    <div class="relative" id="<?php echo esc_attr($carousel_id); ?>">
+<section class="w-full py-12 sm:py-16">
+	<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+		<div id="<?php echo esc_attr($carousel_id); ?>" class="relative">
 
-        <div class="testimonial-track">
+			<?php foreach ($groups as $group_index => $group) : ?>
+				<div
+					class="testimonial-group<?php echo $group_index === 0 ? ' is-active' : ''; ?>"
+					aria-hidden="<?php echo $group_index === 0 ? 'false' : 'true'; ?>">
 
-            <?php foreach ($items as $index => $item) :
-                $image     = $item['image'];
-                $image_url = is_array($image) ? $image['url'] : $image;
-                $image_alt = is_array($image) ? $image['alt'] : '';
-                $content   = wp_trim_words(wp_strip_all_tags($item['content']), 40, '...');
-            ?>
-                <div
-                    class="testimonial-slide<?php echo $index === 0 ? ' is-active' : ''; ?>"
-                    aria-hidden="<?php echo $index === 0 ? 'false' : 'true'; ?>">
-                    <div class="relative w-full min-h-[240px] md:min-h-[460px] flex items-center justify-center overflow-hidden">
-                        <img
-                            src="<?php echo esc_url($image_url); ?>"
-                            alt="<?php echo esc_attr($image_alt); ?>"
-                            class="absolute inset-0 w-full h-full object-cover" />
+					<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+						<?php foreach ($group as $item) :
+							$image       = $item['image'] ?? '';
+							$image_url   = is_array($image) ? ($image['url'] ?? '') : (string) $image;
+							$image_alt   = is_array($image) ? ($image['alt'] ?? '') : '';
+							$content     = wp_trim_words(wp_strip_all_tags($item['content'] ?? ''), 40, '&hellip;');
+							$name        = $item['name'] ?? '';
+							$job_title   = $item['job_title'] ?? '';
+							$institution = $item['institution'] ?? '';
+						?>
+							<div class="flex flex-col items-center rounded-2xl bg-[#F3F3F3] px-8 py-10 text-center">
 
-                        <div class="absolute inset-0" style="background-color: rgba(16,25,53,0.6);"></div>
+								<div class="mb-5 flex h-14 w-14 items-center justify-center">
+									<?php if (!empty($image_url)) : ?>
+										<img
+											src="<?php echo esc_url($image_url); ?>"
+											alt="<?php echo esc_attr($image_alt); ?>"
+											class="h-14 w-14 rounded-full object-cover"
+										/>
+									<?php else : ?>
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="#00B6CB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+											<line x1="16" y1="8" x2="2" y2="22"></line>
+											<line x1="17.5" y1="15" x2="9" y2="15"></line>
+										</svg>
+									<?php endif; ?>
+								</div>
 
-                        <div class="relative z-10 text-center text-white px-16 sm:px-24 md:px-36 lg:px-56 py-8 md:py-20 max-w-5xl mx-auto">
-                            <div class="text-sm sm:text-lg md:text-2xl lg:text-3xl font-medium md:!leading-[45px] leading-[30px]">
-                                <?php echo esc_html($content); ?>
-                            </div>
-                            <div class="text-sm sm:text-lg md:text-2xl lg:text-3xl font-medium leading-normal sm:leading-relaxed md:leading-loose">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+								<?php if ($content) : ?>
+									<p class="mb-5 text-sm leading-relaxed text-slate-600">
+										&ldquo;<?php echo esc_html($content); ?>&rdquo;
+									</p>
+								<?php endif; ?>
 
-        </div>
+								<?php if ($name) : ?>
+									<p class="text-2xl font-bold text-slate-900"><?php echo esc_html($name); ?></p>
+								<?php endif; ?>
 
-        <button
-            class="testimonial-prev absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white shadow-md hover:opacity-75 transition-opacity"
-            style="background-color: #00B6CB;"
-            aria-label="Vorige testimonial">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
+								<?php if ($job_title) : ?>
+									<p class="mt-1 text-slate-900"><?php echo esc_html($job_title); ?></p>
+								<?php endif; ?>
 
-        <button
-            class="testimonial-next absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white shadow-md hover:opacity-75 transition-opacity"
-            style="background-color: #00B6CB;"
-            aria-label="Volgende testimonial">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-        </button>
+								<?php if ($institution) : ?>
+									<p class="mt-1 text-slate-900"><?php echo esc_html($institution); ?></p>
+								<?php endif; ?>
 
-    </div>
+							</div>
+						<?php endforeach; ?>
+					</div>
+
+				</div>
+			<?php endforeach; ?>
+
+		</div>
+	</div>
 </section>
 
 <style>
-    .testimonial-track {
-        position: relative;
-    }
+	.testimonial-group {
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		transition: opacity 0.8s ease;
+		pointer-events: none;
+	}
 
-    .testimonial-slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0;
-        transition: opacity 0.7s ease;
-        pointer-events: none;
-    }
-
-    .testimonial-slide.is-active {
-        position: relative;
-        opacity: 1;
-        pointer-events: auto;
-    }
+	.testimonial-group.is-active {
+		opacity: 1;
+		position: relative;
+		pointer-events: auto;
+	}
 </style>
 
+<?php if ($has_multiple) : ?>
 <script>
-    (function() {
-        var carousel = document.getElementById('<?php echo esc_js($carousel_id); ?>');
-        if (!carousel) return;
+(function () {
+	var carousel = document.getElementById('<?php echo esc_js($carousel_id); ?>');
+	if (!carousel) return;
 
-        var slides = carousel.querySelectorAll('.testimonial-slide');
-        var total = slides.length;
-        var current = 0;
-        var autoplay;
+	var groups  = carousel.querySelectorAll('.testimonial-group');
+	var total   = groups.length;
+	if (total < 2) return;
+	var current = 0;
 
-        function goTo(index) {
-            slides[current].classList.remove('is-active');
-            slides[current].setAttribute('aria-hidden', 'true');
+	function goTo(index) {
+		groups[current].classList.remove('is-active');
+		groups[current].setAttribute('aria-hidden', 'true');
+		current = (index + total) % total;
+		groups[current].classList.add('is-active');
+		groups[current].setAttribute('aria-hidden', 'false');
+	}
 
-            current = (index + total) % total;
-
-            slides[current].classList.add('is-active');
-            slides[current].setAttribute('aria-hidden', 'false');
-        }
-
-        function resetAutoplay() {
-            clearInterval(autoplay);
-            autoplay = setInterval(function() {
-                goTo(current + 1);
-            }, 6000);
-        }
-
-        carousel.querySelector('.testimonial-prev').addEventListener('click', function() {
-            goTo(current - 1);
-            resetAutoplay();
-        });
-
-        carousel.querySelector('.testimonial-next').addEventListener('click', function() {
-            goTo(current + 1);
-            resetAutoplay();
-        });
-
-        resetAutoplay();
-    }());
+	setInterval(function () { goTo(current + 1); }, 10000);
+}());
 </script>
+<?php endif; ?>

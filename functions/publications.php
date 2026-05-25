@@ -12,6 +12,31 @@ add_action('init', function () {
     'show_in_rest' => true,
   ]);
 
+  // Register custom meta fields for REST API
+  $meta_fields = [
+    'publication_year',
+    'publication_authors',
+    'publication_keywords',
+    'publication_source',
+    'publication_date',
+    'publication_url',
+    'doi',
+    'publication_title',
+    'external_id',
+  ];
+
+  foreach ($meta_fields as $field) {
+    register_rest_field('publication', $field, [
+      'get_callback' => function ($post) use ($field) {
+        return get_post_meta($post['id'], $field, true);
+      },
+      'schema' => [
+        'type' => 'string',
+        'context' => ['view', 'edit'],
+      ],
+    ]);
+  }
+
   $taxonomies = [
     'publication_year'   => 'Year',
     'publication_author' => 'Author',
@@ -87,40 +112,49 @@ function upsert_publication($data)
 
   update_post_meta($post_id, 'external_id', $data['external_id']);
 
-  // YEAR
+  // YEAR - Store as both taxonomy and meta
   if (!empty($data['year'])) {
     wp_set_object_terms(
       $post_id,
       [$data['year']],
       'publication_year'
     );
+    update_post_meta($post_id, 'publication_year', sanitize_text_field($data['year']));
   }
 
-  // AUTHORS
+  // AUTHORS - Store as both taxonomy and meta
   if (!empty($data['authors'])) {
     wp_set_object_terms(
       $post_id,
       $data['authors'],
       'publication_author'
     );
+    update_post_meta($post_id, 'publication_authors', wp_json_encode($data['authors']));
   }
 
-  // KEYWORDS
+  // KEYWORDS - Store as both taxonomy and meta
   if (!empty($data['keywords'])) {
     wp_set_object_terms(
       $post_id,
       $data['keywords'],
       'publication_keyword'
     );
+    update_post_meta($post_id, 'publication_keywords', wp_json_encode($data['keywords']));
   }
 
-  // SOURCE
+  // SOURCE - Store as both taxonomy and meta
   if (!empty($data['source'])) {
     wp_set_object_terms(
       $post_id,
       [$data['source']],
       'publication_source'
     );
+    update_post_meta($post_id, 'publication_source', sanitize_text_field($data['source']));
+  }
+
+  // PUBLICATION DATE
+  if (!empty($data['publication_date'])) {
+    update_post_meta($post_id, 'publication_date', sanitize_text_field($data['publication_date']));
   }
 
   if (!empty($data['url'])) {
@@ -176,6 +210,8 @@ function sync_zotero_publications()
         'content'     => $data['abstractNote'] ?? '',
         'excerpt'     => wp_trim_words($data['abstractNote'] ?? '', 30),
 
+        'publication_date' => $data['date'] ?? '',
+        
         'year' => !empty($data['date'])
           ? date('Y', strtotime($data['date']))
           : '',

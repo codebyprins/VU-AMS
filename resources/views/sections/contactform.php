@@ -13,19 +13,16 @@ if (is_numeric($form)) {
 }
 
 if ($shortcode !== '') {
-	// Optioneel ACF-veld; valt terug op de standaardtekst als het niet bestaat of leeg is.
 	$contact_title = get_sub_field('contact_title') ?: 'Neem contact op';
 	?>
 	<section class="section bg-gradient-to-b from-surface to-white py-20 lg:py-28">
 		<div class="container px-4 sm:px-6 lg:px-8">
 
-			<!-- Header -->
 			<div class="mx-auto mb-12 max-w-2xl text-center lg:mb-16">
 				<h2 class="font-bold leading-[1.15] tracking-tight text-accent"><?php echo esc_html($contact_title); ?></h2>
 				<span class="mx-auto mt-6 block h-1 w-16 rounded-full bg-gradient-to-r from-primary to-primary_dark" aria-hidden="true"></span>
 			</div>
 
-			<!-- Formulierkaart -->
 			<div class="mx-auto max-w-2xl rounded-[1.75rem] bg-white p-8 shadow-2xl shadow-accent/10 sm:p-12 lg:p-16">
 				<div
 					id="contact-form-wrapper"
@@ -42,6 +39,7 @@ if ($shortcode !== '') {
 						[&_.wpcf7-form-control:not(.wpcf7-submit):hover]:border-primary/40 [&_.wpcf7-form-control:not(.wpcf7-submit):hover]:shadow-md
 						[&_.wpcf7-form-control:not(.wpcf7-submit):focus]:border-primary [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:bg-white [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:ring-[3px] [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:ring-primary/20
 						[&_textarea.wpcf7-form-control]:min-h-36 [&_textarea.wpcf7-form-control]:resize-y
+						[&_.wpcf7-form-control.wpcf7-file]:!text-[12px] [&_.wpcf7-form-control.wpcf7-select]:!text-[12px]
 						[&_.wpcf7-submit]:mt-1 [&_.wpcf7-submit]:flex [&_.wpcf7-submit]:w-full [&_.wpcf7-submit]:cursor-pointer [&_.wpcf7-submit]:items-center [&_.wpcf7-submit]:justify-center [&_.wpcf7-submit]:rounded-xl [&_.wpcf7-submit]:border-0 [&_.wpcf7-submit]:bg-gradient-to-br [&_.wpcf7-submit]:from-primary [&_.wpcf7-submit]:to-primary_dark [&_.wpcf7-submit]:px-8 [&_.wpcf7-submit]:py-4 [&_.wpcf7-submit]:text-base [&_.wpcf7-submit]:font-bold [&_.wpcf7-submit]:tracking-wide [&_.wpcf7-submit]:text-white [&_.wpcf7-submit]:shadow-lg [&_.wpcf7-submit]:shadow-primary/40 [&_.wpcf7-submit]:transition
 						[&_.wpcf7-submit:hover]:-translate-y-0.5 [&_.wpcf7-submit:hover]:brightness-105 [&_.wpcf7-submit:hover]:shadow-xl [&_.wpcf7-submit:hover]:shadow-primary/50
 						[&_.wpcf7-submit:active]:translate-y-0
@@ -56,9 +54,9 @@ if ($shortcode !== '') {
 						[&_form.failed_.wpcf7-response-output]:border-red-600 [&_form.failed_.wpcf7-response-output]:bg-red-50 [&_form.failed_.wpcf7-response-output]:text-red-700
 						[&_form.spam_.wpcf7-response-output]:border-red-600 [&_form.spam_.wpcf7-response-output]:bg-red-50 [&_form.spam_.wpcf7-response-output]:text-red-700
 						sm:[&_.wpcf7-form]:grid-cols-2
-						sm:[&_.wpcf7-form>p]:col-span-2
-						sm:[&_.wpcf7-form>p:has([data-name=your-name])]:col-span-1
-						sm:[&_.wpcf7-form>p:has([data-name=your-email])]:col-span-1
+						sm:[&_.wpcf7-form>p]:col-span-1
+						sm:[&_.wpcf7-form>p:has(textarea)]:col-span-2
+						sm:[&_.wpcf7-form>p:last-of-type]:col-span-2
 						sm:[&_.wpcf7-response-output]:col-span-2
 					"
 				>
