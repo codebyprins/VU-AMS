@@ -17,6 +17,33 @@ $alignment_classes = [
 $align = $alignment_classes[$layout] ?? $alignment_classes['center'];
 ?>
 
+<style>
+    .hero-title p {
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in-up {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .fade-in-up.delay-1 { animation-delay: 0.1s; }
+    .fade-in-up.delay-2 { animation-delay: 0.25s; }
+</style>
+
 <section class="relative w-screen h-[400px] overflow-hidden">
 
     <?php if ($video): ?>
@@ -30,13 +57,13 @@ $align = $alignment_classes[$layout] ?? $alignment_classes['center'];
         <div class="relative z-20 h-full flex flex-col justify-end p-10 text-white bg-gradient-to-t from-black/60 to-transparent <?php echo $align; ?>">
 
             <?php if ($title): ?>
-                <h1 class="hero-title text-5xl md:text-7xl font-bold">
+                <h1 class="hero-title text-5xl md:text-7xl font-bold fade-in-up delay-1">
                     <?php echo wp_kses_post($title); ?>
                 </h1>
             <?php endif; ?>
 
             <?php if ($text): ?>
-                <div class=" leading-[1.2] hero-text mt-4 text-1xl text-[1.875rem] max-w-[600px]">
+                <div class="leading-[1.2] hero-text mt-4 text-1xl text-[1.875rem] max-w-[600px] fade-in-up delay-2">
                     <?php echo apply_filters('the_content', $text); ?>
                 </div>
             <?php endif; ?>
@@ -45,12 +72,3 @@ $align = $alignment_classes[$layout] ?? $alignment_classes['center'];
     <?php endif; ?>
 
 </section>
-
-
-<style>
-    .hero-title p {
-        font-size: inherit;
-        font-weight: inherit;
-        line-height: inherit;
-    }
-</style>

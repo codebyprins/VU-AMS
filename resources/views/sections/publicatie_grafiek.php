@@ -20,19 +20,44 @@ if (!is_wp_error($year_terms) && !empty($year_terms)) {
 }
 ?>
 
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    opacity: 0;
+  }
+
+  .fade-in-up.is-visible {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .fade-in-up.delay-1 { animation-delay: 0.1s; }
+  .fade-in-up.delay-2 { animation-delay: 0.25s; }
+  .fade-in-up.delay-3 { animation-delay: 0.4s; }
+</style>
+
 <section class="container mx-auto px-4 py-8 md:py-12">
 
     <?php if ($titel) : ?>
-        <h2 class="font-sans text-2xl md:text-4xl font-bold mb-2"><?php echo esc_html($titel); ?></h2>
-        <div class="w-full h-[2px] bg-primary mb-4"></div>
+        <h2 class="font-sans text-2xl md:text-4xl font-bold mb-2 fade-in-up delay-1"><?php echo esc_html($titel); ?></h2>
+        <div class="w-full h-[2px] bg-primary mb-4 fade-in-up delay-1"></div>
     <?php endif; ?>
 
     <?php if ($beschrijving) : ?>
-        <p class="font-sans text-[16px] text-gray-600 mb-8"><?php echo esc_html($beschrijving); ?></p>
+        <p class="font-sans text-[16px] text-gray-600 mb-8 fade-in-up delay-2"><?php echo esc_html($beschrijving); ?></p>
     <?php endif; ?>
 
     <?php if (!empty($jaren)) : ?>
-        <div class="border border-gray-200 rounded-lg p-6">
+        <div class="border border-gray-200 rounded-lg p-6 fade-in-up delay-3">
             <div class="flex items-center gap-4 mb-6">
                 <span class="flex items-center gap-2 text-sm text-gray-500">
                     <span class="inline-block w-8 h-[2px] bg-primary"></span>
@@ -58,55 +83,70 @@ if (!is_wp_error($year_terms) && !empty($year_terms)) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('publicatie-grafiek');
-    if (!ctx) return;
+(function () {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: <?php echo json_encode($jaren); ?>,
-            datasets: [{
-                label: 'Publicaties',
-                data: <?php echo json_encode($publicaties); ?>,
-                borderColor: '#00B6CB',
-                backgroundColor: 'rgba(0, 182, 203, 0.1)',
-                borderWidth: 2,
-                tension: 0.3,
-                fill: true,
-                pointBackgroundColor: '#00B6CB',
-                pointRadius: 5,
-                pointHoverRadius: 7
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
+    document.querySelectorAll('.fade-in-up').forEach((el) => {
+        observer.observe(el);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('publicatie-grafiek');
+        if (!ctx) return;
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode($jaren); ?>,
+                datasets: [{
+                    label: 'Publicaties',
+                    data: <?php echo json_encode($publicaties); ?>,
+                    borderColor: '#00B6CB',
+                    backgroundColor: 'rgba(0, 182, 203, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointBackgroundColor: '#00B6CB',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
             },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Jaar',
-                        color: '#888'
-                    },
-                    ticks: {
-                        autoSkip: false,
-                        maxRotation: 45
-                    }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Publicaties',
-                        color: '#888'
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Jaar',
+                            color: '#888'
+                        },
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45
+                        }
                     },
-                    beginAtZero: true
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Publicaties',
+                            color: '#888'
+                        },
+                        beginAtZero: true
+                    }
                 }
             }
-        }
+        });
     });
-});
+})();
 </script>
