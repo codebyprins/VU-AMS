@@ -1,8 +1,6 @@
 <?php
 $title = get_field('popup_title', 'option');
 $content = get_field('popup_text', 'option');
-$email = get_field('popup_email', 'option');
-$button = get_field('popup_button', 'option');
 ?>
 
 <div id="newsletter-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
@@ -28,23 +26,46 @@ $button = get_field('popup_button', 'option');
             </div>
         <?php endif; ?>
 
-        <div class="space-y-4">
-
-            <input 
-                type="email"
-                placeholder="<?php echo esc_attr($email ?: 'Enter your email'); ?>"
-                class="w-full px-4 py-2 border border-[#F7C80C] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#ebcf60]"
-            >
-
-            <?php if ($button): ?>
-                <a 
-                    href="<?php echo esc_url($button); ?>"
-                    class="block w-full text-center bg-[#00B6CB] text-white py-2 rounded-lg hover:bg-[#ABE0E6]transition"
-                >
-                    Subscribe
-                </a>
-            <?php endif; ?>
-
+        <div class="space-y-4 mailpoet-form-wrapper">
+            <style>
+                .mailpoet-form-wrapper input[type="email"],
+                .mailpoet-form-wrapper input[type="text"],
+                .mailpoet-form-wrapper input[type="number"] {
+                    width: 100%;
+                    padding: 0.5rem 1rem;
+                    border: 1px solid #F7C80C;
+                    border-radius: 0.5rem;
+                    outline: none;
+                }
+                
+                .mailpoet-form-wrapper input[type="email"]:focus,
+                .mailpoet-form-wrapper input[type="text"]:focus,
+                .mailpoet-form-wrapper input[type="number"]:focus {
+                    outline: none;
+                    ring: 1px #ebcf60;
+                    box-shadow: 0 0 0 1px #ebcf60;
+                }
+                
+                .mailpoet-form-wrapper button,
+                .mailpoet-form-wrapper input[type="submit"] {
+                    display: block;
+                    width: 100%;
+                    text-align: center;
+                    background-color: #00B6CB;
+                    color: white;
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.5rem;
+                    border: none;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }
+                
+                .mailpoet-form-wrapper button:hover,
+                .mailpoet-form-wrapper input[type="submit"]:hover {
+                    background-color: #ABE0E6;
+                }
+            </style>
+            <?php echo do_shortcode('[mailpoet_form id="1"]'); ?>
         </div>
 
     </div>
