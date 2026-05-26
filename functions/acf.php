@@ -19,6 +19,89 @@ add_action('acf/render_field/name=publications_api_sync', function () {
             Sync Publications
         </button>
         <div id="sync-status" style="margin-top:10px;"></div>
+        <div
+            id="publication-sync-modal"
+            class="publication-sync-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="publication-sync-modal-title"
+            style="display:none;">
+            <div class="publication-sync-modal__panel">
+                <h2 id="publication-sync-modal-title">Publication sync</h2>
+                <p id="publication-sync-modal-message">Starting publication sync...</p>
+                <div class="publication-sync-modal__bar" aria-hidden="true">
+                    <div id="publication-sync-progress-bar" class="publication-sync-modal__bar-fill" style="width:0%;"></div>
+                </div>
+                <div class="publication-sync-modal__meta">
+                    <span id="publication-sync-progress-text">0%</span>
+                    <span id="publication-sync-count-text">0 / 0</span>
+                </div>
+                <div id="publication-sync-log" class="publication-sync-modal__log" aria-live="polite"></div>
+                <button type="button" class="button button-secondary" id="publication-sync-close" disabled>
+                    Close
+                </button>
+            </div>
+        </div>
+        <style>
+            .publication-sync-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 100000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0, 0, 0, 0.45);
+            }
+
+            .publication-sync-modal__panel {
+                width: min(560px, calc(100vw - 40px));
+                padding: 24px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            }
+
+            .publication-sync-modal__panel h2 {
+                margin-top: 0;
+            }
+
+            .publication-sync-modal__bar {
+                height: 18px;
+                overflow: hidden;
+                background: #e5e5e5;
+                border-radius: 999px;
+            }
+
+            .publication-sync-modal__bar-fill {
+                height: 100%;
+                background: #2271b1;
+                transition: width 0.2s ease;
+            }
+
+            .publication-sync-modal__meta {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 8px;
+                color: #50575e;
+            }
+
+            .publication-sync-modal__log {
+                height: 180px;
+                margin: 16px 0;
+                padding: 12px;
+                overflow: auto;
+                background: #f6f7f7;
+                border: 1px solid #dcdcde;
+                border-radius: 4px;
+                font-family: monospace;
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .publication-sync-modal__log p {
+                margin: 0 0 4px;
+            }
+        </style>
         <hr>
         <strong>Last Sync Info</strong><br>
         <p> Last sync: <?php echo esc_html($log['last_run_end'] ?? '-'); ?></p>
