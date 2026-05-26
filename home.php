@@ -56,7 +56,7 @@ $blog_intro   = get_field('blog_intro', 'option') ?: get_bloginfo('description')
 
           <article class="group flex flex-col overflow-hidden rounded-base border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg">
 
-            <a href="<?php echo esc_url($permalink); ?>" class="block aspect-[16/10] overflow-hidden bg-surface" aria-hidden="true" tabindex="-1">
+            <a href="<?php echo esc_url($permalink); ?>" class="block aspect-[16/10] overflow-hidden bg-[#F8F8F8]" aria-hidden="true" tabindex="-1">
               <?php if (has_post_thumbnail()) : ?>
                 <?php the_post_thumbnail('large', [
                     'class'   => 'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
@@ -127,7 +127,7 @@ $blog_intro   = get_field('blog_intro', 'option') ?: get_bloginfo('description')
 
     <?php else : ?>
 
-      <div class="rounded-base bg-surface p-12 text-center">
+      <div class="rounded-base bg-[#F8F8F8] p-12 text-center">
         <h2 class="text-h4 font-bold text-accent">No posts found</h2>
         <p class="mx-auto mt-3 max-w-md text-slate-600">
           There are no articles published yet. Please check back later.

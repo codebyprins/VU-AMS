@@ -36,7 +36,7 @@ if ($query->have_posts()) {
 
 ?>
 
-<section class="w-full bg-surface py-section_base">
+<section class="w-full bg-[#F8F8F8] py-section_base">
 	<div class="mx-auto max-w-7xl px-container_xs sm:px-container_sm lg:px-container_lg">
 		<div class="max-w-[65ch]">
 			<p class="text-sm font-medium uppercase tracking-[0.24em] text-accent/70"><?php echo esc_html($title); ?></p>
@@ -47,7 +47,7 @@ if ($query->have_posts()) {
 				<?php foreach ($featured_posts as $post_item): ?>
 					<article class="overflow-hidden rounded-base border border-accent/10 bg-white shadow-sm transition-transform duration-200 hover:-translate-y-1">
 						<a class="block h-full" href="<?php echo esc_url($post_item['permalink']); ?>">
-							<div class="bg-surface">
+							<div class="bg-[#F8F8F8]">
 								<?php if (!empty($post_item['image_id'])): ?>
 									<?php echo wp_get_attachment_image($post_item['image_id'], 'large', false, ['class' => 'aspect-[16/10] h-full w-full object-cover']); ?>
 								<?php else: ?>
