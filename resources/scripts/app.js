@@ -14,3 +14,4 @@ import './numerical_counter.js';
 import './map.js';
 import './popup.js';
 import './imgcarousel.js';
+import './publications-filter.js';
