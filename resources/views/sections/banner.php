@@ -4,6 +4,29 @@ $big = get_sub_field('big');
 $small = get_sub_field('small');
 ?>
 
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.25s; }
+  .delay-3 { animation-delay: 0.4s; }
+  .delay-4 { animation-delay: 0.55s; }
+</style>
+
 <section class="bg-[#F8F8F8] w-full h-full">
   <?php if ($bigsmall) : ?>
 
@@ -13,26 +36,26 @@ $small = get_sub_field('small');
       <div class="w-full md:w-1/2 flex-shrink-0 px-6 pt-8 pb-6 md:pl-[20px] md:pt-[89px] md:pb-[91px] md:pr-8">
 
         <?php if ($big['subtitle']) : ?>
-          <p class="font-sans text-[16px] md:text-[24px] text-black mb-2">
+          <p class="font-sans text-[16px] md:text-[24px] text-black mb-2 animate-fade-in-up delay-1">
             <?php echo esc_html($big['subtitle']); ?>
           </p>
         <?php endif; ?>
 
         <?php if ($big['title']) : ?>
-          <h1 class="font-sans text-[32px] md:text-[48px] font-bold leading-tight text-black mb-4">
+          <h1 class="font-sans text-[32px] md:text-[48px] font-bold leading-tight text-black mb-4 animate-fade-in-up delay-2">
             <?php echo esc_html($big['title']); ?>
           </h1>
         <?php endif; ?>
 
         <?php if ($big['content']) : ?>
-          <div class="font-sans text-[14px] md:text-[16px] text-black mb-6">
+          <div class="font-sans text-[14px] md:text-[16px] text-black mb-6 animate-fade-in-up delay-3">
             <?php echo $big['content']; ?>
           </div>
         <?php endif; ?>
 
         <?php if ($big['button']) : ?>
           <a href="<?php echo esc_url($big['button']['url']); ?>"
-            class="inline-block bg-primary text-white font-sans text-[16px] px-6 py-3 rounded-lg">
+            class="inline-block bg-primary text-white font-sans text-[16px] px-6 py-3 rounded-lg animate-fade-in-up delay-4">
             <?php echo esc_html($big['button']['title']); ?>
           </a>
         <?php endif; ?>
@@ -47,7 +70,6 @@ $small = get_sub_field('small');
         </div>
       <?php elseif (!$big['image_or_bubbles'] && $big['bubbles']) : ?>
         <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
-          <!-- Bubbles component here -->
           <div class="bubble_container relative flex flex-col gap-5 mr-[80px]">
             <div class="flex flex-col justify-center items-center gap-4 pl-[100px]">
               <?php if ($big['bubbles']['text_top']) : ?>
@@ -88,13 +110,13 @@ $small = get_sub_field('small');
       <div class="px-6 py-8 md:pt-[89px] md:pb-[91px]">
 
         <?php if ($small['subtitle']) : ?>
-          <p class="font-sans text-[16px] md:text-[24px] text-black mb-2">
+          <p class="font-sans text-[16px] md:text-[24px] text-black mb-2 animate-fade-in-up delay-1">
             <?php echo esc_html($small['subtitle']); ?>
           </p>
         <?php endif; ?>
 
         <?php if ($small['title']) : ?>
-          <h1 class="font-sans text-[28px] md:text-[48px] font-bold leading-tight text-black">
+          <h1 class="font-sans text-[28px] md:text-[48px] font-bold leading-tight text-black animate-fade-in-up delay-2">
             <?php echo esc_html($small['title']); ?>
           </h1>
         <?php endif; ?>
