@@ -27,7 +27,7 @@
     <?php endif; ?>
 
     <header class="bg-gradient-to-r from-[#01B4C9] from-[62%] to-[#0F1733]">
-        <div class="container mx-auto px-4 py-6 flex items-center gap-8">
+        <div class="container mx-auto px-4 py-6 flex items-center gap-4 lg:gap-8">
             <?php
             $logo = get_field('logo', 'option');
             $logo_url = $logo ? esc_url($logo['url']) : esc_url(site_url('/wp-content/uploads/2026/04/image-1.png'));
@@ -52,7 +52,7 @@
                         }
                         public function start_lvl(&$output, $depth = 0, $args = null)
                         {
-                            $output .= '<ul class="absolute left-0 top-full min-w-[200px] bg-white border border-[#F7C80C] rounded-[12px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2">' . "\n";
+                            $output .= '<ul class="absolute left-0 top-full min-w-[200px] bg-white border border-primary rounded-[12px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 py-2">' . "\n";
                         }
                         public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
                         {
@@ -90,15 +90,15 @@
                 ]);
                 ?>
             </nav>
-            <button id="search-popup_open" type="button" aria-label="Zoeken" class="hidden lg:block text-white hover:text-[#F7C80C] transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <button id="search-popup_open" type="button" aria-label="Zoeken" class="block ml-auto lg:ml-0 text-white hover:text-[#F7C80C] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 lg:h-5 w-8 lg:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
                 </svg>
             </button>
             <a href="/contact" class="hidden lg:inline-flex btn btn-primary">
                 Get in contact
             </a>
-            <button id="mobile-menu-toggle" type="button" aria-label="Menu openen" class="lg:hidden ml-auto text-white">
+            <button id="mobile-menu-toggle" type="button" aria-label="Menu openen" class="lg:hidden ml-0 lg:ml-auto text-white">
                 <svg id="icon-hamburger" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -169,11 +169,11 @@
             <a href="/contact" class="block text-center btn btn-primary w-full">Get in contact</a>
         </div>
     </div>
-    <div class="search-popup fixed inset-0 z-50 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="search-popup fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300" aria-hidden="true">
 
         <div class="absolute inset-0 bg-black/50 transition-opacity duration-300"></div>
 
-        <div id="search-modal" class="absolute top-1/2 left-1/2 w-full max-w-xl p-4 z-10 bg-white rounded-xl transform -translate-x-1/2 -translate-y-[40%] opacity-0 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+        <div id="search-modal" class="absolute top-1/2 left-1/2 w-full max-w-[350px] sm:max-w-xl p-4 z-10 bg-white rounded-xl transform -translate-x-1/2 -translate-y-[40%] opacity-0 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
             <h3 class="text-black font-semibold mb-4">Search:</h3>
             <form role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>" class="flex items-center gap-2 bg-white px-2 py-2 border-b border-black w-[95%]">
                 <button type="submit" class="text-gray-800 hover:text-[#F7C80C] transition-colors" aria-label="Submit search">

@@ -1,9 +1,7 @@
 <?php
-
 // register the post type and taxaonmies
 add_action('init', function () {
 
-  // post type
   register_post_type('publication', [
     'label' => 'Publications',
     'public' => true,
@@ -14,12 +12,36 @@ add_action('init', function () {
     'show_in_rest' => true,
   ]);
 
-  // taxonomies
+  // Register custom meta fields for REST API
+  $meta_fields = [
+    'publication_year',
+    'publication_authors',
+    'publication_keywords',
+    'publication_source',
+    'publication_date',
+    'publication_url',
+    'doi',
+    'publication_title',
+    'external_id',
+  ];
+
+  foreach ($meta_fields as $field) {
+    register_rest_field('publication', $field, [
+      'get_callback' => function ($post) use ($field) {
+        return get_post_meta($post['id'], $field, true);
+      },
+      'schema' => [
+        'type' => 'string',
+        'context' => ['view', 'edit'],
+      ],
+    ]);
+  }
+
   $taxonomies = [
-    'publication_year'    => 'Year',
-    'publication_author'  => 'Author',
-    'publication_type'    => 'Type',
+    'publication_year'   => 'Year',
+    'publication_author' => 'Author',
     'publication_keyword' => 'Keyword',
+    'publication_source' => 'Source',
   ];
 
   foreach ($taxonomies as $slug => $label) {
@@ -33,215 +55,480 @@ add_action('init', function () {
   }
 });
 
+//run the sync functions
 
-// admin sync option under posttype menu
-add_action('admin_menu', function () {
-  add_submenu_page(
-    'edit.php?post_type=publication',
-    'Sync Publications',
-    'Sync',
-    'manage_options',
-    'sync-publications',
-    'render_publication_sync_page'
-  );
-});
-
-//make the rende page
-
-function render_publication_sync_page()
+function run_publication_sync()
 {
-  if (!empty($_POST['sync_publications'])) {
-    sync_zotero_publications();
-    echo '<div class="notice notice-success"><p>Publications synced.</p></div>';
+  set_time_limit(120);
+  publication_sync_title_seen('', true);
+  publication_sync_token(uniqid('publication_sync_', true));
+
+  $zotero_result  = sync_zotero_publications();
+  $scholar_result = sync_google_scholar_publications();
+
+  $completed_sources = [];
+
+  if ($zotero_result['completed']) {
+    $completed_sources[] = 'Zotero';
   }
-?>
-  <div class="wrap">
-    <h1>Sync Publications</h1>
-    <form method="post">
-      <?php wp_nonce_field('sync_publications'); ?>
-      <button
-        type="submit"
-        name="sync_publications"
-        class="button button-primary">
-        Sync Zotero
-      </button>
-    </form>
-  </div>
-<?php
+
+  if ($scholar_result['completed']) {
+    $completed_sources[] = 'Google Scholar';
+  }
+
+  $archived_count = archive_missing_publications($completed_sources);
+
+  publication_sync_log([
+    'last_run_start'  => current_time('mysql'),
+    'last_run_end'    => current_time('mysql'),
+    'zotero_updated'  => $zotero_result['updated'],
+    'scholar_updated' => $scholar_result['updated'],
+    'archived'        => $archived_count,
+    'total_updated'   => $zotero_result['updated'] + $scholar_result['updated'],
+    'total_posts'     => wp_count_posts('publication')->publish,
+  ]);
+}
+
+function normalize_publication_title($title)
+{
+  $title = html_entity_decode(wp_strip_all_tags((string) $title), ENT_QUOTES, get_bloginfo('charset'));
+  $title = remove_accents($title);
+  $title = strtolower($title);
+  $title = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $title);
+
+  return trim(preg_replace('/\s+/', ' ', $title));
+}
+
+function get_publication_by_normalized_title($normalized_title, $external_id = '')
+{
+  if (!$normalized_title) {
+    return 0;
+  }
+
+  $posts = get_posts([
+    'post_type'      => 'publication',
+    'post_status'    => 'any',
+    'fields'         => 'ids',
+    'posts_per_page' => 1,
+    'meta_query'     => [
+      [
+        'key'   => 'normalized_title',
+        'value' => $normalized_title,
+      ],
+    ],
+  ]);
+
+  $post_id = $posts[0] ?? 0;
+  if (!$post_id || !$external_id) {
+    return $post_id;
+  }
+
+  return get_post_meta($post_id, 'external_id', true) === $external_id ? 0 : $post_id;
+}
+
+function is_zotero_publication_data($data)
+{
+  return ($data['source'] ?? '') === 'Zotero'
+    || strpos($data['external_id'] ?? '', 'zotero_') === 0;
+}
+
+function publication_sync_title_seen($normalized_title, $reset = false)
+{
+  static $seen_titles = [];
+
+  if ($reset) {
+    $seen_titles = [];
+    return false;
+  }
+
+  if (!$normalized_title) {
+    return true;
+  }
+
+  if (isset($seen_titles[$normalized_title])) {
+    return true;
+  }
+
+  $seen_titles[$normalized_title] = true;
+  return false;
+}
+
+function publication_sync_token($token = null)
+{
+  static $current_token = '';
+
+  if ($token !== null) {
+    $current_token = $token;
+  }
+
+  return $current_token;
+}
+
+function publication_sync_result($updated, $completed)
+{
+  return [
+    'updated'   => $updated,
+    'completed' => $completed,
+  ];
+}
+
+function mark_publication_seen_in_sync($post_id)
+{
+  $token = publication_sync_token();
+
+  if ($token) {
+    update_post_meta($post_id, '_publication_sync_token', $token);
+  }
+}
+
+function publication_post_matches_source($post_id, $source)
+{
+  $external_id = get_post_meta($post_id, 'external_id', true);
+
+  if ($source === 'Zotero' && strpos($external_id, 'zotero_') === 0) {
+    return true;
+  }
+
+  if ($source === 'Google Scholar' && strpos($external_id, 'scholar_') === 0) {
+    return true;
+  }
+
+  $sources = get_the_terms($post_id, 'publication_source');
+  if (!$sources || is_wp_error($sources)) {
+    return false;
+  }
+
+  return in_array($source, wp_list_pluck($sources, 'name'), true);
+}
+
+function archive_missing_publications($completed_sources)
+{
+  if (empty($completed_sources)) {
+    return 0;
+  }
+
+  $token = publication_sync_token();
+  if (!$token) {
+    return 0;
+  }
+
+  $post_ids = get_posts([
+    'post_type'      => 'publication',
+    'post_status'    => 'publish',
+    'fields'         => 'ids',
+    'posts_per_page' => -1,
+    'meta_query'     => [
+      [
+        'key'     => 'external_id',
+        'compare' => 'EXISTS',
+      ],
+    ],
+  ]);
+
+  $archived = 0;
+
+  foreach ($post_ids as $post_id) {
+    if (get_post_meta($post_id, '_publication_sync_token', true) === $token) {
+      continue;
+    }
+
+    $matches_completed_source = false;
+    foreach ($completed_sources as $source) {
+      if (publication_post_matches_source($post_id, $source)) {
+        $matches_completed_source = true;
+        break;
+      }
+    }
+
+    if (!$matches_completed_source) {
+      continue;
+    }
+
+    $updated = wp_update_post([
+      'ID'          => $post_id,
+      'post_status' => 'draft',
+    ], true);
+
+    if (!is_wp_error($updated)) {
+      $archived++;
+    }
+  }
+
+  return $archived;
+}
+
+// log sync info in options and update posts
+function upsert_publication($data)
+{
+  if (empty($data['external_id'])) {
+    return false;
+  }
+
+  $existing = get_posts([
+    'post_type'   => 'publication',
+    'fields'      => 'ids',
+    'numberposts' => 1,
+    'meta_key'    => 'external_id',
+    'meta_value'  => $data['external_id'],
+  ]);
+
+  $post_id = $existing[0] ?? 0;
+  $normalized_title = normalize_publication_title($data['title'] ?? '');
+  $duplicate_post_id = !$post_id
+    ? get_publication_by_normalized_title($normalized_title, $data['external_id'])
+    : 0;
+
+  if ($duplicate_post_id) {
+    if (!is_zotero_publication_data($data)) {
+      return false;
+    }
+
+    $post_id = $duplicate_post_id;
+  }
+
+  $post_args = [
+    'post_type'    => 'publication',
+    'post_status'  => 'publish',
+    'post_title'   => $data['title'] ?? '',
+    'post_content' => $data['content'] ?? '',
+    'post_excerpt' => $data['excerpt'] ?? '',
+  ];
+
+  if ($post_id) {
+    $post_args['ID'] = $post_id;
+    wp_update_post($post_args);
+  } else {
+    $post_id = wp_insert_post($post_args);
+  }
+
+  if (!$post_id || is_wp_error($post_id)) {
+    return false;
+  }
+
+
+  update_post_meta($post_id, 'external_id', $data['external_id']);
+  update_post_meta($post_id, 'normalized_title', $normalized_title);
+  mark_publication_seen_in_sync($post_id);
+
+  // YEAR - Store as both taxonomy and meta
+  if (!empty($data['year'])) {
+    wp_set_object_terms(
+      $post_id,
+      [$data['year']],
+      'publication_year'
+    );
+    update_post_meta($post_id, 'publication_year', sanitize_text_field($data['year']));
+  }
+
+  // AUTHORS - Store as both taxonomy and meta
+  if (!empty($data['authors'])) {
+    wp_set_object_terms(
+      $post_id,
+      $data['authors'],
+      'publication_author'
+    );
+    update_post_meta($post_id, 'publication_authors', wp_json_encode($data['authors']));
+  }
+
+  // KEYWORDS - Store as both taxonomy and meta
+  if (!empty($data['keywords'])) {
+    wp_set_object_terms(
+      $post_id,
+      $data['keywords'],
+      'publication_keyword'
+    );
+    update_post_meta($post_id, 'publication_keywords', wp_json_encode($data['keywords']));
+  }
+
+  // SOURCE - Store as both taxonomy and meta
+  if (!empty($data['source'])) {
+    wp_set_object_terms(
+      $post_id,
+      [$data['source']],
+      'publication_source'
+    );
+    update_post_meta($post_id, 'publication_source', sanitize_text_field($data['source']));
+  }
+
+  // PUBLICATION DATE
+  if (!empty($data['publication_date'])) {
+    update_post_meta($post_id, 'publication_date', sanitize_text_field($data['publication_date']));
+  }
+
+  if (!empty($data['url'])) {
+    update_post_meta($post_id, 'publication_url', esc_url_raw($data['url']));
+  }
+
+  if (!empty($data['doi'])) {
+    update_post_meta($post_id, 'doi', $data['doi']);
+  }
+
+  if (!empty($data['publication_title'])) {
+    update_post_meta(
+      $post_id,
+      'publication_title',
+      sanitize_text_field($data['publication_title'])
+    );
+  }
+
+  return $post_id;
+}
+
+// sync Zotera and safe as post
+function sync_zotero_publications()
+{
+  $updated = 0;
+
+  $group_id = get_field('zotero_group_id', 'option');
+  if (!$group_id) return publication_sync_result(0, false);
+
+  $start = 0;
+  $limit = 100;
+
+  while (true) {
+
+    $url = "https://api.zotero.org/groups/{$group_id}/items?format=json&limit={$limit}&start={$start}";
+    $response = wp_remote_get($url, [
+      'timeout' => 20,
+    ]);
+
+    if (is_wp_error($response)) return publication_sync_result($updated, false);
+
+    if (wp_remote_retrieve_response_code($response) !== 200) {
+      return publication_sync_result($updated, false);
+    }
+
+    $items = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($items)) return publication_sync_result($updated, false);
+    if (empty($items)) break;
+
+    foreach ($items as $item) {
+
+      $data = $item['data'] ?? [];
+      if (!$data || in_array($data['itemType'], ['note', 'attachment'])) continue;
+
+      $title = $data['title'] ?? '';
+      $normalized_title = normalize_publication_title($title);
+      if (publication_sync_title_seen($normalized_title)) continue;
+
+      $post_id = upsert_publication([
+        'external_id' => 'zotero_' . $item['key'],
+        'title'       => $title,
+        'content'     => $data['abstractNote'] ?? '',
+        'excerpt'     => wp_trim_words($data['abstractNote'] ?? '', 30),
+
+        'publication_date' => $data['date'] ?? '',
+        
+        'year' => !empty($data['date'])
+          ? date('Y', strtotime($data['date']))
+          : '',
+
+        'authors' => array_map(function ($creator) {
+          return trim(
+            ($creator['firstName'] ?? '') . ' ' .
+              ($creator['lastName'] ?? '')
+          );
+        }, $data['creators'] ?? []),
+
+        'keywords' => !empty($data['tags'])
+          ? array_column($data['tags'], 'tag')
+          : [],
+
+        'source' => 'Zotero',
+        'url' => get_publication_url($data),
+
+        'doi' => $data['DOI'] ?? '',
+
+        'publication_title' => $data['publicationTitle']
+          ?? $data['proceedingsTitle']
+          ?? $data['bookTitle']
+          ?? '',
+      ]);
+
+      if ($post_id) $updated++;
+    }
+
+    if (count($items) < $limit) break;
+    $start += $limit;
+  }
+
+  return publication_sync_result($updated, true);
 }
 
 
-// sync Zotera
-
-function sync_zotero_publications()
+// fetch data from google scholar using serpapi and safe as post
+function sync_google_scholar_publications()
 {
-  $group_id = ZOTERO_GROUP_ID;
+  $updated = 0;
 
-  if (!$group_id) {
-    return;
-  }
+  $api_key   = get_field('serpapi_api_key', 'option');
+  $author_id = get_field('google_scholar_author_id', 'option');
 
-  $url = "https://api.zotero.org/groups/{$group_id}/items/top?format=json";
+  if (!$api_key || !$author_id) return publication_sync_result(0, false);
 
-  $response = wp_remote_get($url);
+  $start = 0;
+  $limit = 20;
+  $pages = 0;
 
-  if (is_wp_error($response)) {
-    return;
-  }
+  do {
 
-  $items = json_decode(
-    wp_remote_retrieve_body($response),
-    true
-  );
+    $url = add_query_arg([
+      'engine'    => 'google_scholar_author',
+      'author_id' => $author_id,
+      'api_key'   => $api_key,
+      'start'     => $start,
+    ], 'https://serpapi.com/search.json');
 
-  if (!$items) {
-    return;
-  }
-
-  foreach ($items as $item) {
-    $data = $item['data'] ?? [];
-
-    // dont add the attachments
-    if (
-      empty($data) ||
-      in_array($data['itemType'], ['attachment', 'note'])
-    ) {
-      continue;
-    }
-
-    $title = trim($data['title'] ?? '');
-
-    if (!$title) {
-      continue;
-    }
-
-
-    $has_date = !empty($data['date']);
-    $has_authors = !empty($data['creators']);
-    $has_tags = !empty($data['tags']);
-    $has_type = !empty($data['itemType']);
-
-
-    if (
-      !$has_date ||
-      !$has_authors ||
-      !$has_type
-    ) {
-      continue;
-    }
-
-    // check if post exists with the same key
-    $existing = get_posts([
-      'post_type' => 'publication',
-      'posts_per_page' => 1,
-      'fields' => 'ids',
-      'meta_key' => 'zotero_key',
-      'meta_value' => $item['key'],
+    $response = wp_remote_get($url, [
+      'timeout' => 20,
     ]);
+    if (is_wp_error($response)) return publication_sync_result($updated, false);
 
-    $post_data = [
-      'post_type' => 'publication',
-      'post_status' => 'publish',
-      'post_title' => $title,
-      'post_content' => $data['abstractNote'] ?? '',
-      'post_excerpt' => wp_trim_words(
-        wp_strip_all_tags($data['abstractNote'] ?? ''),
-        40
-      ),
-    ];
-
-    // if exists updtate, else add
-    if ($existing) {
-      $post_data['ID'] = $existing[0];
-      $post_id = wp_update_post($post_data);
-    } else {
-      $post_id = wp_insert_post($post_data);
+    if (wp_remote_retrieve_response_code($response) !== 200) {
+      return publication_sync_result($updated, false);
     }
 
-    if (!$post_id || is_wp_error($post_id)) {
-      continue;
+    $body = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($body)) return publication_sync_result($updated, false);
+
+    $articles = $body['articles'] ?? [];
+
+    foreach ($articles as $article) {
+
+      $title = $article['title'] ?? '';
+      $normalized_title = normalize_publication_title($title);
+      if (publication_sync_title_seen($normalized_title)) continue;
+
+      $external_id = !empty($article['citation_id'])
+        ? 'scholar_' . $article['citation_id']
+        : 'scholar_' . md5($title);
+
+      $post_id = upsert_publication([
+        'external_id' => $external_id,
+        'title'       => $title,
+        'year'        => $article['year'] ?? '',
+        'authors'     => !empty($article['authors'])
+          ? array_map('trim', explode(',', $article['authors']))
+          : [],
+        'source'      => 'Google Scholar',
+        'url'         => $article['link'] ?? '',
+        'publication_title' => $article['publication'] ?? '',
+      ]);
+
+      if ($post_id) $updated++;
     }
 
-    // update the meta to prevent duplaticates
+    $start += $limit;
+    $pages++;
 
-    update_post_meta($post_id, 'zotero_key', $item['key']);
-
-    update_post_meta(
-      $post_id,
-      'publication_url',
-      get_publication_url($data)
-    );
-
-    update_post_meta(
-      $post_id,
-      'doi',
-      $data['DOI'] ?? ''
-    );
-
-    // set year taxanomy
-    if (!empty($data['date'])) {
-      preg_match('/\d{4}/', $data['date'], $matches);
-      if (!empty($matches[0])) {
-        wp_set_object_terms(
-          $post_id,
-          $matches[0],
-          'publication_year'
-        );
-      }
+    if ($pages >= 10 && count($articles) === $limit) {
+      return publication_sync_result($updated, false);
     }
 
-    // set author taxanomy
-    if (!empty($data['creators'])) {
-      $authors = [];
-      foreach ($data['creators'] as $creator) {
-        $name = trim(
-          ($creator['firstName'] ?? '') .
-            ' ' .
-            ($creator['lastName'] ?? '')
-        );
+    if ($pages >= 10) break;
+  } while (count($articles) === $limit);
 
-        if ($name) {
-          $authors[] = $name;
-        }
-      }
-
-      wp_set_object_terms(
-        $post_id,
-        $authors,
-        'publication_author'
-      );
-    }
-
-    // set tags taxanomy
-    if (!empty($data['tags'])) {
-
-      $tags = [];
-
-      foreach ($data['tags'] as $tag) {
-
-        if (!empty($tag['tag'])) {
-          $tags[] = $tag['tag'];
-        }
-      }
-
-      wp_set_object_terms(
-        $post_id,
-        $tags,
-        'publication_keyword'
-      );
-    }
-
-    //type of publication
-
-    if (!empty($data['itemType'])) {
-
-      wp_set_object_terms(
-        $post_id,
-        $data['itemType'],
-        'publication_type'
-      );
-    }
-  }
+  return publication_sync_result($updated, true);
 }
 
 function get_publication_url($data)
@@ -251,4 +538,55 @@ function get_publication_url($data)
   }
 
   return $data['url'] ?? '';
+}
+
+// DAILY CRON SYNC
+add_action('init', function () {
+
+  // avoid duplicate cron jobs
+  if (!wp_next_scheduled('publications_daily_sync')) {
+
+    wp_schedule_event(
+      time(),
+      'daily',
+      'publications_daily_sync'
+    );
+  }
+});
+
+// actual cron callback
+add_action('publications_daily_sync', function () {
+
+  // lock to prevent overlapping syncs
+  if (get_transient('publication_sync_running')) {
+    return;
+  }
+
+  set_transient('publication_sync_running', true, 15 * MINUTE_IN_SECONDS);
+
+  run_publication_sync();
+
+  delete_transient('publication_sync_running');
+});
+
+// show only if administrator
+add_action('wp_ajax_sync_publications', function () {
+
+  if (!current_user_can('manage_options')) {
+    wp_send_json_error(['message' => 'Unauthorized']);
+  }
+
+  run_publication_sync();
+
+  wp_send_json_success([
+    'message' => 'Publication sync complete'
+  ]);
+});
+
+// show what is syns status
+function publication_sync_log($data)
+{
+  $log = get_option('publication_sync_log', []);
+  $log = array_merge($log, $data);
+  update_option('publication_sync_log', $log, false);
 }
