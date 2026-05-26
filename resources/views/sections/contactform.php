@@ -1,0 +1,72 @@
+<?php
+$form = get_sub_field('form');
+$shortcode = '[contact-form-7 id="9e134a4" title="Contact form 1"]';
+
+if (is_numeric($form)) {
+	$shortcode = sprintf('[contact-form-7 id="%d"]', (int) $form);
+} elseif (is_array($form) && isset($form['ID']) && is_numeric($form['ID'])) {
+	$shortcode = sprintf('[contact-form-7 id="%d"]', (int) $form['ID']);
+} elseif (is_object($form) && isset($form->ID) && is_numeric($form->ID)) {
+	$shortcode = sprintf('[contact-form-7 id="%d"]', (int) $form->ID);
+} elseif (is_string($form)) {
+	$shortcode = trim($form);
+}
+
+if ($shortcode !== '') {
+	$contact_title = get_sub_field('contact_title') ?: 'Neem contact op';
+	?>
+	<section class="w-full bg-surface py-section_base">
+		<div class="mx-auto max-w-7xl px-container_xs sm:px-container_sm lg:px-container_lg">
+
+			<div class="max-w-[65ch]">
+				<p class="text-sm font-medium uppercase tracking-[0.24em] text-accent/70">Contact</p>
+				<h2 class="mt-3 text-h2 font-normal leading-tight text-accent sm:text-[42px]"><?php echo esc_html($contact_title); ?></h2>
+			</div>
+
+			<div class="mt-10 max-w-3xl rounded-base border border-accent/10 bg-white p-6 sm:p-8 lg:p-10">
+				<div
+					id="contact-form-wrapper"
+					class="
+						max-w-[65ch]
+						[&_.wpcf7-form]:grid [&_.wpcf7-form]:grid-cols-1 [&_.wpcf7-form]:gap-5
+						[&_.wpcf7-form>p]:m-0 [&_.wpcf7-form>p]:w-full
+						[&_label]:block [&_label]:text-sm [&_label]:font-medium [&_label]:leading-snug [&_label]:text-accent
+						[&_label_br]:hidden
+						[&_.cf7-required]:font-medium [&_.cf7-required]:text-primary
+						[&_.cf7-optional]:text-xs [&_.cf7-optional]:font-normal [&_.cf7-optional]:text-accent/45
+						[&_.wpcf7-form-control-wrap]:mt-2 [&_.wpcf7-form-control-wrap]:block
+						[&_.wpcf7-form-control:not(.wpcf7-submit)]:block [&_.wpcf7-form-control:not(.wpcf7-submit)]:w-full [&_.wpcf7-form-control:not(.wpcf7-submit)]:appearance-none [&_.wpcf7-form-control:not(.wpcf7-submit)]:rounded-base [&_.wpcf7-form-control:not(.wpcf7-submit)]:border [&_.wpcf7-form-control:not(.wpcf7-submit)]:border-accent/10 [&_.wpcf7-form-control:not(.wpcf7-submit)]:bg-surface [&_.wpcf7-form-control:not(.wpcf7-submit)]:px-4 [&_.wpcf7-form-control:not(.wpcf7-submit)]:py-3 [&_.wpcf7-form-control:not(.wpcf7-submit)]:text-base [&_.wpcf7-form-control:not(.wpcf7-submit)]:text-accent [&_.wpcf7-form-control:not(.wpcf7-submit)]:outline-none [&_.wpcf7-form-control:not(.wpcf7-submit)]:transition
+						[&_.wpcf7-form-control:not(.wpcf7-submit)::placeholder]:text-accent/40
+						[&_.wpcf7-form-control:not(.wpcf7-submit):hover]:border-primary/40
+						[&_.wpcf7-form-control:not(.wpcf7-submit):focus]:border-primary [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:bg-white [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:ring-2 [&_.wpcf7-form-control:not(.wpcf7-submit):focus]:ring-primary/20
+						[&_select.wpcf7-form-control]:pr-10 [&_select.wpcf7-form-control]:bg-[length:1rem_1rem] [&_select.wpcf7-form-control]:bg-[right_0.875rem_center] [&_select.wpcf7-form-control]:bg-no-repeat
+						[&_textarea.wpcf7-form-control]:min-h-40 [&_textarea.wpcf7-form-control]:resize-y
+						[&_.wpcf7-submit]:mt-1 [&_.wpcf7-submit]:inline-flex [&_.wpcf7-submit]:w-full [&_.wpcf7-submit]:cursor-pointer [&_.wpcf7-submit]:items-center [&_.wpcf7-submit]:justify-center [&_.wpcf7-submit]:rounded-base [&_.wpcf7-submit]:border-0 [&_.wpcf7-submit]:bg-primary [&_.wpcf7-submit]:px-6 [&_.wpcf7-submit]:py-3.5 [&_.wpcf7-submit]:text-base [&_.wpcf7-submit]:font-medium [&_.wpcf7-submit]:text-white [&_.wpcf7-submit]:transition [&_.wpcf7-submit:hover]:bg-primary_dark
+						[&_.wpcf7-submit:focus-visible]:outline [&_.wpcf7-submit:focus-visible]:outline-2 [&_.wpcf7-submit:focus-visible]:outline-offset-2 [&_.wpcf7-submit:focus-visible]:outline-primary/40
+						[&_.wpcf7-spinner]:mx-auto [&_.wpcf7-spinner]:mt-3
+						[&_.wpcf7-not-valid-tip]:mt-1.5 [&_.wpcf7-not-valid-tip]:block [&_.wpcf7-not-valid-tip]:text-xs [&_.wpcf7-not-valid-tip]:font-medium [&_.wpcf7-not-valid-tip]:text-red-600
+						[&_.wpcf7-form-control.wpcf7-not-valid]:!border-red-600 [&_.wpcf7-form-control.wpcf7-not-valid]:!bg-red-50
+						[&_.wpcf7-response-output]:mt-1 [&_.wpcf7-response-output]:max-w-[65ch] [&_.wpcf7-response-output]:rounded-base [&_.wpcf7-response-output]:border [&_.wpcf7-response-output]:border-accent/10 [&_.wpcf7-response-output]:px-4 [&_.wpcf7-response-output]:py-3.5 [&_.wpcf7-response-output]:text-sm [&_.wpcf7-response-output]:text-accent
+						[&_form.sent_.wpcf7-response-output]:border-primary/20 [&_form.sent_.wpcf7-response-output]:bg-primary_light/30 [&_form.sent_.wpcf7-response-output]:text-primary_dark
+						[&_form.invalid_.wpcf7-response-output]:border-red-600 [&_form.invalid_.wpcf7-response-output]:bg-red-50 [&_form.invalid_.wpcf7-response-output]:text-red-700
+						[&_form.unaccepted_.wpcf7-response-output]:border-red-600 [&_form.unaccepted_.wpcf7-response-output]:bg-red-50 [&_form.unaccepted_.wpcf7-response-output]:text-red-700
+						[&_form.failed_.wpcf7-response-output]:border-red-600 [&_form.failed_.wpcf7-response-output]:bg-red-50 [&_form.failed_.wpcf7-response-output]:text-red-700
+						[&_form.spam_.wpcf7-response-output]:border-red-600 [&_form.spam_.wpcf7-response-output]:bg-red-50 [&_form.spam_.wpcf7-response-output]:text-red-700
+						sm:[&_.wpcf7-form>p]:max-w-[65ch]
+						md:[&_.wpcf7-form]:grid-cols-2
+						md:[&_.wpcf7-form>p]:col-span-2
+						md:[&_.wpcf7-form>p:has([data-name=your-name])]:col-span-1
+						md:[&_.wpcf7-form>p:has([data-name=your-email])]:col-span-1
+						md:[&_.wpcf7-form>p:has([data-name=your-name])]:max-w-none
+						md:[&_.wpcf7-form>p:has([data-name=your-email])]:max-w-none
+						md:[&_.wpcf7-response-output]:col-span-2
+					"
+				>
+					<?php echo do_shortcode($shortcode); ?>
+				</div>
+			</div>
+		</div>
+	</section>
+	<?php
+}
+?>
