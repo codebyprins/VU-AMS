@@ -3,7 +3,7 @@
 
         <?php
         $layout = get_row_layout();
-
+        $file = "resources/views/sections/{$layout}.php";
     if (locate_template($file)) {
         get_template_part("resources/views/sections/{$layout}");
     } else {
