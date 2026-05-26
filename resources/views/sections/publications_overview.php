@@ -157,7 +157,7 @@ if (is_wp_error($keywords)) {
                                 ?>
                                 <option
                                     value="<?= esc_attr($term->slug); ?>"
-                                    <?php 
+                                    <?php
                                     $is_selected = in_array($term->slug, $selected_keywords, true);
                                     echo $is_selected ? 'selected' : '';
                                     ?>>
@@ -227,7 +227,6 @@ if (is_wp_error($keywords)) {
                         if ($years && !is_wp_error($years)) {
                             $year = $years[0]->name;
                         }
-
                         ?>
 
                         <div class="publication-item border-b-2 border-black p-6 overflow-hidden">
