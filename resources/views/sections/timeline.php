@@ -1,55 +1,30 @@
 <?php
-// Load timeline fields
-$title1 = get_sub_field('title1') ?: '';
-$title2 = get_sub_field('title2') ?: '';
-$title3 = get_sub_field('title3') ?: '';
-$title4 = get_sub_field('title4') ?: '';
-
-$subtext1 = get_sub_field('subtext1') ?: '';
-$subtext2 = get_sub_field('subtext2') ?: '';
-$subtext3 = get_sub_field('subtext3') ?: '';
-$subtext4 = get_sub_field('subtext4') ?: '';
-
-// Build fallback timeline items
-$manual_timeline_items = [
-	['title' => $title1, 'text' => $subtext1],
-	['title' => $title2, 'text' => $subtext2],
-	['title' => $title3, 'text' => $subtext3],
-	['title' => $title4, 'text' => $subtext4],
-];
-
-// Load timeline items
-$timeline_items = [];
-if (function_exists('have_rows') && have_rows('timeline')) {
-	while (have_rows('timeline')) {
-		the_row();
-		$timeline_items[] = [
-			'title' => get_sub_field('title') ?: '',
-			'text' => get_sub_field('text') ?: '',
-			'subtext1' => get_sub_field('subtext1') ?: '',
-			'subtext2' => get_sub_field('subtext2') ?: '',
-			'subtext3' => get_sub_field('subtext3') ?: '',
-			'subtext4' => get_sub_field('subtext4') ?: '',
-		];
-	}
-}
-
-// Use manual items as fallback if no items
-if (empty($timeline_items)) {
-	$timeline_items = array_values(array_filter($manual_timeline_items, static function ($item) {
-		return $item['title'] !== '' || $item['text'] !== '';
-	}));
-
-	// Provide placeholder if empty
-	if (empty($timeline_items)) {
-		$timeline_items = array_fill(0, 4, ['title' => 'Titel', 'text' => '']);
-	}
-}
-
-// Gradient (white → soft cyan)
 $timeline_gradient = 'linear-gradient(180deg,#ffffff 0%,rgba(225,252,255,0.46) 55.77%,rgba(120,216,227,0.38) 78.37%,rgba(0,182,203,0.37) 100%)';
+if (empty($timeline_items)) {
+	$timeline_items = [];
+	if (function_exists('get_sub_field')) {
+		$rows = get_sub_field('timeline'); 
+		if (!empty($rows) && is_array($rows)) {
+			foreach ($rows as $row) {
+				$image = $row['image'] ?? null;
+				if (is_array($image) && isset($image['ID'])) {
+					$image_id = $image['ID'];
+				} elseif (is_numeric($image)) {
+					$image_id = (int) $image;
+				} else {
+					$image_id = null;
+				}
+
+				$timeline_items[] = [
+					'image' => $image_id,
+					'text' => $row['text'] ?? '',
+					'subtext' => $row['subtext'] ?? '',
+				];
+			}
+		}
+	}
+}
 ?>
-	<!-- Timeline -->
 	<div class="relative w-full border-t border-black/5" style="background: <?php echo esc_attr($timeline_gradient); ?>;">
 		<div class="mx-auto max-w-7xl px-6 py-20 lg:px-16 lg:py-28">
 			<div class="relative">
@@ -71,21 +46,31 @@ $timeline_gradient = 'linear-gradient(180deg,#ffffff 0%,rgba(225,252,255,0.46) 5
 							<div class="pl-12 lg:grid lg:grid-cols-2 lg:gap-16 lg:pl-0">
 								<?php if ($align_right): ?>
 									<div class="hidden lg:block" aria-hidden="true"></div>
-									<article class="w-full max-w-[340px] rounded-2xl bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,0.08)] ring-1 ring-black/5">
+									<article class="w-full max-w-[600px] rounded-2xl bg-white p-6 text-black shadow-sm ring-1 ring-black/5">
+										<?php if (!empty($item['image'])): ?>
+											<div class="mb-4 overflow-hidden rounded-xl bg-black/5">
+												<?php echo wp_get_attachment_image($item['image'], 'large', false, ['class' => 'h-auto max-h-[200px] w-full object-cover']); ?>
+											</div>
+										<?php endif; ?>
 										<h3 class="text-xl font-normal leading-tight text-black">
-											<?php echo esc_html($item['title']); ?>
+											<?php echo esc_html($item['text']); ?>
 										</h3>
-										<div class="mt-3 text-sm leading-snug text-black [&_p]:mb-2 [&_p:last-child]:mb-0">
-											<?php echo wp_kses_post(wpautop($item['text'])); ?>
+										<div class="mt-3 max-w-[65ch] text-base leading-7 text-black [&_p]:mb-2 [&_p:last-child]:mb-0">
+											<?php echo wp_kses_post(wpautop($item['subtext'])); ?>
 										</div>
 									</article>
 								<?php else: ?>
-									<article class="w-full max-w-[340px] rounded-2xl bg-white p-6 shadow-[0_10px_30px_rgba(0,0,0,0.08)] ring-1 ring-black/5 lg:ml-auto">
+									<article class="w-full max-w-[600px] rounded-2xl bg-white p-6 text-black shadow-sm ring-1 ring-black/5 lg:ml-auto">
+										<?php if (!empty($item['image'])): ?>
+											<div class="mb-4 overflow-hidden rounded-xl bg-black/5">
+												<?php echo wp_get_attachment_image($item['image'], 'large', false, ['class' => 'h-auto max-h-[200px] w-full object-cover']); ?>
+											</div>
+										<?php endif; ?>
 										<h3 class="text-xl font-normal leading-tight text-black">
-											<?php echo esc_html($item['title']); ?>
+											<?php echo esc_html($item['text']); ?>
 										</h3>
-										<div class="mt-3 text-sm leading-snug text-black [&_p]:mb-2 [&_p:last-child]:mb-0">
-											<?php echo wp_kses_post(wpautop($item['text'])); ?>
+										<div class="mt-3 max-w-[65ch] text-base leading-7 text-black [&_p]:mb-2 [&_p:last-child]:mb-0">
+											<?php echo wp_kses_post(wpautop($item['subtext'])); ?>
 										</div>
 									</article>
 									<div class="hidden lg:block" aria-hidden="true"></div>

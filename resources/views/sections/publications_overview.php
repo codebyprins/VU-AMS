@@ -10,8 +10,6 @@ $tax_query = [
     'relation' => 'AND'
 ];
 
-// filter by year
-
 if (!empty($_GET['year'])) {
 
     $tax_query[] = [
@@ -42,14 +40,11 @@ $args = [
     'order'          => 'DESC',
 ];
 
-// search by title/content/keywords
-
 if (!empty($_GET['search'])) {
 
     $args['s'] = sanitize_text_field($_GET['search']);
 }
 
-// search by author
 if (!empty($_GET['author'])) {
 
     $tax_query[] = [
@@ -65,7 +60,6 @@ if (count($tax_query) > 1) {
 
 $query = new WP_Query($args);
 
-// the filter opions
 $years = get_terms([
     'taxonomy'   => 'publication_year',
     'hide_empty' => true,

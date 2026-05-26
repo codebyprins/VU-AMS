@@ -26,6 +26,7 @@ add_action('acf/render_field/name=publications_api_sync', function () {
 
         <p>Zotero Updated: <?php echo esc_html($log['zotero_updated'] ?? 0); ?></p>
         <p>Scholar Updated: <?php echo esc_html($log['scholar_updated'] ?? 0); ?></p>
+        <p>Archived: <?php echo esc_html($log['archived'] ?? 0); ?></p>
         <p>Total Updated: <?php echo esc_html($log['total_updated'] ?? 0); ?></p>
 
     </div>
