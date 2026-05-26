@@ -1,6 +1,19 @@
 <?php
 $titel = get_sub_field('titel');
 $product_logo = get_sub_field('product_logo');
+$product_naam = get_sub_field('product__naam');
+$category = get_sub_field('category-downloads');
+
+$term_ids = [];
+if ($category) {
+    if (is_array($category)) {
+        foreach ($category as $term) {
+            $term_ids[] = is_object($term) ? $term->term_id : (int)$term;
+        }
+    } else {
+        $term_ids[] = is_object($category) ? $category->term_id : (int)$category;
+    }
+}
 
 $releases = get_posts([
     'post_type'      => 'software-release',
@@ -8,10 +21,15 @@ $releases = get_posts([
     'post_status'    => 'publish',
     'orderby'        => 'date',
     'order'          => 'ASC',
+    'tax_query'      => !empty($term_ids) ? [[
+        'taxonomy' => 'download-category',
+        'field'    => 'term_id',
+        'terms'    => $term_ids,
+    ]] : [],
 ]);
 ?>
 
-<section class="px-4 py-8 md:px-[131px] md:py-12">
+<section class="container mx-auto px-4 py-8 md:py-12">
 
     <?php if ($titel) : ?>
         <h2 class="font-sans text-2xl md:text-4xl font-bold mb-2"><?php echo esc_html($titel); ?></h2>
@@ -23,13 +41,18 @@ $releases = get_posts([
 
             <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 p-6">
 
-                <?php if ($product_logo) : ?>
-                    <img src="<?php echo esc_url($product_logo['url']); ?>"
-                         alt="<?php echo esc_html($product_logo['alt']); ?>"
-                         class="w-12 h-12 object-contain flex-shrink-0 bg-gray-100 rounded">
-                <?php else : ?>
-                    <div class="w-12 h-12 bg-gray-200 flex-shrink-0 rounded"></div>
-                <?php endif; ?>
+                <div class="flex flex-col items-start gap-1 flex-shrink-0">
+                    <?php if ($product_naam) : ?>
+                        <p class="text-sm font-semibold text-gray-700"><?php echo esc_html($product_naam); ?></p>
+                    <?php endif; ?>
+                    <?php if ($product_logo) : ?>
+                        <img src="<?php echo esc_url($product_logo['url']); ?>"
+                             alt="<?php echo esc_html($product_logo['alt']); ?>"
+                             class="w-12 h-12 object-contain bg-gray-100 rounded">
+                    <?php else : ?>
+                        <div class="w-12 h-12 bg-gray-200 rounded"></div>
+                    <?php endif; ?>
+                </div>
 
                 <div class="flex flex-col gap-1 w-full md:w-auto">
                     <span class="text-sm font-medium">MacOS</span>
@@ -57,10 +80,8 @@ $releases = get_posts([
                     </a>
                 </div>
 
-                <!-- Small text -->
                 <div id="small-text" class="text-sm text-gray-500 max-w-[600px]"></div>
 
-                <!-- Changelog knop -->
                 <button id="changelog-toggle"
                         class="btn btn-primary-outline w-full md:w-auto md:ml-auto">
                     Changelog
@@ -70,14 +91,14 @@ $releases = get_posts([
             <div id="changelog-content" class="bg-gray-100 border-t border-gray-200 p-6">
                 <?php foreach ($releases as $index => $release) : ?>
                     <?php
-                    $changelog = get_field('changelog', $release->ID);
+                    $changelog  = get_field('changelog', $release->ID);
                     $small_text = get_field('small_text', $release->ID);
-                    $macos = get_field('macos_download', $release->ID);
-                    $windows = get_field('windows_download', $release->ID);
+                    $macos      = get_field('macos_download', $release->ID);
+                    $windows    = get_field('windows_download', $release->ID);
                     ?>
                     <div class="changelog-item hidden" data-index="<?php echo $index; ?>"
-                         data-macos="<?php echo esc_url($macos['url'] ?? '#'); ?>"
-                         data-windows="<?php echo esc_url($windows['url'] ?? '#'); ?>"
+                         data-macos="<?php echo esc_url(is_array($macos) ? ($macos['url'] ?? '#') : ($macos ?? '#')); ?>"
+                         data-windows="<?php echo esc_url(is_array($windows) ? ($windows['url'] ?? '#') : ($windows ?? '#')); ?>"
                          data-small-text="<?php echo esc_attr($small_text ?? ''); ?>">
                         <div class="text-sm text-gray-700"><?php echo $changelog; ?></div>
                     </div>
@@ -89,22 +110,21 @@ $releases = get_posts([
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const macosSelect = document.getElementById('macos-select');
-    const windowsSelect = document.getElementById('windows-select');
-    const macosDownload = document.getElementById('macos-download');
+    const macosSelect     = document.getElementById('macos-select');
+    const windowsSelect   = document.getElementById('windows-select');
+    const macosDownload   = document.getElementById('macos-download');
     const windowsDownload = document.getElementById('windows-download');
-    const changelogToggle = document.getElementById('changelog-toggle');
+    const changelogToggle  = document.getElementById('changelog-toggle');
     const changelogContent = document.getElementById('changelog-content');
-    const changelogItems = document.querySelectorAll('.changelog-item');
-    const smallText = document.getElementById('small-text');
-    const lastIndex = changelogItems.length - 1;
+    const changelogItems   = document.querySelectorAll('.changelog-item');
+    const smallText        = document.getElementById('small-text');
 
     function updateDownloads() {
         const index = macosSelect.value;
         const activeItem = document.querySelector(`.changelog-item[data-index="${index}"]`);
         if (activeItem) {
-            macosDownload.href = activeItem.dataset.macos;
-            windowsDownload.href = activeItem.dataset.windows;
+            macosDownload.href    = activeItem.dataset.macos;
+            windowsDownload.href  = activeItem.dataset.windows;
             smallText.textContent = activeItem.dataset.smallText;
             changelogItems.forEach(item => item.classList.add('hidden'));
             activeItem.classList.remove('hidden');
@@ -125,8 +145,8 @@ document.addEventListener('DOMContentLoaded', function() {
         changelogContent.classList.toggle('hidden');
     });
 
-    macosSelect.value = lastIndex;
-    windowsSelect.value = lastIndex;
+    macosSelect.selectedIndex  = macosSelect.options.length - 1;
+    windowsSelect.selectedIndex = windowsSelect.options.length - 1;
     updateDownloads();
 });
 </script>
