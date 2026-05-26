@@ -9,7 +9,7 @@ $pc_cards = get_sub_field('page_cards');
     <div class="grid grid-cols-12 gap-4">
       <?php foreach ($pc_cards as $card): ?>
         <a href="<?php echo esc_url($card['page_card_link']); ?>"
-          class="col-span-12 sm:col-span-6 xl:col-span-4 flex flex-col justify-end border-[1px] border-black rounded-base p-5 md:p-10 transform hover:bg-surface  hover:translate-y-[-5px] ease-in-out hover:duration-300">
+          class="col-span-12 sm:col-span-6 xl:col-span-4 flex flex-col justify-end border-[1px] border-black rounded-base p-5 md:p-10 transform hover:bg-[#F8F8F8] hover:translate-y-[-5px] ease-in-out hover:duration-300">
           <p class="mb-2">Go to</p>
           <div class="flex justify-between items-center gap-4">
             <h3><?php echo esc_html($card['page_card_title']); ?></h3>
