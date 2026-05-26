@@ -1,15 +1,36 @@
-jQuery(function ($) {
+(function (window, $) {
+  if (!$) {
+    return;
+  }
 
-  $('#sync-publications').on('click', function (e) {
-    e.preventDefault();
+  $(function () {
+    var $button = $('#sync-publications');
+    var $status = $('#sync-status');
+    var ajaxUrl = window.vuAmsPublicationSync && window.vuAmsPublicationSync.ajaxUrl;
 
-    $('#sync-status').text('Syncing...');
+    if (!$button.length || !$status.length || !ajaxUrl) {
+      return;
+    }
 
-    $.post(ajaxurl, {
-      action: 'sync_publications'
-    }, function (res) {
-      $('#sync-status').text(res.data.message);
+    $button.on('click', function (e) {
+      e.preventDefault();
+
+      $button.prop('disabled', true);
+      $status.text('Syncing...');
+
+      $.post(ajaxUrl, {
+        action: 'sync_publications'
+      }).done(function (res) {
+        var message = res && res.data && res.data.message
+          ? res.data.message
+          : 'Sync finished.';
+
+        $status.text(message);
+      }).fail(function () {
+        $status.text('Sync failed. Please try again.');
+      }).always(function () {
+        $button.prop('disabled', false);
+      });
     });
   });
-
-});
+})(window, window.jQuery);
