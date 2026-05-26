@@ -6,13 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Only show if the user hasn't made a choice yet
     if (!localStorage.getItem(CONSENT_KEY)) {
-        // Remove the inline display:none and let it appear
-        overlay.style.removeProperty('display');
-        // Trigger fade-in on next frame
-        requestAnimationFrame(() => {
-            overlay.classList.remove('opacity-0');
-            overlay.classList.add('opacity-100');
-        });
+        setTimeout(() => {
+            overlay.style.removeProperty('display');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    overlay.classList.remove('opacity-0');
+                    overlay.classList.add('opacity-100');
+                });
+            });
+        }, 1000);
     }
 
     function dismissConsent(choice) {
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             overlay.style.display = 'none';
-        }, 300);
+        }, 200);
     }
 
     document.getElementById('cookie-accept-all')?.addEventListener('click', () => {
