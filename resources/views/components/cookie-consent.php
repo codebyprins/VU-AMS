@@ -1,8 +1,7 @@
 <?php
-// Don't render if user already made a choice (handled client-side via localStorage, but we still render the HTML)
 ?>
-<div id="cookie-consent-overlay" class="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4 transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="cookie-consent-title" style="display:none!important;">
-    <div class="bg-gradient-to-br from-[#01B4C9] to-[#0F1733] rounded-2xl shadow-2xl max-w-md w-full p-8 text-white">
+<div id="cookie-consent-overlay" class="fixed bottom-4 right-4 z-[60] opacity-0 transition-opacity duration-200" role="dialog" aria-modal="true" aria-labelledby="cookie-consent-title" style="display:none!important;">
+    <div class="bg-gradient-to-br from-[#01B4C9] to-[#0F1733] rounded-2xl shadow-2xl max-w-xs w-full p-5 text-white">
 
         <div class="flex items-center gap-3 mb-5">
             <div class="shrink-0 w-10 h-10 bg-[#F7C80C] rounded-full flex items-center justify-center">
@@ -22,7 +21,6 @@
             if ($privacy_url) {
                 printf(
                     wp_kses(
-                        /* translators: %s: privacy policy URL */
                         __('Lees onze <a href="%s" class="underline hover:text-[#F7C80C] transition-colors" target="_blank" rel="noopener noreferrer">privacyverklaring</a> voor meer informatie.', 'vu-ams'),
                         ['a' => ['href' => [], 'class' => [], 'target' => [], 'rel' => []]]
                     ),

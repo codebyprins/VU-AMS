@@ -21,14 +21,45 @@ add_action('acf/render_field/name=publications_api_sync', function () {
         <div id="sync-status" style="margin-top:10px;"></div>
         <hr>
         <strong>Last Sync Info</strong><br>
-        <p> Last Run Start: <?php echo esc_html($log['last_run_start'] ?? '-'); ?></p>
-        <p> Last Run End: <?php echo esc_html($log['last_run_end'] ?? '-'); ?></p>
+        <p> Last sync: <?php echo esc_html($log['last_run_end'] ?? '-'); ?></p>
         <p>Total in DB: <?php echo esc_html($log['total_posts'] ?? wp_count_posts('publication')->publish); ?></p><br>
 
         <p>Zotero Updated: <?php echo esc_html($log['zotero_updated'] ?? 0); ?></p>
         <p>Scholar Updated: <?php echo esc_html($log['scholar_updated'] ?? 0); ?></p>
+        <p>Archived: <?php echo esc_html($log['archived'] ?? 0); ?></p>
         <p>Total Updated: <?php echo esc_html($log['total_updated'] ?? 0); ?></p>
 
     </div>
 <?php
 });
+
+add_action('init', function () {
+
+    add_filter(
+        'acf/load_field/key=field_6a0eb3d7467a5',
+        'load_publication_keyword_choices'
+    );
+});
+
+function load_publication_keyword_choices($field)
+{
+    $field['choices'] = [];
+
+    $terms = get_terms([
+        'taxonomy'   => 'publication_keyword',
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+    ]);
+
+    if (is_wp_error($terms)) {
+        return $field;
+    }
+
+    foreach ($terms as $term) {
+
+        $field['choices'][$term->slug] = $term->name;
+    }
+
+    return $field;
+}

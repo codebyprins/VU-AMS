@@ -30,7 +30,7 @@ $darklight = get_sub_field('darklight');
             <div class="col-span-1 relative min-h-[300px] md:min-h-[400px] <?php echo $reverse ? 'order-2 md:order-1' : 'order-1 md:order-2'; ?>">
                 <?php $image = get_sub_field('text-button-image'); ?>
                 <?php if ($image) : ?>
-                    <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" class="absolute inset-0 w-full h-full object-cover" />
+                    <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" class="absolute rounded-sm inset-0 w-full h-full object-cover" />
                 <?php endif; ?>
             </div>
         </div>
