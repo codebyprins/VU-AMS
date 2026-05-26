@@ -39,7 +39,8 @@ $prc_cards         = get_sub_field('product_cards');
           $is_vertical = ($prc_card_layout === 'Image text vertical');
           ?>
 
-          <div class="border border-black rounded-base p-10 w-full md:w-1/2 flex flex-col">
+          <a href="<?php echo esc_url(get_permalink($product_id)); ?>"
+            class="border border-black rounded-base p-10 w-full md:w-1/2 flex flex-col">
 
             <div class="<?php echo $is_vertical ? 'flex flex-col gap-6 flex-1' : 'flex flex-col lg:flex-row gap-4 flex-1'; ?>">
 
@@ -48,8 +49,7 @@ $prc_cards         = get_sub_field('product_cards');
                   <img
                     class="w-full h-full object-cover block"
                     src="<?php echo esc_url($image['url']); ?>"
-                    alt="<?php echo esc_attr($image['alt'] ?? ''); ?>"
-                  >
+                    alt="<?php echo esc_attr($image['alt'] ?? ''); ?>">
                 </figure>
               <?php endif; ?>
 
@@ -103,7 +103,7 @@ $prc_cards         = get_sub_field('product_cards');
 
             </div>
 
-          </div>
+          </a>
 
         <?php endforeach; ?>
 

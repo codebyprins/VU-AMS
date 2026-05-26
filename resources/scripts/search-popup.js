@@ -3,20 +3,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('search-modal');
     const openBtn = document.getElementById('search-popup_open');
     const closeBtn = document.getElementById('search-popup_close');
+
+    if (!searchPopup || !modal || !openBtn || !closeBtn) return;
+
     const overlay = searchPopup.querySelector('.absolute.inset-0');
 
     function openPopup() {
-        searchPopup.classList.remove('opacity-0', 'pointer-events-none');
-
-        modal.classList.remove('opacity-0', '-translate-y-[40%]');
-        modal.classList.add('-translate-y-1/2');
+        searchPopup.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+        modal.classList.remove('hidden', '-translate-y-[40%]', 'opacity-0');
+        modal.classList.add('-translate-y-1/2', 'block');
     }
 
     function closePopup() {
-        searchPopup.classList.add('opacity-0', 'pointer-events-none');
-
-        modal.classList.add('opacity-0', '-translate-y-[40%]');
-        modal.classList.remove('-translate-y-1/2');
+        searchPopup.classList.add('hidden', 'pointer-events-none', 'opacity-0');
+        modal.classList.add('hidden', '-translate-y-[40%]', 'opacity-0');
+        modal.classList.remove('-translate-y-1/2', 'block');
     }
 
     openBtn.addEventListener('click', openPopup);

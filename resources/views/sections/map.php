@@ -21,7 +21,7 @@ $locations = get_posts([
     </div>
     <div class="map_container xl:max-w-[1350px] lg:max-w-[1094px] md:max-w-[858px] sm:max-w-[710px] w-full h-full mx-auto sm:px-4 px-7 py-10">
         <div class="map_inner flex justify-center items-center w-full h-full relative">
-            <img src="./wp-content/themes/VU-AMS/resources/images/map.png" class="opacity-50" alt="World Map">
+            <img src="/wp-content/themes/VU-AMS/resources/images/map.png" class="opacity-50" alt="World Map">
             <?php foreach ($locations as $location) : 
                 $type = get_field('type', $location->ID);
                 $position = get_field('position', $location->ID);

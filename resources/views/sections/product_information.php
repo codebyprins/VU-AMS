@@ -10,7 +10,6 @@
         ];
     endwhile;
 
-    // Split in 2 kolommen
     $left_items = [];
     $right_items = [];
 
@@ -25,7 +24,6 @@
 
 <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
 
-    <!-- LINKER KOLOM -->
     <div class="divide-y divide-yellow-400">
         <?php foreach ($left_items as $item): ?>
             <div class="accordion-item cursor-pointer">
@@ -40,9 +38,6 @@
                 <?php if (!empty($item['content'])): ?>
                     <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300 m-[6px] pl-[5px]">
                             <?php echo $item['content']; ?>
-<!-- 
-                        <p class="pt-2 px-[18px] pb-4 text-sm text-gray-600 bg-orange-600">
-                        </p> -->
                     </div>
                 <?php endif; ?>
 
@@ -50,7 +45,6 @@
         <?php endforeach; ?>
     </div>
 
-    <!-- RECHTER KOLOM -->
 <div class="divide-y divide-yellow-400">
         <?php foreach ($right_items as $item): ?>
             <div class="accordion-item cursor-pointer">
@@ -65,9 +59,6 @@
                 <?php if (!empty($item['content'])): ?>
                     <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300 m-[6px] pl-[5px]">
                             <?php echo $item['content']; ?>
-<!-- 
-                        <p class="pt-2 px-[18px] pb-4 text-sm text-gray-600 bg-orange-600">
-                        </p> -->
                     </div>
                 <?php endif; ?>
 

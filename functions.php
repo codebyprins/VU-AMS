@@ -1,14 +1,13 @@
 <?php
-
 $theme_files =
     [
         'setup',
         'menus',
         'enqueue',
-        'acf',
         'pagination',
         'publications',
-        'update-publication'
+        'acf',
+        'theme'
     ];
 
 foreach ($theme_files as $file) {
