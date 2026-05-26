@@ -1,5 +1,24 @@
 <?php
-function theme_enqueue_assets() {
+function theme_enqueue_assets()
+{
+    
+    // Choices.js CSS
+    wp_enqueue_style(
+        'choices-css',
+        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css',
+        [],
+        null
+    );
+
+    // Choices.js JS
+    wp_enqueue_script(
+        'choices-js',
+        'https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js',
+        [],
+        null,
+        true
+    );
+    
     // Swiper CSS
     wp_enqueue_style(
         'swiper-style',
@@ -57,19 +76,18 @@ function theme_enqueue_assets() {
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
-// Enqueue admin scripts
-function theme_enqueue_admin_assets() {
+function theme_enqueue_admin_assets()
+{
     wp_enqueue_script(
-        'sync-publications',
+        'publication-api-sync',
         get_template_directory_uri() . '/resources/scripts/api-sync.js',
         ['jquery'],
         filemtime(get_template_directory() . '/resources/scripts/api-sync.js'),
         true
     );
-    
-    wp_localize_script('sync-publications', 'syncSettings', [
+
+    wp_localize_script('publication-api-sync', 'vuAmsPublicationSync', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('sync_publications_nonce'),
     ]);
 }
 add_action('admin_enqueue_scripts', 'theme_enqueue_admin_assets');
