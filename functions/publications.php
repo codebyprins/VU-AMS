@@ -60,6 +60,19 @@ add_action('init', function () {
 function run_publication_sync()
 {
   set_time_limit(120);
+  publication_sync_update_status([
+    'running' => true,
+    'done' => false,
+    'stage' => 'Starting',
+    'message' => 'Starting publication sync...',
+    'processed' => 0,
+    'total' => 0,
+    'zotero_updated' => 0,
+    'scholar_updated' => 0,
+    'archived' => 0,
+    'log' => [],
+  ], true);
+
   publication_sync_title_seen('', true);
   publication_sync_token(uniqid('publication_sync_', true));
 
@@ -76,6 +89,11 @@ function run_publication_sync()
     $completed_sources[] = 'Google Scholar';
   }
 
+  publication_sync_update_status([
+    'stage' => 'Archiving',
+    'message' => 'Checking for publications missing from completed sources...',
+  ]);
+
   $archived_count = archive_missing_publications($completed_sources);
 
   publication_sync_log([
@@ -87,6 +105,22 @@ function run_publication_sync()
     'total_updated'   => $zotero_result['updated'] + $scholar_result['updated'],
     'total_posts'     => wp_count_posts('publication')->publish,
   ]);
+
+  publication_sync_update_status([
+    'running' => false,
+    'done' => true,
+    'stage' => 'Complete',
+    'message' => 'Publication sync complete',
+    'processed' => publication_sync_status_value('total'),
+    'zotero_updated' => $zotero_result['updated'],
+    'scholar_updated' => $scholar_result['updated'],
+    'archived' => $archived_count,
+  ]);
+
+  return publication_sync_result(
+    $zotero_result['updated'] + $scholar_result['updated'],
+    true
+  );
 }
 
 function normalize_publication_title($title)
@@ -170,6 +204,86 @@ function publication_sync_result($updated, $completed)
     'updated'   => $updated,
     'completed' => $completed,
   ];
+}
+
+function publication_sync_default_status()
+{
+  return [
+    'running' => false,
+    'done' => false,
+    'stage' => 'Idle',
+    'message' => '',
+    'processed' => 0,
+    'total' => 0,
+    'zotero_updated' => 0,
+    'scholar_updated' => 0,
+    'archived' => 0,
+    'log' => [],
+  ];
+}
+
+function publication_sync_status_value($key)
+{
+  $status = get_option('publication_sync_status', publication_sync_default_status());
+
+  return $status[$key] ?? publication_sync_default_status()[$key] ?? null;
+}
+
+function publication_sync_update_status($data, $replace = false)
+{
+  $status = $replace
+    ? publication_sync_default_status()
+    : get_option('publication_sync_status', publication_sync_default_status());
+
+  $status = array_merge($status, $data);
+
+  if (!empty($data['log_entry'])) {
+    $status['log'][] = [
+      'time' => current_time('H:i:s'),
+      'text' => sanitize_text_field($data['log_entry']),
+    ];
+
+    $status['log'] = array_slice($status['log'], -80);
+    unset($status['log_entry']);
+  }
+
+  $total = (int) ($status['total'] ?? 0);
+  $processed = (int) ($status['processed'] ?? 0);
+  $status['percent'] = $total > 0
+    ? min(100, (int) floor(($processed / $total) * 100))
+    : 0;
+
+  update_option('publication_sync_status', $status, false);
+}
+
+function publication_sync_increment_total($amount)
+{
+  $amount = max(0, (int) $amount);
+
+  if (!$amount) {
+    return;
+  }
+
+  publication_sync_update_status([
+    'total' => ((int) publication_sync_status_value('total')) + $amount,
+  ]);
+}
+
+function publication_sync_progress($source, $processed, $updated, $force = false)
+{
+  publication_sync_update_status([
+    'stage' => $source,
+    'message' => sprintf('%s sync: %d publications processed, %d updated.', $source, $processed, $updated),
+    'processed' => $force
+      ? (int) publication_sync_status_value('processed')
+      : (int) publication_sync_status_value('processed') + 1,
+  ]);
+
+  if ($force || $processed % 10 === 0) {
+    publication_sync_update_status([
+      'log_entry' => sprintf('%s: processed %d publications, updated %d.', $source, $processed, $updated),
+    ]);
+  }
 }
 
 function mark_publication_seen_in_sync($post_id)
@@ -378,15 +492,16 @@ function upsert_publication($data)
 function sync_zotero_publications()
 {
   $updated = 0;
+  $processed = 0;
 
   $group_id = get_field('zotero_group_id', 'option');
   if (!$group_id) return publication_sync_result(0, false);
 
   $start = 0;
   $limit = 100;
+  $total_known = false;
 
   while (true) {
-
     $url = "https://api.zotero.org/groups/{$group_id}/items?format=json&limit={$limit}&start={$start}";
     $response = wp_remote_get($url, [
       'timeout' => 20,
@@ -398,18 +513,32 @@ function sync_zotero_publications()
       return publication_sync_result($updated, false);
     }
 
+    if ($start === 0) {
+      $total_results = (int) wp_remote_retrieve_header($response, 'Total-Results');
+      if ($total_results > 0) {
+        $total_known = true;
+        publication_sync_increment_total($total_results);
+      }
+    }
+
     $items = json_decode(wp_remote_retrieve_body($response), true);
     if (!is_array($items)) return publication_sync_result($updated, false);
     if (empty($items)) break;
+    if (!$total_known) {
+      publication_sync_increment_total(count($items));
+    }
 
     foreach ($items as $item) {
-
       $data = $item['data'] ?? [];
       if (!$data || in_array($data['itemType'], ['note', 'attachment'])) continue;
 
+      $processed++;
       $title = $data['title'] ?? '';
       $normalized_title = normalize_publication_title($title);
-      if (publication_sync_title_seen($normalized_title)) continue;
+      if (publication_sync_title_seen($normalized_title)) {
+        publication_sync_progress('Zotero', $processed, $updated);
+        continue;
+      }
 
       $post_id = upsert_publication([
         'external_id' => 'zotero_' . $item['key'],
@@ -446,10 +575,15 @@ function sync_zotero_publications()
       ]);
 
       if ($post_id) $updated++;
+      publication_sync_progress('Zotero', $processed, $updated);
     }
 
     if (count($items) < $limit) break;
     $start += $limit;
+  }
+
+  if ($processed > 0 && $processed % 10 !== 0) {
+    publication_sync_progress('Zotero', $processed, $updated, true);
   }
 
   return publication_sync_result($updated, true);
@@ -460,6 +594,7 @@ function sync_zotero_publications()
 function sync_google_scholar_publications()
 {
   $updated = 0;
+  $processed = 0;
 
   $api_key   = get_field('serpapi_api_key', 'option');
   $author_id = get_field('google_scholar_author_id', 'option');
@@ -471,7 +606,6 @@ function sync_google_scholar_publications()
   $pages = 0;
 
   do {
-
     $url = add_query_arg([
       'engine'    => 'google_scholar_author',
       'author_id' => $author_id,
@@ -492,12 +626,16 @@ function sync_google_scholar_publications()
     if (!is_array($body)) return publication_sync_result($updated, false);
 
     $articles = $body['articles'] ?? [];
+    publication_sync_increment_total(count($articles));
 
     foreach ($articles as $article) {
-
+      $processed++;
       $title = $article['title'] ?? '';
       $normalized_title = normalize_publication_title($title);
-      if (publication_sync_title_seen($normalized_title)) continue;
+      if (publication_sync_title_seen($normalized_title)) {
+        publication_sync_progress('Google Scholar', $processed, $updated);
+        continue;
+      }
 
       $external_id = !empty($article['citation_id'])
         ? 'scholar_' . $article['citation_id']
@@ -516,6 +654,7 @@ function sync_google_scholar_publications()
       ]);
 
       if ($post_id) $updated++;
+      publication_sync_progress('Google Scholar', $processed, $updated);
     }
 
     $start += $limit;
@@ -527,6 +666,10 @@ function sync_google_scholar_publications()
 
     if ($pages >= 10) break;
   } while (count($articles) === $limit);
+
+  if ($processed > 0 && $processed % 10 !== 0) {
+    publication_sync_progress('Google Scholar', $processed, $updated, true);
+  }
 
   return publication_sync_result($updated, true);
 }
@@ -576,10 +719,37 @@ add_action('wp_ajax_sync_publications', function () {
     wp_send_json_error(['message' => 'Unauthorized']);
   }
 
-  run_publication_sync();
+  check_ajax_referer('publication_sync', 'nonce');
+
+  if (get_transient('publication_sync_running')) {
+    wp_send_json_error([
+      'message' => 'Publication sync is already running.',
+      'status' => get_option('publication_sync_status', publication_sync_default_status()),
+    ]);
+  }
+
+  set_transient('publication_sync_running', true, 15 * MINUTE_IN_SECONDS);
+
+  $result = run_publication_sync();
+
+  delete_transient('publication_sync_running');
 
   wp_send_json_success([
-    'message' => 'Publication sync complete'
+    'message' => 'Publication sync complete',
+    'status' => get_option('publication_sync_status', publication_sync_default_status()),
+  ]);
+});
+
+add_action('wp_ajax_publication_sync_status', function () {
+
+  if (!current_user_can('manage_options')) {
+    wp_send_json_error(['message' => 'Unauthorized']);
+  }
+
+  check_ajax_referer('publication_sync', 'nonce');
+
+  wp_send_json_success([
+    'status' => get_option('publication_sync_status', publication_sync_default_status()),
   ]);
 });
 

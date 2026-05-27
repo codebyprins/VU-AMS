@@ -78,6 +78,13 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 
 function theme_enqueue_admin_assets()
 {
+    wp_enqueue_style(
+        'publication-sync-style',
+        get_template_directory_uri() . '/resources/styles/components/publications-sync.css',
+        [],
+        filemtime(get_template_directory() . '/resources/styles/components/publications-sync.css')
+    );
+
     wp_enqueue_script(
         'publication-api-sync',
         get_template_directory_uri() . '/resources/scripts/api-sync.js',
@@ -88,6 +95,7 @@ function theme_enqueue_admin_assets()
 
     wp_localize_script('publication-api-sync', 'vuAmsPublicationSync', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('publication_sync'),
     ]);
 }
 add_action('admin_enqueue_scripts', 'theme_enqueue_admin_assets');
