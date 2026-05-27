@@ -1,5 +1,25 @@
 <?php
 $publications_tags_filter = get_field('publications_tags_filter', 'option') ?: [];
+$selected_year = sanitize_text_field($_GET['publication_year_filter'] ?? $_GET['year'] ?? '');
+$selected_search = sanitize_text_field($_GET['search'] ?? '');
+$selected_author = sanitize_text_field($_GET['author'] ?? '');
+$selected_keywords = [];
+
+if (!empty($_GET['keyword'])) {
+    $selected_keywords = is_array($_GET['keyword'])
+        ? array_map('sanitize_text_field', $_GET['keyword'])
+        : [sanitize_text_field($_GET['keyword'])];
+}
+
+$filter_action_url = get_permalink(get_queried_object_id());
+
+if (is_post_type_archive('publication')) {
+    $filter_action_url = get_post_type_archive_link('publication');
+}
+
+if (!$filter_action_url) {
+    $filter_action_url = home_url('/');
+}
 
 $paged = max(
     1,
@@ -10,24 +30,19 @@ $tax_query = [
     'relation' => 'AND'
 ];
 
-if (!empty($_GET['year'])) {
-
+if (!empty($selected_year)) {
     $tax_query[] = [
         'taxonomy' => 'publication_year',
         'field'    => 'slug',
-        'terms'    => sanitize_text_field($_GET['year']),
+        'terms'    => [$selected_year],
     ];
 }
 
-if (!empty($_GET['keyword']) && is_array($_GET['keyword'])) {
-
+if (!empty($selected_keywords)) {
     $tax_query[] = [
         'taxonomy' => 'publication_keyword',
         'field'    => 'slug',
-        'terms'    => array_map(
-            'sanitize_text_field',
-            $_GET['keyword']
-        ),
+        'terms'    => $selected_keywords,
         'operator' => 'IN',
     ];
 }
@@ -40,17 +55,15 @@ $args = [
     'order'          => 'DESC',
 ];
 
-if (!empty($_GET['search'])) {
-
-    $args['s'] = sanitize_text_field($_GET['search']);
+if (!empty($selected_search)) {
+    $args['s'] = $selected_search;
 }
 
-if (!empty($_GET['author'])) {
-
+if (!empty($selected_author)) {
     $tax_query[] = [
         'taxonomy' => 'publication_author',
         'field'    => 'slug',
-        'terms'    => sanitize_text_field($_GET['author']),
+        'terms'    => [$selected_author],
     ];
 }
 
@@ -67,18 +80,27 @@ $years = get_terms([
     'order'      => 'DESC',
 ]);
 
+if (is_wp_error($years)) {
+    $years = [];
+}
+
 $keywords = get_terms([
     'taxonomy'   => 'publication_keyword',
     'hide_empty' => true,
     'orderby'    => 'name',
     'order'      => 'ASC',
 ]);
+
+if (is_wp_error($keywords)) {
+    $keywords = [];
+}
 ?>
 
 <section class="bg-white py-10">
     <div class="container mx-auto px-4 flex md:flex-row flex-col md:gap-16 gap-5 justify-between">
         <form
             method="GET"
+            action="<?= esc_url($filter_action_url); ?>"
             class="xl:w-1/4 md:w-2/5 w-full bg-[#d4eff2] border-4 border-[#01B4C9] rounded-xl px-4 py-5 self-start md:block">
             <h3 class="mb-6">Filters</h3>
 
@@ -88,20 +110,20 @@ $keywords = get_terms([
                     type="text"
                     name="search"
                     placeholder="Search publications..."
-                    value="<?= esc_attr($_GET['search'] ?? ''); ?>"
+                    value="<?= esc_attr($selected_search); ?>"
                     class="w-full bg-white border border-black py-2 px-4">
             </div>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
-                <p>Year</p>
+                <p>Publication year</p>
                 <select
-                    name="year"
+                    name="publication_year_filter"
                     class="w-full bg-white border border-black py-2 px-4">
                     <option value="">All Years</option>
                     <?php foreach ($years as $year) : ?>
                         <option
                             value="<?= esc_attr($year->slug); ?>"
-                            <?= selected($_GET['year'] ?? '', $year->slug); ?>>
+                            <?= selected($selected_year, $year->slug); ?>>
                             <?= esc_html($year->name); ?>
                         </option>
                     <?php endforeach; ?>
@@ -114,7 +136,7 @@ $keywords = get_terms([
                     type="text"
                     name="author"
                     placeholder="Search author..."
-                    value="<?= esc_attr($_GET['author'] ?? ''); ?>"
+                    value="<?= esc_attr($selected_author); ?>"
                     class="w-full bg-white border border-black py-2 px-4">
             </div>
 
@@ -135,7 +157,10 @@ $keywords = get_terms([
                                 ?>
                                 <option
                                     value="<?= esc_attr($term->slug); ?>"
-                                    <?= (!empty($_GET['keyword']) && in_array($term->slug, (array) $_GET['keyword'])) ? 'selected' : ''; ?>>
+                                    <?php
+                                    $is_selected = in_array($term->slug, $selected_keywords, true);
+                                    echo $is_selected ? 'selected' : '';
+                                    ?>>
                                     <?= esc_html($term->name); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -144,17 +169,23 @@ $keywords = get_terms([
                 </select>
             </div>
 
-            <a
-                href="<?= esc_url(remove_query_arg(['search', 'year', 'author', 'keyword'])); ?>"
-                class="btn btn-primary-outline w-full">
-                Reset Filters
-            </a>
+            <div class="flex gap-4 items-center">
+                <a
+                    href="<?= esc_url($filter_action_url); ?>"
+                    class="btn btn-primary-outline flex-1 flex justify-center">
+                    <?php
+                    echo theme_svg('rotate-left', 'w-4 h-full');
+                    ?>
+                </a>
 
-            <button
-                type="submit"
-                class="btn btn-primary mt-6 w-full">
-                Apply Filters
-            </button>
+                <button
+                    type="submit"
+                    class="btn btn-primary flex-1 flex justify-center">
+                    <?php
+                    echo theme_svg('magnifying-glass', 'w-4 h-full');
+                    ?>
+                </button>
+            </div>
         </form>
         <div class="xl:w-3/4 md:w-3/5 w-full">
             <div>
@@ -196,7 +227,6 @@ $keywords = get_terms([
                         if ($years && !is_wp_error($years)) {
                             $year = $years[0]->name;
                         }
-
                         ?>
 
                         <div class="publication-item border-b-2 border-black p-6 overflow-hidden">
@@ -230,10 +260,8 @@ $keywords = get_terms([
                         </div>
                     <?php endwhile; ?>
                 <?php else : ?>
-                    <div class="publication-item border border-[#01B4C9] rounded-xl p-6">
-                        <p>
-                            No publications found using given criteria
-                        </p>
+                    <div class="publication-item border-b-2 border-black p-6">
+                        <p><?php esc_html_e('No publications found.', 'vu-ams'); ?></p>
                     </div>
                 <?php endif; ?>
                 <?php custom_pagination($query); ?>
