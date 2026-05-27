@@ -20,31 +20,6 @@ if (!is_wp_error($year_terms) && !empty($year_terms)) {
 }
 ?>
 
-<style>
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .fade-in-up {
-    opacity: 0;
-  }
-
-  .fade-in-up.is-visible {
-    animation: fadeInUp 0.6s ease forwards;
-  }
-
-  .fade-in-up.delay-1 { animation-delay: 0.1s; }
-  .fade-in-up.delay-2 { animation-delay: 0.25s; }
-  .fade-in-up.delay-3 { animation-delay: 0.4s; }
-</style>
-
 <section class="container mx-auto px-4 py-8 md:py-12">
 
     <?php if ($titel) : ?>
