@@ -22,7 +22,7 @@ $banner_posts = new WP_Query([
         </h2>
       <?php endif; ?>
 
-      <div class="swiper w-full h-[400px] bg-primary rounded-base">
+      <div class="swiper relative w-full h-[400px] bg-primary rounded-base overflow-hidden">
         <?php if ($banner_type === 'publication' && $banner_bg): ?>
           <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('<?= esc_url($banner_bg['url']); ?>');">
           </div>
