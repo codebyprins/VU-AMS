@@ -29,7 +29,7 @@ $releases = get_posts([
 ]);
 ?>
 
-<section class="container mx-auto px-4 py-8 md:py-12">
+<section class="download-block container mx-auto px-4 py-8 md:py-12">
 
     <?php if ($titel) : ?>
         <h2 class="font-sans text-2xl md:text-4xl font-bold mb-2"><?php echo esc_html($titel); ?></h2>
@@ -110,43 +110,46 @@ $releases = get_posts([
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const macosSelect     = document.getElementById('macos-select');
-    const windowsSelect   = document.getElementById('windows-select');
-    const macosDownload   = document.getElementById('macos-download');
-    const windowsDownload = document.getElementById('windows-download');
-    const changelogToggle  = document.getElementById('changelog-toggle');
-    const changelogContent = document.getElementById('changelog-content');
-    const changelogItems   = document.querySelectorAll('.changelog-item');
-    const smallText        = document.getElementById('small-text');
+    // Werk met alle download blocks
+    document.querySelectorAll('.download-block').forEach(function(block) {
+        const macosSelect     = block.querySelector('#macos-select');
+        const windowsSelect   = block.querySelector('#windows-select');
+        const macosDownload   = block.querySelector('#macos-download');
+        const windowsDownload = block.querySelector('#windows-download');
+        const changelogToggle  = block.querySelector('#changelog-toggle');
+        const changelogContent = block.querySelector('#changelog-content');
+        const changelogItems   = block.querySelectorAll('.changelog-item');
+        const smallText        = block.querySelector('#small-text');
 
-    function updateDownloads() {
-        const index = macosSelect.value;
-        const activeItem = document.querySelector(`.changelog-item[data-index="${index}"]`);
-        if (activeItem) {
-            macosDownload.href    = activeItem.dataset.macos;
-            windowsDownload.href  = activeItem.dataset.windows;
-            smallText.textContent = activeItem.dataset.smallText;
-            changelogItems.forEach(item => item.classList.add('hidden'));
-            activeItem.classList.remove('hidden');
+        function updateDownloads() {
+            const index = macosSelect.value;
+            const activeItem = block.querySelector(`.changelog-item[data-index="${index}"]`);
+            if (activeItem) {
+                macosDownload.href    = activeItem.dataset.macos;
+                windowsDownload.href  = activeItem.dataset.windows;
+                smallText.textContent = activeItem.dataset.smallText;
+                changelogItems.forEach(item => item.classList.add('hidden'));
+                activeItem.classList.remove('hidden');
+            }
         }
-    }
 
-    macosSelect.addEventListener('change', function() {
-        windowsSelect.value = this.value;
+        macosSelect.addEventListener('change', function() {
+            windowsSelect.value = this.value;
+            updateDownloads();
+        });
+
+        windowsSelect.addEventListener('change', function() {
+            macosSelect.value = this.value;
+            updateDownloads();
+        });
+
+        changelogToggle.addEventListener('click', function() {
+            changelogContent.classList.toggle('hidden');
+        });
+
+        macosSelect.selectedIndex  = macosSelect.options.length - 1;
+        windowsSelect.selectedIndex = windowsSelect.options.length - 1;
         updateDownloads();
     });
-
-    windowsSelect.addEventListener('change', function() {
-        macosSelect.value = this.value;
-        updateDownloads();
-    });
-
-    changelogToggle.addEventListener('click', function() {
-        changelogContent.classList.toggle('hidden');
-    });
-
-    macosSelect.selectedIndex  = macosSelect.options.length - 1;
-    windowsSelect.selectedIndex = windowsSelect.options.length - 1;
-    updateDownloads();
 });
 </script>
