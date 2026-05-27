@@ -9,6 +9,7 @@
 @import "./components/buttons.css";
 @import "./components/support-form.css";
 @import "./components/publications-filter.css";
+@import "./components//animation.css";
 
 /* Tailwind core layers */
 @tailwind base;

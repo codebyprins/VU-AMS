@@ -17,33 +17,6 @@ $alignment_classes = [
 $align = $alignment_classes[$layout] ?? $alignment_classes['center'];
 ?>
 
-<style>
-    .hero-title p {
-        font-size: inherit;
-        font-weight: inherit;
-        line-height: inherit;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .fade-in-up {
-        opacity: 0;
-        animation: fadeInUp 0.6s ease forwards;
-    }
-
-    .fade-in-up.delay-1 { animation-delay: 0.1s; }
-    .fade-in-up.delay-2 { animation-delay: 0.25s; }
-</style>
-
 <section class="relative w-screen h-[400px] overflow-hidden">
 
     <?php if ($video): ?>
