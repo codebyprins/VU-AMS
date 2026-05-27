@@ -2,10 +2,17 @@
 
 // here go the acf settings, field groups, etc.
 
-//remove standard editor from posts and pages, use acf for input
+//remove standard editor from almost allposts and pages, use acf for input.
+// (DONT TURN OFF FOR PUBLICATIONS, THE SYNC PUTS CONTENT IN IT)
 function remove_editor_globally()
 {
     remove_post_type_support('post', 'editor');
+    remove_post_type_support('support_blog', 'editor');
+    remove_post_type_support('product', 'editor');
+    remove_post_type_support('project', 'editor');
+    remove_post_type_support('software-release', 'editor');
+    remove_post_type_support('team-member', 'editor');  
+    remove_post_type_support('location', 'editor');
     remove_post_type_support('page', 'editor');
 }
 add_action('init', 'remove_editor_globally');
