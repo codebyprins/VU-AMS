@@ -2,7 +2,7 @@
 $titel = get_sub_field('titel');
 $product_logo = get_sub_field('product_logo');
 $product_naam = get_sub_field('product__naam');
-$category = get_sub_field('category-downloads');
+$category = get_sub_field('category');
 
 $term_ids = [];
 if ($category) {
