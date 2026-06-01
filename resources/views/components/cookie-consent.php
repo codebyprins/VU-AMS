@@ -44,3 +44,18 @@
 
     </div>
 </div>
+
+<button
+    id="cookie-settings-btn"
+    type="button"
+    class="fixed bottom-6 right-6 z-[59] w-12 h-12 rounded-full bg-[#F7C80C] text-[#0F1733] shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl"
+    aria-label="<?php esc_attr_e('Cookie-instellingen aanpassen', 'vu-ams'); ?>"
+    style="display:none;">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M21.598 11.064a1.006 1.006 0 0 0-.854-.172A2.938 2.938 0 0 1 20 11c-1.654 0-3-1.346-3.003-2.937.005-.034.016-.136.017-.17a1 1 0 0 0-1.263-1.02 2.99 2.99 0 0 1-.471.066C13.839 6.938 13 6.08 13 5a3.01 3.01 0 0 1 .05-.567A1 1 0 0 0 12 3.116a9 9 0 1 0 10.087 8.816 1 1 0 0 0-.489-.868z"/>
+        <circle cx="9.5" cy="13.5" r="1.5"/>
+        <circle cx="13.5" cy="16" r="1"/>
+        <circle cx="15" cy="11.5" r="1"/>
+        <circle cx="10.5" cy="10" r="1"/>
+    </svg>
+</button>
