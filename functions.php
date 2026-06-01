@@ -7,7 +7,9 @@ $theme_files =
         'pagination',
         'publications',
         'acf',
-        'theme'
+        'search',
+        'theme',
+        'cf7',
     ];
 
 foreach ($theme_files as $file) {

@@ -93,3 +93,41 @@ function load_publication_keyword_choices($field)
 
     return $field;
 }
+
+add_action('init', function () {
+    add_filter(
+        'acf/load_field/name=category',
+        'load_faq_tag_choices'
+    );
+});
+
+function load_faq_tag_choices($field)
+{
+    // Only apply to FAQ tag fields
+    if ($field['name'] !== 'category') {
+        return $field;
+    }
+
+    $field['choices'] = [];
+
+    $terms = get_terms([
+        'taxonomy'   => 'faq-tag',
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+    ]);
+
+    if (is_wp_error($terms)) {
+        return $field;
+    }
+
+    if (empty($terms)) {
+        return $field;
+    }
+
+    foreach ($terms as $term) {
+        $field['choices'][$term->slug] = $term->name;
+    }
+
+    return $field;
+}

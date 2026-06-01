@@ -23,7 +23,15 @@
                                             ?>
                                         </span>
                                     </div>
-                                    <a href="<?php the_permalink(); ?>" class="text-xl text-[#01B4C9] max-w-[600px] overflow-hidden text-ellipsis whitespace-nowrap hover:text-[#F7C80C] transition-colors">
+                                    <a href="<?php 
+                                        if (get_post_type() === 'faq') {
+                                            echo esc_url(get_permalink(get_page_by_path('support')) . '#faq');
+                                        } elseif (get_post_type() === 'team-member') {
+                                            echo esc_url(get_permalink(get_page_by_path('about-us')));
+                                        } else {
+                                            the_permalink();
+                                        }
+                                    ?>" class="text-xl text-[#01B4C9] max-w-[600px] overflow-hidden text-ellipsis whitespace-nowrap hover:text-[#F7C80C] transition-colors">
                                         <?php the_title(); ?>
                                     </a>
                                 </div>
@@ -32,7 +40,15 @@
                                 </p>
                             </div>
                             <div class="right md:flex hidden items-center justify-center">
-                                <a href="<?php the_permalink(); ?>" class="bg-[#01B4C9] hover:bg-[#F7C80C] transition-colors rounded-full w-[50px] h-[50px] flex items-center justify-center">
+                                <a href="<?php 
+                                    if (get_post_type() === 'faq') {
+                                        echo esc_url(get_permalink(get_page_by_path('support')) . '#faq');
+                                    } elseif (get_post_type() === 'team-member') {
+                                        echo esc_url(get_permalink(get_page_by_path('about-us')));
+                                    } else {
+                                        the_permalink();
+                                    }
+                                ?>" class="bg-[#01B4C9] hover:bg-[#F7C80C] transition-colors rounded-full w-[50px] h-[50px] flex items-center justify-center">
                                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M25.375 14.4997L19.3333 8.45801M25.375 14.4997L19.3333 20.5413M25.375 14.4997H3.625" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
