@@ -1,8 +1,4 @@
 <?php
-
-/**
- * Dynamically populate CF7 select fields with post-type data.
- */
 add_filter('wpcf7_form_tag', function ($tag) {
     if (!is_array($tag) || ($tag['name'] ?? '') !== 'your-product') {
         return $tag;
