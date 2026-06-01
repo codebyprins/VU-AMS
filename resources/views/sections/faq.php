@@ -1,12 +1,30 @@
 <?php
 
 $title = get_sub_field('title');
+$selected_tags = get_sub_field('category');
 
-$faq_posts = get_posts([
+$query_args = [
     'post_type' => 'faq',
     'posts_per_page' => -1,
     'post_status' => 'publish'
-]);
+];
+
+if (!empty($selected_tags)) {
+    if (!is_array($selected_tags)) {
+        $selected_tags = [$selected_tags];
+    }
+    
+    $query_args['tax_query'] = [
+        [
+            'taxonomy' => 'faq-tag',
+            'field' => 'term_id',
+            'terms' => $selected_tags,
+            'operator' => 'IN'
+        ]
+    ];
+}
+
+$faq_posts = get_posts($query_args);
 
 ?>
 
