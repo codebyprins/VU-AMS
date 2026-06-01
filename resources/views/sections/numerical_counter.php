@@ -10,15 +10,27 @@ $numerical_items = get_sub_field('numerical_items');
         <?php foreach ($numerical_items as $item) : ?>
             <?php
             $display_number = $item['number'];
+            $sync_count = $item['sync_count'];
             
-            if ($item['sync_locations_count']) {
-                $locations = get_posts([
-                    'post_type' => 'location',
-                    'posts_per_page' => -1,
-                    'post_status' => 'publish',
-                    'fields' => 'ids'
-                ]);
-                $display_number = count($locations);
+            if ($sync_count && $sync_count !== 'no_sync') {
+                $post_type_map = [
+                    'locations' => 'location',
+                    'publications' => 'publication',
+                    'team_members' => 'team-member',
+                    'projects' => 'project',
+                    'products' => 'product',
+                    'software_releases' => 'software-release'
+                ];
+                
+                if (isset($post_type_map[$sync_count])) {
+                    $posts = get_posts([
+                        'post_type' => $post_type_map[$sync_count],
+                        'posts_per_page' => -1,
+                        'post_status' => 'publish',
+                        'fields' => 'ids'
+                    ]);
+                    $display_number = count($posts);
+                }
             }
             ?>
             <div class="number-item min-w-[100px] flex flex-col items-center gap-1 md:mb-8 mb-4">
