@@ -7,6 +7,7 @@ $theme_files =
         'pagination',
         'publications',
         'acf',
+        'search',
         'theme',
         'cf7',
     ];
