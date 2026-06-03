@@ -55,6 +55,56 @@ add_action('init', function () {
   }
 });
 
+add_action('restrict_manage_posts', function ($post_type) {
+  if ($post_type !== 'publication') {
+    return;
+  }
+
+  $selected_year = sanitize_text_field(wp_unslash($_GET['publication_year'] ?? ''));
+  $years = get_terms([
+    'taxonomy' => 'publication_year',
+    'hide_empty' => true,
+  ]);
+
+  if (is_wp_error($years) || empty($years)) {
+    return;
+  }
+
+  usort($years, function ($a, $b) {
+    return (int) $b->name <=> (int) $a->name;
+  });
+?>
+  <select name="publication_year" id="filter-by-publication-year">
+    <option value=""><?php esc_html_e('All years', 'vu-ams'); ?></option>
+    <?php foreach ($years as $year) : ?>
+      <option value="<?php echo esc_attr($year->slug); ?>" <?php selected($selected_year, $year->slug); ?>>
+        <?php echo esc_html($year->name); ?>
+      </option>
+    <?php endforeach; ?>
+  </select>
+<?php
+});
+
+add_filter('manage_edit-publication_sortable_columns', function ($columns) {
+  $columns['taxonomy-publication_year'] = 'publication_year';
+
+  return $columns;
+});
+
+add_action('pre_get_posts', function ($query) {
+  if (
+    !is_admin()
+    || !$query->is_main_query()
+    || $query->get('post_type') !== 'publication'
+    || $query->get('orderby') !== 'publication_year'
+  ) {
+    return;
+  }
+
+  $query->set('meta_key', 'publication_year');
+  $query->set('orderby', 'meta_value_num');
+});
+
 //run the sync functions
 
 function run_publication_sync()
@@ -131,6 +181,15 @@ function normalize_publication_title($title)
   $title = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $title);
 
   return trim(preg_replace('/\s+/', ' ', $title));
+}
+
+function normalize_publication_year($value)
+{
+  if (preg_match('/\b(19|20|21)\d{2}\b/', (string) $value, $matches)) {
+    return $matches[0];
+  }
+
+  return '';
 }
 
 function get_publication_by_normalized_title($normalized_title, $external_id = '')
@@ -425,13 +484,14 @@ function upsert_publication($data)
   mark_publication_seen_in_sync($post_id);
 
   // YEAR - Store as both taxonomy and meta
-  if (!empty($data['year'])) {
+  $publication_year = normalize_publication_year($data['year'] ?? '');
+  if ($publication_year) {
     wp_set_object_terms(
       $post_id,
-      [$data['year']],
+      [$publication_year],
       'publication_year'
     );
-    update_post_meta($post_id, 'publication_year', sanitize_text_field($data['year']));
+    update_post_meta($post_id, 'publication_year', $publication_year);
   }
 
   // AUTHORS - Store as both taxonomy and meta
@@ -548,9 +608,7 @@ function sync_zotero_publications()
 
         'publication_date' => $data['date'] ?? '',
         
-        'year' => !empty($data['date'])
-          ? date('Y', strtotime($data['date']))
-          : '',
+        'year' => normalize_publication_year($data['date'] ?? ''),
 
         'authors' => array_map(function ($creator) {
           return trim(
