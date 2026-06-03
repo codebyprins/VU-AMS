@@ -12,9 +12,12 @@
             <h2 id="cookie-consent-title" class="text-xl font-bold"><?php esc_html_e('Cookie settings', 'vu-ams'); ?></h2>
         </div>
 
-        <p class="text-sm text-white/80 mb-3">
-            <?php esc_html_e('We use cookies to improve your experience on our website, analyse traffic, and show relevant content.', 'vu-ams'); ?>
-        </p>
+        <div class="text-sm text-white/80 mb-3 [&_p]:text-sm [&_p]:m-0">
+            <?php
+            $cookie_description = get_field('cookie_description', 'option');
+            echo $cookie_description ? wp_kses_post($cookie_description) : esc_html__('We use cookies to improve your experience on our website, analyse traffic, and show relevant content.', 'vu-ams');
+            ?>
+        </div>
         <p class="text-sm text-white/60 mb-7">
             <?php
             $privacy_url = get_privacy_policy_url();
