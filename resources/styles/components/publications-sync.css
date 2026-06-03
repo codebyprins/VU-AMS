@@ -56,3 +56,7 @@
 .publication-sync-modal__log p {
   margin: 0 0 4px;
 }
+
+.publications-link {
+  word-break: break-all;
+}
