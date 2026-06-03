@@ -97,11 +97,11 @@ if (is_wp_error($keywords)) {
 ?>
 
 <section class="bg-white py-10">
-    <div class="container mx-auto px-4 flex md:flex-row flex-col md:gap-16 gap-5 justify-between">
+    <div class="container mx-auto px-4 flex md:flex-row flex-col md:gap-16 gap-5 justify-between relative">
         <form
             method="GET"
             action="<?= esc_url($filter_action_url); ?>"
-            class="xl:w-1/4 md:w-2/5 w-full bg-[#d4eff2] border-4 border-[#01B4C9] rounded-xl px-4 py-5 self-start md:block">
+            class="xl:w-1/4 md:w-2/5 w-full md:sticky md:top-24 left-0 relative top-0 bg-[#d4eff2] border-4 border-[#01B4C9] rounded-xl px-4 py-5 self-start md:block">
             <h3 class="mb-6">Filters</h3>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
