@@ -486,13 +486,14 @@ function upsert_publication($data)
   mark_publication_seen_in_sync($post_id);
 
   // YEAR - Store as both taxonomy and meta
-  if (!empty($data['year'])) {
+  $publication_year = normalize_publication_year($data['year'] ?? '');
+  if ($publication_year) {
     wp_set_object_terms(
       $post_id,
-      [$data['year']],
+      [$publication_year],
       'publication_year'
     );
-    update_post_meta($post_id, 'publication_year', sanitize_text_field($data['year']));
+    update_post_meta($post_id, 'publication_year', $publication_year);
   }
 
   // AUTHORS - Store as both taxonomy and meta
@@ -609,9 +610,7 @@ function sync_zotero_publications()
 
         'publication_date' => $data['date'] ?? '',
         
-        'year' => !empty($data['date'])
-          ? date('Y', strtotime($data['date']))
-          : '',
+        'year' => normalize_publication_year($data['date'] ?? ''),
 
         'authors' => array_map(function ($creator) {
           return trim(
