@@ -11,8 +11,8 @@ $title = get_field('popup_title', 'option');
 $content = get_field('popup_text', 'option');
 
 $footer_column = $footer_col_4['newsletter_toggle'] === true
-  ? 'col-span-12 sm:col-span-6 lg:col-span-4'
-  : 'col-span-12 sm:col-span-6 lg:col-span-5';
+  ? 'col-span-12 xs:col-span-6 lg:col-span-4'
+  : 'col-span-12 xs:col-span-6 lg:col-span-5';
 
 // Contact details from general optionpage
 $contact = [
@@ -36,25 +36,25 @@ function render_footer_column($col, $contact = [])
 
     case 'Contact':
       echo '<div class="text-white flex flex-col gap-1">';
-      echo '<h3 class="text-lg">Contact</h3>';
+      echo '<h3 class="text-base">Contact</h3>';
 
       echo '<div class="flex gap-4">';
-      echo '<div class="flex-1">';
+      echo '<div class="">';
       if (!empty($contact['address']))
-        echo '<p>' . esc_html($contact['address']) . '</p>';
+        echo '<p class="text-sm">' . esc_html($contact['address']) . '</p>';
       if (!empty($contact['postcode_city']))
-        echo '<p>' . esc_html($contact['postcode_city']) . '</p>';
+        echo '<p class="text-sm">' . esc_html($contact['postcode_city']) . '</p>';
       if (!empty($contact['country']))
-        echo '<p>' . esc_html($contact['country']) . '</p>';
+        echo '<p class="text-sm">' . esc_html($contact['country']) . '</p>';
       echo '</div>';
 
-      echo '<div class="flex-1">';
+      echo '<div class="">';
       if (!empty($contact['phone']))
-        echo '<p>' . esc_html($contact['phone']) . '</p>';
+        echo '<p class="text-sm">' . esc_html($contact['phone']) . '</p>';
       if (!empty($contact['email']))
-        echo '<p>' . esc_html($contact['email']) . '</p>';
+        echo '<p class="text-sm">' . esc_html($contact['email']) . '</p>';
       if (!empty($contact['kvk']))
-        echo '<p>' . esc_html($contact['kvk']) . '</p>';
+        echo '<p class="text-sm">' . esc_html($contact['kvk']) . '</p>';
       echo '</div>';
       echo '</div>';
       echo '</div>';
@@ -63,13 +63,13 @@ function render_footer_column($col, $contact = [])
     case 'Title text':
       $data = $col['footer_title_text'] ?? [];
 
-      echo '<h3 class="text-white text-lg ">' . esc_html($data['footer_title_text_title'] ?? '') . '</h3>';
-      echo '<p class="text-white">' . esc_html($data['footer_title_text_text'] ?? '') . '</p>';
+      echo '<h3 class="text-white text-base ">' . esc_html($data['footer_title_text_title'] ?? '') . '</h3>';
+      echo '<p class="text-white text-sm">' . esc_html($data['footer_title_text_text'] ?? '') . '</p>';
       break;
 
     case 'Title Image':
       $data = $col['footer_title_image'] ?? [];
-      echo '<h3 class="text-white text-lg mb-1 ">' . esc_html($data['footer_title_image_title'] ?? '') . '</h3>';
+      echo '<h3 class="text-white text-base mb-1 ">' . esc_html($data['footer_title_image_title'] ?? '') . '</h3>';
       echo '<div class="flex gap-4">';
       if (!empty($data['footer_title_image_images'])) {
         foreach ($data['footer_title_image_images'] as $img) {
@@ -101,10 +101,10 @@ function render_footer_column($col, $contact = [])
 
 </main>
 
-<footer class="bg-primary-gradient px-section_sm sm:px-section_md md:px-section_base">
-  <div class="container py-container_sm flex flex-col gap-2">
+<footer class="bg-primary-gradient">
+  <div class="px-4 py-6 flex flex-col gap-2">
     <?php if (!empty($company)): ?>
-      <h2 class="text-white text-lg">
+      <h2 class="text-white text-base">
         <?php echo esc_html($company); ?>
       </h2>
     <?php endif; ?>
@@ -136,7 +136,7 @@ function render_footer_column($col, $contact = [])
       <!-- Column 4 is optional -->
       <?php if ($footer_col_4['newsletter_toggle'] === true): ?>
         <div class="col-span-12 sm:col-span-6 lg:col-span-2 flex flex-col gap-1">
-          <h3 class="text-white text-lg"><?php echo esc_html($footer_col_4['newsletter_title'] ?? 'Newsletter'); ?>
+          <h3 class="text-white text-base"><?php echo esc_html($footer_col_4['newsletter_title'] ?? 'Newsletter'); ?>
           </h3>
           <button
             class="btn btn-secondary"><?php echo esc_html($footer_col_4['newsletter_button_text'] ?? 'Sign up'); ?></button>
@@ -146,14 +146,19 @@ function render_footer_column($col, $contact = [])
   </div>
 
   <!-- Sub footer -->
-  <div class="container py-2">
-    <p class="text-center text-xs text-white flex gap-2 flex-wrap justify-center">
+  <div class="container py-2 flex gap-2 justify-between">
+    <div class="text-center text-white flex gap-2 flex-wrap justify-center">
       <?php if ($company): ?>
-        <span><?php echo esc_html($company); ?></span>
+        <span class="text-sm"><?php echo esc_html($company); ?></span>
       <?php endif; ?>
-      <span>©<?php echo date("Y"); ?></span>
-      <span>All rights reserved.</span>
-    </p>
+      <span class="text-sm">©<?php echo date("Y"); ?></span>
+      <span class="text-sm">All rights reserved.</span>
+    </div>
+    <?php wp_nav_menu([
+      'theme_location' => 'Footer',
+      'container' => false,
+      'menu_class' => 'footer-menu',
+    ]); ?>
   </div>
 </footer>
 
@@ -161,70 +166,31 @@ function render_footer_column($col, $contact = [])
 
 <div id="newsletter-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
 
-    <div class="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-xl p-6">
+  <div class="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-xl p-6">
 
-        <button 
-            id="close-popup"
-            class="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
-        >
-            &times;
-        </button>
+    <button
+      id="close-popup"
+      class="absolute top-4 right-4 text-gray-400 hover:text-black text-xl">
+      &times;
+    </button>
 
-        <?php if ($title): ?>
-            <h2 class="text-2xl font-semibold mb-3">
-                <?php echo esc_html($title); ?>
-            </h2>
-        <?php endif; ?>
+    <?php if ($title): ?>
+      <h2 class="text-2xl font-semibold mb-3">
+        <?php echo esc_html($title); ?>
+      </h2>
+    <?php endif; ?>
 
-        <?php if ($content): ?>
-            <div class="text-gray-600 mb-5">
-                <?php echo wp_kses_post($content); ?>
-            </div>
-        <?php endif; ?>
+    <?php if ($content): ?>
+      <div class="text-gray-600 mb-5">
+        <?php echo wp_kses_post($content); ?>
+      </div>
+    <?php endif; ?>
 
-        <div class="space-y-4 mailpoet-form-wrapper">
-            <style>
-                .mailpoet-form-wrapper input[type="email"],
-                .mailpoet-form-wrapper input[type="text"],
-                .mailpoet-form-wrapper input[type="number"] {
-                    width: 100%;
-                    padding: 0.5rem 1rem;
-                    border: 1px solid #F7C80C;
-                    border-radius: 0.5rem;
-                    outline: none;
-                }
-                
-                .mailpoet-form-wrapper input[type="email"]:focus,
-                .mailpoet-form-wrapper input[type="text"]:focus,
-                .mailpoet-form-wrapper input[type="number"]:focus {
-                    outline: none;
-                    ring: 1px #ebcf60;
-                    box-shadow: 0 0 0 1px #ebcf60;
-                }
-                
-                .mailpoet-form-wrapper button,
-                .mailpoet-form-wrapper input[type="submit"] {
-                    display: block;
-                    width: 100%;
-                    text-align: center;
-                    background-color: #00B6CB;
-                    color: white;
-                    padding: 0.5rem 1rem;
-                    border-radius: 0.5rem;
-                    border: none;
-                    cursor: pointer;
-                    transition: background-color 0.2s;
-                }
-                
-                .mailpoet-form-wrapper button:hover,
-                .mailpoet-form-wrapper input[type="submit"]:hover {
-                    background-color: #ABE0E6;
-                }
-            </style>
-            <?php echo do_shortcode('[mailpoet_form id="1"]'); ?>
-        </div>
-
+    <div class="space-y-4 mailpoet-form-wrapper">
+      <?php echo do_shortcode('[mailpoet_form id="1"]'); ?>
     </div>
+
+  </div>
 </div>
 
 <?php wp_footer(); ?>
