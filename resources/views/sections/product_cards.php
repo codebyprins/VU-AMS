@@ -4,13 +4,12 @@ $prc_card_layout   = get_sub_field('product_card_layout');
 $prc_cards         = get_sub_field('product_cards');
 ?>
 
-
 <?php if ($prc_cards): ?>
   <section class="px-5">
     <div class="container mx-auto py-10 xl:py-14">
 
       <?php if (!empty($prc_section_title)): ?>
-        <h2 class="pb-8 fade-in-up delay-1">
+        <h2 class="pb-8 fade-in-up-cards delay-1">
           <?php echo esc_html($prc_section_title); ?>
         </h2>
       <?php endif; ?>
@@ -43,7 +42,7 @@ $prc_cards         = get_sub_field('product_cards');
           ?>
 
           <a href="<?php echo esc_url(get_permalink($product_id)); ?>"
-            class="border border-black rounded-base p-10 w-full md:w-1/2 flex flex-col fade-in-up <?php echo $card_delay; ?>">
+            class="border border-black rounded-base p-10 w-full md:w-1/2 flex flex-col fade-in-up-cards <?php echo $card_delay; ?>">
 
             <div class="<?php echo $is_vertical ? 'flex flex-col gap-6 flex-1' : 'flex flex-col lg:flex-row gap-4 flex-1'; ?>">
 
