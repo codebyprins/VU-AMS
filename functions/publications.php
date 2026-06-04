@@ -55,49 +55,55 @@ add_action('init', function () {
   }
 });
 
-// add a box
-add_action('add_meta_boxes_publication', function () {
-  add_meta_box(
-    'publication_details',
-    'Publication details',
-    'render_publication_details_meta_box',
-    'publication',
-    'side',
-    'high'
-  );
+add_action('restrict_manage_posts', function ($post_type) {
+  if ($post_type !== 'publication') {
+    return;
+  }
+
+  $selected_year = sanitize_text_field(wp_unslash($_GET['publication_year'] ?? ''));
+  $years = get_terms([
+    'taxonomy' => 'publication_year',
+    'hide_empty' => true,
+  ]);
+
+  if (is_wp_error($years) || empty($years)) {
+    return;
+  }
+
+  usort($years, function ($a, $b) {
+    return (int) $b->name <=> (int) $a->name;
+  });
+?>
+  <select name="publication_year" id="filter-by-publication-year">
+    <option value=""><?php esc_html_e('All years', 'vu-ams'); ?></option>
+    <?php foreach ($years as $year) : ?>
+      <option value="<?php echo esc_attr($year->slug); ?>" <?php selected($selected_year, $year->slug); ?>>
+        <?php echo esc_html($year->name); ?>
+      </option>
+    <?php endforeach; ?>
+  </select>
+<?php
 });
 
+add_filter('manage_edit-publication_sortable_columns', function ($columns) {
+  $columns['taxonomy-publication_year'] = 'publication_year';
 
-// make a section that shows details from publications
-function render_publication_details_meta_box($post)
-{
-  $url = get_post_meta($post->ID, 'publication_url', true);
-  $publication_date = get_post_meta($post->ID, 'publication_date', true);
-  $years = get_the_terms($post->ID, 'publication_year');
-  $year = ($years && !is_wp_error($years)) ? implode(', ', wp_list_pluck($years, 'name')) : '';
-?>
-  <p>
-    <strong>Publication link</strong><br>
-    <?php if ($url) : ?>
-      <a href="<?= esc_url($url); ?>" target="_blank" rel="noopener" class="publications-link">
-        <?= esc_html($url); ?>
-      </a>
-    <?php else : ?>
-      <span>-</span>
-    <?php endif; ?>
-  </p>
+  return $columns;
+});
 
-  <p>
-    <strong>Publication date</strong><br>
-    <span><?= esc_html($publication_date ?: '-'); ?></span>
-  </p>
+add_action('pre_get_posts', function ($query) {
+  if (
+    !is_admin()
+    || !$query->is_main_query()
+    || $query->get('post_type') !== 'publication'
+    || $query->get('orderby') !== 'publication_year'
+  ) {
+    return;
+  }
 
-  <p>
-    <strong>Publication year</strong><br>
-    <span><?= esc_html($year ?: '-'); ?></span>
-  </p>
-<?php
-}
+  $query->set('meta_key', 'publication_year');
+  $query->set('orderby', 'meta_value_num');
+});
 
 //run the sync functions
 
@@ -167,8 +173,6 @@ function run_publication_sync()
   );
 }
 
-
-// normalize the title to be able to find duplicates
 function normalize_publication_title($title)
 {
   $title = html_entity_decode(wp_strip_all_tags((string) $title), ENT_QUOTES, get_bloginfo('charset'));
@@ -179,7 +183,6 @@ function normalize_publication_title($title)
   return trim(preg_replace('/\s+/', ' ', $title));
 }
 
-// find publication by normalized title, if external id is provided also check if it matches, to prevent duplicates from different sources
 function get_publication_by_normalized_title($normalized_title, $external_id = '')
 {
   if (!$normalized_title) {
@@ -207,14 +210,12 @@ function get_publication_by_normalized_title($normalized_title, $external_id = '
   return get_post_meta($post_id, 'external_id', true) === $external_id ? 0 : $post_id;
 }
 
-// check if the data is from zotero based on the source or external id
 function is_zotero_publication_data($data)
 {
   return ($data['source'] ?? '') === 'Zotero'
     || strpos($data['external_id'] ?? '', 'zotero_') === 0;
 }
 
-// token to check if title is already seen in the current sync, to prevent duplicates from different sources
 function publication_sync_title_seen($normalized_title, $reset = false)
 {
   static $seen_titles = [];
@@ -236,7 +237,6 @@ function publication_sync_title_seen($normalized_title, $reset = false)
   return false;
 }
 
-// token to mark which posts are seen in the current sync, to be able to archive missing ones
 function publication_sync_token($token = null)
 {
   static $current_token = '';
@@ -248,7 +248,6 @@ function publication_sync_token($token = null)
   return $current_token;
 }
 
-// set default results for sync
 function publication_sync_result($updated, $completed)
 {
   return [
@@ -257,7 +256,6 @@ function publication_sync_result($updated, $completed)
   ];
 }
 
-// set defaults for the sync
 function publication_sync_default_status()
 {
   return [
@@ -274,7 +272,6 @@ function publication_sync_default_status()
   ];
 }
 
-// 
 function publication_sync_status_value($key)
 {
   $status = get_option('publication_sync_status', publication_sync_default_status());
@@ -282,7 +279,6 @@ function publication_sync_status_value($key)
   return $status[$key] ?? publication_sync_default_status()[$key] ?? null;
 }
 
-// update the sync status in the progess screen
 function publication_sync_update_status($data, $replace = false)
 {
   $status = $replace
@@ -310,7 +306,6 @@ function publication_sync_update_status($data, $replace = false)
   update_option('publication_sync_status', $status, false);
 }
 
-//update total count in the progress screen
 function publication_sync_increment_total($amount)
 {
   $amount = max(0, (int) $amount);
@@ -324,7 +319,6 @@ function publication_sync_increment_total($amount)
   ]);
 }
 
-// sync progress message
 function publication_sync_progress($source, $processed, $updated, $force = false)
 {
   publication_sync_update_status([
@@ -342,8 +336,6 @@ function publication_sync_progress($source, $processed, $updated, $force = false
   }
 }
 
-
-// put a toke in the postmet
 function mark_publication_seen_in_sync($post_id)
 {
   $token = publication_sync_token();
@@ -353,7 +345,6 @@ function mark_publication_seen_in_sync($post_id)
   }
 }
 
-// look which post are from which source
 function publication_post_matches_source($post_id, $source)
 {
   $external_id = get_post_meta($post_id, 'external_id', true);
@@ -373,8 +364,6 @@ function publication_post_matches_source($post_id, $source)
 
   return in_array($source, wp_list_pluck($sources, 'name'), true);
 }
-
-// archive posts that are not in the completed sources
 
 function archive_missing_publications($completed_sources)
 {
@@ -486,14 +475,13 @@ function upsert_publication($data)
   mark_publication_seen_in_sync($post_id);
 
   // YEAR - Store as both taxonomy and meta
-  $publication_year = normalize_publication_year($data['year'] ?? '');
-  if ($publication_year) {
+  if (!empty($data['year'])) {
     wp_set_object_terms(
       $post_id,
-      [$publication_year],
+      [$data['year']],
       'publication_year'
     );
-    update_post_meta($post_id, 'publication_year', $publication_year);
+    update_post_meta($post_id, 'publication_year', sanitize_text_field($data['year']));
   }
 
   // AUTHORS - Store as both taxonomy and meta
@@ -610,7 +598,9 @@ function sync_zotero_publications()
 
         'publication_date' => $data['date'] ?? '',
         
-        'year' => normalize_publication_year($data['date'] ?? ''),
+        'year' => !empty($data['date'])
+          ? date('Y', strtotime($data['date']))
+          : '',
 
         'authors' => array_map(function ($creator) {
           return trim(
