@@ -15,10 +15,10 @@
     if ($topbar_content) : ?>
         <div class="hidden lg:block bg-[#ABE0E6] text-black text-xs py-3.5 overflow-hidden">
             <div id="topbar-marquee-wrap" class="flex">
-                <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0"><?php
+                <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0 flex flex-row"><?php
                     $clean = wp_strip_all_tags($topbar_content);
                     for ($i = 0; $i < 30; $i++) {
-                        echo '<span class="px-12">' . esc_html($clean) . '</span>';
+                        echo '<span class="px-12">' . wp_kses_post($topbar_content) . '</span>';
                     }
                     ?>
                 </span>

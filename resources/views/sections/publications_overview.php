@@ -1,5 +1,6 @@
 <?php
-$publications_tags_filter = get_field('publications_tags_filter', 'option') ?: [];
+$publications_tags_filter = get_field('publications_tags_filter', 'option');
+$publications_tags_filter = is_array($publications_tags_filter) ? $publications_tags_filter : [];
 $selected_year = sanitize_text_field($_GET['publication_year_filter'] ?? $_GET['year'] ?? '');
 $selected_search = sanitize_text_field($_GET['search'] ?? '');
 $selected_author = sanitize_text_field($_GET['author'] ?? '');
@@ -97,11 +98,11 @@ if (is_wp_error($keywords)) {
 ?>
 
 <section class="bg-white py-10">
-    <div class="container mx-auto px-4 flex md:flex-row flex-col md:gap-16 gap-5 justify-between">
+    <div class="container mx-auto px-4 flex md:flex-row flex-col md:gap-16 gap-5 justify-between relative">
         <form
             method="GET"
             action="<?= esc_url($filter_action_url); ?>"
-            class="xl:w-1/4 md:w-2/5 w-full bg-[#d4eff2] border-4 border-[#01B4C9] rounded-xl px-4 py-5 self-start md:block">
+            class="xl:w-1/4 md:w-2/5 w-full md:sticky md:top-24 left-0 relative top-0 bg-[#d4eff2] border-4 border-[#01B4C9] rounded-xl px-4 py-5 self-start md:block">
             <h3 class="mb-6">Filters</h3>
 
             <div class="filter-item flex flex-col gap-1 mb-5">
@@ -147,8 +148,13 @@ if (is_wp_error($keywords)) {
                     class="w-full bg-white border border-black py-2 px-4"
                     multiple>
                     <?php foreach ($publications_tags_filter as $filter) : ?>
-                        <optgroup label="<?= esc_attr($filter['publications_tags_category']); ?>">
-                            <?php foreach ($filter['publications_tags_tags'] as $tag_id) : ?>
+                        <?php
+                        $filter_category = $filter['publications_tags_category'] ?? '';
+                        $filter_tags = $filter['publications_tags_tags'] ?? [];
+                        $filter_tags = is_array($filter_tags) ? $filter_tags : [];
+                        ?>
+                        <optgroup label="<?= esc_attr($filter_category); ?>">
+                            <?php foreach ($filter_tags as $tag_id) : ?>
                                 <?php
                                 $term = get_term($tag_id);
                                 if (!$term || is_wp_error($term)) {
@@ -201,20 +207,23 @@ if (is_wp_error($keywords)) {
                             $publication_id,
                             'publication_keyword'
                         );
+                        $publication_tags = ($publication_tags && !is_wp_error($publication_tags)) ? $publication_tags : [];
 
                         $authors = get_the_terms(
                             $publication_id,
                             'publication_author'
                         );
+                        $authors = ($authors && !is_wp_error($authors)) ? $authors : [];
 
                         $years = get_the_terms(
                             $publication_id,
                             'publication_year'
                         );
+                        $years = ($years && !is_wp_error($years)) ? $years : [];
 
                         $authors_str = '';
 
-                        if ($authors && !is_wp_error($authors)) {
+                        if ($authors) {
 
                             $authors_str = implode(
                                 ', ',
@@ -224,7 +233,7 @@ if (is_wp_error($keywords)) {
 
                         $year = '';
 
-                        if ($years && !is_wp_error($years)) {
+                        if ($years) {
                             $year = $years[0]->name;
                         }
                         ?>
