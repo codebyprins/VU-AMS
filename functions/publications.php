@@ -183,6 +183,29 @@ function normalize_publication_title($title)
   return trim(preg_replace('/\s+/', ' ', $title));
 }
 
+// normalize the year to extract from date strings or validate year format
+function normalize_publication_year($date_or_year)
+{
+  if (empty($date_or_year)) {
+    return '';
+  }
+
+  $date_or_year = trim((string) $date_or_year);
+  
+  // Try to extract year from date string (e.g., "2023-01-15" or "January 15, 2023")
+  if (preg_match('/\b(19|20)\d{2}\b/', $date_or_year, $matches)) {
+    return $matches[1];
+  }
+
+  // If it's already just a year (4 digits), return it
+  if (preg_match('/^\d{4}$/', $date_or_year)) {
+    return $date_or_year;
+  }
+
+  return '';
+}
+
+// find publication by normalized title, if external id is provided also check if it matches, to prevent duplicates from different sources
 function get_publication_by_normalized_title($normalized_title, $external_id = '')
 {
   if (!$normalized_title) {
