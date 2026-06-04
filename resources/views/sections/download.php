@@ -1,8 +1,9 @@
 <?php
-$titel = get_sub_field('titel');
-$product_logo = get_sub_field('product_logo');
-$product_naam = get_sub_field('product__naam');
-$category = get_sub_field('category');
+$titel               = get_sub_field('titel');
+$product_logo        = get_sub_field('product_logo');
+$product_naam        = get_sub_field('product__naam');
+$category            = get_sub_field('category');
+$changelog_versions  = get_sub_field('changelog_all_versions');
 
 $term_ids = [];
 if ($category) {
@@ -88,21 +89,50 @@ $releases = get_posts([
                 </button>
             </div>
 
-            <div id="changelog-content" class="bg-gray-100 border-t border-gray-200 p-6">
-                <?php foreach ($releases as $index => $release) : ?>
-                    <?php
-                    $changelog  = get_field('changelog', $release->ID);
-                    $small_text = get_field('small_text', $release->ID);
-                    $macos      = get_field('macos_download', $release->ID);
-                    $windows    = get_field('windows_download', $release->ID);
-                    ?>
-                    <div class="changelog-item hidden" data-index="<?php echo $index; ?>"
-                         data-macos="<?php echo esc_url(is_array($macos) ? ($macos['url'] ?? '#') : ($macos ?? '#')); ?>"
-                         data-windows="<?php echo esc_url(is_array($windows) ? ($windows['url'] ?? '#') : ($windows ?? '#')); ?>"
-                         data-small-text="<?php echo esc_attr($small_text ?? ''); ?>">
-                        <div class="text-sm text-gray-700"><?php echo $changelog; ?></div>
+            <div id="changelog-content" class="hidden bg-gray-50 border-t border-gray-200 p-6">
+
+                <!-- Verborgen per-release changelog HTML -->
+                <div class="release-changelogs" hidden aria-hidden="true">
+                    <?php foreach ($releases as $index => $release) : ?>
+                        <div data-index="<?php echo $index; ?>">
+                            <?php echo wp_kses_post(get_field('changelog', $release->ID) ?? ''); ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <!-- Verborgen per-release small_text -->
+                <div class="release-small-texts" hidden aria-hidden="true">
+                    <?php foreach ($releases as $index => $release) : ?>
+                        <div data-index="<?php echo $index; ?>"><?php echo esc_html(get_field('small_text', $release->ID) ?? ''); ?></div>
+                    <?php endforeach; ?>
+                </div>
+
+                <?php if (!empty($changelog_versions) && is_array($changelog_versions)) : ?>
+                    <div class="flex flex-col gap-2">
+                        <?php foreach ($changelog_versions as $version_item) : ?>
+                            <div class="changelog-version rounded-lg border border-gray-200 bg-white overflow-hidden">
+                                <div class="changelog-version-header flex items-center justify-between px-4 py-3 cursor-pointer select-none hover:bg-gray-50 transition-colors">
+                                    <span class="text-sm font-semibold text-gray-800"><?php echo esc_html($version_item['version']); ?></span>
+                                    <button type="button" class="changelog-read-more flex items-center gap-1 text-primary text-sm font-medium hover:underline">
+                                        <span class="read-more-label">Lees meer</span>
+                                        <svg class="read-more-icon w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="changelog-version-body border-t border-gray-100 px-4 text-sm text-gray-700 prose max-w-none overflow-hidden" style="max-height:0;transition:max-height 0.35s ease,padding 0.35s ease;padding-top:0;padding-bottom:0;">
+                                    <?php echo wp_kses_post($version_item['version_description']); ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                <?php else : ?>
+                    <p class="text-sm text-gray-400 italic">Geen changelog beschikbaar.</p>
+                <?php endif; ?>
+
+                <!-- Changelog van geselecteerde release -->
+                <div id="release-changelog-display" class="prose max-w-none text-sm text-gray-700 mt-6"></div>
+
             </div>
         </div>
     <?php endif; ?>
@@ -118,18 +148,43 @@ document.addEventListener('DOMContentLoaded', function() {
         const windowsDownload = block.querySelector('#windows-download');
         const changelogToggle  = block.querySelector('#changelog-toggle');
         const changelogContent = block.querySelector('#changelog-content');
-        const changelogItems   = block.querySelectorAll('.changelog-item');
         const smallText        = block.querySelector('#small-text');
+        const releaseChangelogDisplay = block.querySelector('#release-changelog-display');
+        const releaseChangelogs = block.querySelectorAll('.release-changelogs [data-index]');
+
+        // Releases data from PHP
+        const releasesData = <?php
+            $data = [];
+            foreach ($releases as $index => $release) {
+                $macos      = get_field('macos_download', $release->ID);
+                $windows    = get_field('windows_download', $release->ID);
+                $small_text = get_field('small_text', $release->ID);
+                $data[] = [
+                    'index'     => $index,
+                    'macos'     => is_array($macos) ? ($macos['url'] ?? '#') : ($macos ?? '#'),
+                    'windows'   => is_array($windows) ? ($windows['url'] ?? '#') : ($windows ?? '#'),
+                    'smallText' => $small_text ?? '',
+                ];
+            }
+            echo json_encode($data);
+        ?>;
 
         function updateDownloads() {
-            const index = macosSelect.value;
-            const activeItem = block.querySelector(`.changelog-item[data-index="${index}"]`);
-            if (activeItem) {
-                macosDownload.href    = activeItem.dataset.macos;
-                windowsDownload.href  = activeItem.dataset.windows;
-                smallText.textContent = activeItem.dataset.smallText;
-                changelogItems.forEach(item => item.classList.add('hidden'));
-                activeItem.classList.remove('hidden');
+            const index = parseInt(macosSelect.value);
+            const release = releasesData.find(r => r.index === index);
+            if (release) {
+                macosDownload.href   = release.macos;
+                windowsDownload.href = release.windows;
+            }
+            // Small text uit verborgen DOM
+            const smallTextEl = block.querySelector(`.release-small-texts [data-index="${index}"]`);
+            if (smallText) {
+                smallText.textContent = smallTextEl ? smallTextEl.textContent.trim() : '';
+            }
+            // Changelog uit verborgen DOM
+            if (releaseChangelogDisplay) {
+                const changelogEl = block.querySelector(`.release-changelogs [data-index="${index}"]`);
+                releaseChangelogDisplay.innerHTML = changelogEl ? changelogEl.innerHTML.trim() : '';
             }
         }
 
@@ -145,6 +200,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
         changelogToggle.addEventListener('click', function() {
             changelogContent.classList.toggle('hidden');
+        });
+
+        // Expand/collapse version descriptions
+        block.addEventListener('click', function(e) {
+            const btn = e.target.closest('.changelog-read-more');
+            if (!btn) return;
+            const versionItem = btn.closest('.changelog-version');
+            const body  = versionItem.querySelector('.changelog-version-body');
+            const label = btn.querySelector('.read-more-label');
+            const icon  = btn.querySelector('.read-more-icon');
+            const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+            if (isOpen) {
+                body.style.maxHeight  = '0';
+                body.style.paddingTop    = '0';
+                body.style.paddingBottom = '0';
+            } else {
+                body.style.paddingTop    = '1rem';
+                body.style.paddingBottom = '1rem';
+                body.style.maxHeight  = body.scrollHeight + 32 + 'px';
+            }
+            label.textContent    = isOpen ? 'Lees meer' : 'Inklappen';
+            icon.style.transform = isOpen ? '' : 'rotate(180deg)';
         });
 
         macosSelect.selectedIndex  = macosSelect.options.length - 1;
