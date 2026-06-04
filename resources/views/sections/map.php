@@ -40,7 +40,7 @@ $locations = get_posts([
             ?>
             <div id="map_item_open" class="map_item absolute bg-[#00b3ff6c] sm:w-6 w-4 sm:h-6 h-4 cursor-pointer rounded-full flex justify-center items-center" style="<?php echo $position_style; ?>" data-location-id="<?php echo $location->ID; ?>">
                 <div class="map_item-inner bg-[#00B2FF] rounded-full sm:w-5 w-3 sm:h-5 h-3"></div>
-                <div id="map_info_<?php echo $location->ID; ?>" class="map_information absolute bottom-[25px] left-1/2 transform -translate-x-1/2 bg-white sm:px-6 px-4 sm:py-4 py-2 rounded-xl shadow-lg cursor-auto opacity-0 pointer-events-none transition-opacity duration-300">
+                <div id="map_info_<?php echo $location->ID; ?>" class="map_information z-[1] absolute bottom-[25px] left-1/2 transform -translate-x-1/2 bg-white sm:px-6 px-4 sm:py-4 py-2 rounded-xl shadow-lg cursor-auto opacity-0 pointer-events-none transition-opacity duration-300">
                     <h4 class="font-bold text-[#00B2FF] whitespace-nowrap"><?php echo $location->post_title; ?></h4>
                     <p class="font-semibold text-black whitespace-nowrap"><?php echo $type; ?></p>
                     <svg class="absolute top-full left-1/2 transform -translate-x-1/2" width="20" height="10" viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg">
