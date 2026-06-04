@@ -59,6 +59,10 @@
       var percent = parseInt(syncStatus.percent || 0, 10);
       var log = syncStatus.log || [];
 
+      if ($button.prop('disabled') && syncStatus.done && !syncStatus.running && processed === 0 && total === 0) {
+        return;
+      }
+
       $message.text(syncStatus.message || 'Syncing publications...');
       $bar.css('width', percent + '%');
       $progressText.text(percent + '%');
@@ -100,7 +104,6 @@
       $button.prop('disabled', true);
       $status.text('Syncing...');
       openModal();
-      startPolling();
 
       post('sync_publications').done(function (res) {
         var message = res && res.data && res.data.message
@@ -123,6 +126,8 @@
         $button.prop('disabled', false);
         $close.text('Close').prop('disabled', false);
       });
+
+      window.setTimeout(startPolling, 500);
     });
 
     $close.on('click', function () {

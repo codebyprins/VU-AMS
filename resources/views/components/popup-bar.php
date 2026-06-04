@@ -9,7 +9,7 @@ $first_link = get_field('first_link', 'option');
 $second_link = get_field('second_link', 'option');
 ?>
 
-<div id="popup" class="popup fixed inset-x-0 bottom-0 px-4 bg-[#ABE0E6] flex items-center justify-center z-50 w-full py-3 opacity-0 translate-y-4 transition-all duration-500 ease-out">
+<div id="popup" class="popup fixed inset-x-0 bottom-0 px-4 bg-[#ABE0E6] flex items-center justify-center z-[100] w-full py-3 opacity-0 translate-y-4 transition-all duration-500 ease-out">
     <div class="container max-auto flex">
         <div class="w-[95%] flex items-start justify-between lg:flex-row flex-col gap-2">
             <a href="<?php echo esc_url($first_link['link']['url']); ?>" <?php echo !empty($first_link['link']['target']) ? ' target="' . esc_attr($first_link['link']['target']) . '" rel="noopener noreferrer"' : ''; ?> class="w-full flex flex-col gap-1">
