@@ -187,9 +187,9 @@ function normalize_publication_year($date_or_year)
   }
 
   $date_or_year = trim((string) $date_or_year);
-  
-  // Try to extract year from date string (e.g., "2023-01-15" or "January 15, 2023")
-  if (preg_match('/\b(19|20)\d{2}\b/', $date_or_year, $matches)) {
+
+  // Extract a 4-digit year anywhere in the string
+  if (preg_match('/\b((?:19|20)\d{2})\b/', $date_or_year, $matches)) {
     return $matches[1];
   }
 
@@ -631,7 +631,7 @@ function sync_zotero_publications()
         'excerpt'     => wp_trim_words($data['abstractNote'] ?? '', 30),
 
         'publication_date' => $data['date'] ?? '',
-        
+
         'year' => normalize_publication_year($data['date'] ?? ''),
 
         'authors' => array_map(function ($creator) {
@@ -726,7 +726,7 @@ function sync_google_scholar_publications()
       $post_id = upsert_publication([
         'external_id' => $external_id,
         'title'       => $title,
-        'year'        => $article['year'] ?? '',
+        'year'        => normalize_publication_year($article['year'] ?? ''),
         'authors'     => !empty($article['authors'])
           ? array_map('trim', explode(',', $article['authors']))
           : [],
