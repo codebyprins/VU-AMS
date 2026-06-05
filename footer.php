@@ -10,10 +10,6 @@ $newsletter = get_field('newsletter_toggle', 'option');
 $title = get_field('popup_title', 'option');
 $content = get_field('popup_text', 'option');
 
-$footer_column = $footer_col_4['newsletter_toggle'] === true
-  ? 'col-span-12 xs:col-span-6 lg:col-span-4'
-  : 'col-span-12 xs:col-span-6 lg:col-span-5';
-
 // Contact details from general optionpage
 $contact = [
   'address' => get_field('address_line', 'option'),
@@ -92,6 +88,27 @@ function render_footer_column($col, $contact = [])
       echo '</div>';
       break;
 
+      case 'Socials':
+        $selected_socials = $col['footer_socials'] ?? [];
+        $social_links = get_field('company_socials', 'option');
+        echo '<div class="flex items-center h-full gap-4">';
+        if ($selected_socials && is_array($social_links)) {
+          foreach ($selected_socials as $social_item) {
+            // Handle both nested array structure and flat string array
+            $social_name = is_array($social_item) ? ($social_item['footer_social'][0] ?? null) : $social_item;
+            if ($social_name) {
+              $key = 'company_' . strtolower($social_name);
+              $url = $social_links[$key] ?? null;
+              if ($url) {
+                echo '<a href="' . esc_url($url) . '" class="text-white hover:text-primary_dark text-xl" target="_blank">';
+                echo theme_svg(strtolower($social_name), 'w-6 sm:w-8 w-6 sm:h-8');
+                echo '</a>';
+              }
+            }
+          }
+        }
+        echo '</div>';
+        break;
     case 'None':
     default:
       break;
@@ -113,7 +130,7 @@ function render_footer_column($col, $contact = [])
 
 
       <!-- Column 1 is fixed -->
-      <div class="col-span-12 sm:col-span-6 lg:col-span-2">
+      <div class="col-span-12 sm:col-span-6 lg:col-span-3">
         <figure class="max-w-[200px]">
           <?php if (!empty($logo['url'])): ?>
             <img class="w-full h-auto" src="<?php echo esc_url($logo['url']); ?>"
@@ -124,12 +141,12 @@ function render_footer_column($col, $contact = [])
       </div>
 
       <!-- Column 2 -->
-      <div class="<?php echo esc_attr($footer_column); ?>">
+      <div class="col-span-12 sm:col-span-6 lg:col-span-3">
         <?php render_footer_column($col2, $contact); ?>
       </div>
 
       <!-- Column 3 -->
-      <div class="<?php echo esc_attr($footer_column); ?>">
+      <div class="col-span-12 sm:col-span-6 lg:col-span-3">
         <?php render_footer_column($col3, $contact); ?>
       </div>
 
