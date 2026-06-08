@@ -1,9 +1,9 @@
 .btn {
-  @apply inline-flex items-center px-4 py-2 rounded-base text-base transition;
+  @apply inline-flex items-center px-4 py-2 rounded-base text-base transition w-max;
 }
 
 .btn-primary {
-  @apply bg-primary text-white hover:bg-primary_dark;
+  @apply bg-primary text-white border-[2px] border-primary hover:border-primary_dark hover:bg-primary_dark;
 }
 
 .btn-primary-outline {

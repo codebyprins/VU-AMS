@@ -33,6 +33,7 @@ module.exports = {
         section_md: '40px',
         section_sm: '20px',
         container_base: '60px',
+        container_xs: '20px',
         container_sm: '40px',
         container_lg: '80px',
       },
@@ -40,11 +41,12 @@ module.exports = {
         'base': '12px',
       },
       backgroundImage: {
-        'primary-gradient': 'linear-gradient(90deg, #00B6CB 0%, #101935 100%)',
+        'primary-gradient': 'linear-gradient(90deg, #00B6CB 62%, #101935 100%)',
       },
       container: {
         center: true,
         screens: {
+          xs: '450px',
           sm: '640px',
           md: '768px',
           lg: '1024px',

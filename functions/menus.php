@@ -15,6 +15,7 @@ if (!function_exists('menus_setup')) :
         register_nav_menus(
             array(
                 'primary_navigation' => __('Primary', 'vu-ams'),
+                'Footer' => __('Footer', 'vu-ams'),
             )
         );
     }
