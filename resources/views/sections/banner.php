@@ -46,28 +46,29 @@ $small = get_sub_field('small');
             alt="<?php echo esc_html($big['image']['alt']); ?>">
         </div>
       <?php elseif (!$big['image_or_bubbles'] && $big['bubbles']) : ?>
-        <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
-          <div class="bubble_container relative flex flex-col gap-5 mr-[80px]">
-            <div class="flex flex-col justify-center items-center gap-4 pl-[100px]">
-              <?php if ($big['bubbles']['text_top']) : ?>
-                <p class="text-top text-3xl"><?php echo esc_html($big['bubbles']['text_top']); ?></p>
-              <?php endif; ?>
-              <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
-                <?php if ($big['bubbles']['number_top']) : ?>
-                  <p class="number-top text-2xl text-white"><?php echo esc_html($big['bubbles']['number_top']); ?></p>
+        <div class="w-full md:flex-1 flex items-center justify-center px-8 md:pb-8 pb-20 md:pt-4 pt-7 md:p-12">
+          <div class="bubble_container relative flex flex-row gap-5 sm:mr-[80px] mr-0">
+            <?php foreach ($big['bubbles'] as $index => $bubble) : ?>
+              <?php
+              if (!is_array($bubble)) {
+                continue;
+              }
+              $is_top = ((int)$index === 1);
+              ?>
+              <div class="relative flex flex-col justify-center items-center gap-4 <?php echo $is_top ? 'pb-[100px]' : 'pt-[100px]'; ?>">
+                <?php if ($is_top && $bubble['text']) : ?>
+                  <p class="absolute top-[-45px] text-2xl md:text-3xl"><?php echo esc_html($bubble['text']); ?></p>
+                <?php endif; ?>
+                <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
+                  <?php if ($bubble['number']) : ?>
+                    <p class="text-2xl text-white"><?php echo esc_html($bubble['number']); ?></p>
+                  <?php endif; ?>
+                </div>
+                <?php if (!$is_top && $bubble['text']) : ?>
+                  <p class="absolute bottom-[-45px] text-2xl md:text-3xl"><?php echo esc_html($bubble['text']); ?></p>
                 <?php endif; ?>
               </div>
-            </div>
-            <div class="flex flex-col justify-center items-center gap-4">
-              <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
-                <?php if ($big['bubbles']['number_bottom']) : ?>
-                  <p class="number-bottom text-2xl text-white"><?php echo esc_html($big['bubbles']['number_bottom']); ?></p>
-                <?php endif; ?>
-              </div>
-              <?php if ($big['bubbles']['text_bottom']) : ?>
-                <p class="text-bottom text-3xl"><?php echo esc_html($big['bubbles']['text_bottom']); ?></p>
-              <?php endif; ?>
-            </div>
+            <?php endforeach; ?>
           </div>
         </div>
       <?php elseif ($big['image']) : ?>
