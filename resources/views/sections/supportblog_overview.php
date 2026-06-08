@@ -120,7 +120,7 @@ if (is_wp_error($blog_tags)) {
                                     <?php foreach ($post_tags as $pt) : ?>
                                         <a
                                             href="?tag=<?= esc_attr($pt->slug); ?>"
-                                            class="tag bg-[#F6DD75] border border-black text-black px-3 py-1 rounded-full text-sm w-fit hover:bg-[#01B4C9] transition">
+                                            class="tag bg-[#00b6cb] border border-black text-white px-3 py-1 rounded-full text-sm w-fit hover:bg-[#018898] transition">
                                             <?= esc_html($pt->name); ?>
                                         </a>
                                     <?php endforeach; ?>
