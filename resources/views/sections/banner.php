@@ -80,7 +80,7 @@ $small = get_sub_field('small');
 
     </div>
 
-  <?php else : ?>
+<?php else : ?>
 
     <div class="container mx-auto relative flex items-center w-full">
 
@@ -100,8 +100,13 @@ $small = get_sub_field('small');
 
       </div>
 
+        <?php if ($small['button']) : ?>
+            <a href="<?php echo esc_url($small['button']['url']); ?>"
+               class="inline-block bg-primary text-white font-sans text-[16px] px-6 py-3 rounded-lg">
+                <?php echo esc_html($small['button']['title']); ?>
+            </a>
+        <?php endif; ?>
+
     </div>
 
-  <?php endif; ?>
-
-</section>
+<?php endif; ?>
