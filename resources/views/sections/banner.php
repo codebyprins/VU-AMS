@@ -49,24 +49,29 @@ $small = get_sub_field('small');
 
     </div>
 
-  <?php else : ?>
+<?php else : ?>
 
-    <div class="px-6 py-8 md:pl-[140px] md:pt-[89px] md:pb-[91px] md:pr-8">
+    <div class="px-6 py-8 md:pl-[140px] md:pt-[89px] md:pb-[91px] md:pr-[140px]">
 
-      <?php if ($small['subtitle']) : ?>
-        <p class="font-sans text-[16px] md:text-[24px] text-black mb-2">
-          <?php echo esc_html($small['subtitle']); ?>
-        </p>
-      <?php endif; ?>
+        <?php if ($small['subtitle']) : ?>
+            <p class="font-sans text-[16px] md:text-[24px] text-black mb-2">
+                <?php echo esc_html($small['subtitle']); ?>
+            </p>
+        <?php endif; ?>
 
-      <?php if ($small['title']) : ?>
-        <h1 class="font-sans text-[28px] md:text-[48px] font-bold leading-tight text-black">
-          <?php echo esc_html($small['title']); ?>
-        </h1>
-      <?php endif; ?>
+        <?php if ($small['title']) : ?>
+            <h1 class="font-sans text-[28px] md:text-[48px] font-bold leading-tight text-black mb-4">
+                <?php echo esc_html($small['title']); ?>
+            </h1>
+        <?php endif; ?>
+
+        <?php if ($small['button']) : ?>
+            <a href="<?php echo esc_url($small['button']['url']); ?>"
+               class="inline-block bg-primary text-white font-sans text-[16px] px-6 py-3 rounded-lg">
+                <?php echo esc_html($small['button']['title']); ?>
+            </a>
+        <?php endif; ?>
 
     </div>
 
-  <?php endif; ?>
-
-</section>
+<?php endif; ?>
