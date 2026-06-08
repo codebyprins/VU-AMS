@@ -54,14 +54,38 @@ $small = get_sub_field('small');
                 continue;
               }
               $is_top = ((int)$index === 1);
+              
+              $display_number = $bubble['number'];
+              $sync_count = $bubble['sync_count'];
+              
+              if ($sync_count && $sync_count !== 'no_sync') {
+                $post_type_map = [
+                  'locations' => 'location',
+                  'publications' => 'publication',
+                  'team_members' => 'team-member',
+                  'projects' => 'project',
+                  'products' => 'product',
+                  'software_releases' => 'software-release'
+                ];
+                
+                if (isset($post_type_map[$sync_count])) {
+                  $posts = get_posts([
+                    'post_type' => $post_type_map[$sync_count],
+                    'posts_per_page' => -1,
+                    'post_status' => 'publish',
+                    'fields' => 'ids'
+                  ]);
+                  $display_number = count($posts);
+                }
+              }
               ?>
               <div class="relative flex flex-col justify-center items-center gap-4 <?php echo $is_top ? 'pb-[100px]' : 'pt-[100px]'; ?>">
                 <?php if ($is_top && $bubble['text']) : ?>
                   <p class="absolute top-[-45px] text-2xl md:text-3xl"><?php echo esc_html($bubble['text']); ?></p>
                 <?php endif; ?>
                 <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
-                  <?php if ($bubble['number']) : ?>
-                    <p class="text-2xl text-white"><?php echo esc_html($bubble['number']); ?></p>
+                  <?php if ($display_number) : ?>
+                    <p class="text-2xl text-white"><?php echo esc_html($display_number); ?></p>
                   <?php endif; ?>
                 </div>
                 <?php if (!$is_top && $bubble['text']) : ?>
