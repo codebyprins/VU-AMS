@@ -10,7 +10,7 @@ $teamleden = get_posts([
 
 <section class="px-4 lg:px-0 py-10">
     <div class="container mx-auto">
-        <div class="relative overflow-hidden bg-primary rounded-lg pt-6 pb-8 md:overflow-visible md:bg-white md:border-[5px] md:border-primary md:px-[120px] md:pt-[80px] md:pb-[122px]">
+        <div class="relative overflow-hidden bg-primary rounded-lg pt-6 pb-8 md:overflow-visible md:bg-white md:border-[2px] md:border-primary md:px-[120px] md:pt-[80px] md:pb-[122px]">
 
             <?php if ($titel) : ?>
                 <h2 class="text-center font-sans text-2xl mb-8 text-white md:text-black"><?php echo esc_html($titel); ?></h2>
