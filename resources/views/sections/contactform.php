@@ -85,7 +85,6 @@ if ($shortcode !== '') {
 
 						<?php if (!empty($valid_socials)) : ?>
 							<div class="mt-12 border-t border-accent/10 pt-8">
-								<p class="text-sm font-semibold text-accent">Volg ons</p>
 								<div class="mt-4 flex flex-wrap items-center gap-3">
 									<?php foreach ($valid_socials as $key => $social) : ?>
 										<a
