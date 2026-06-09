@@ -17,7 +17,7 @@ $alignment_classes = [
 $align = $alignment_classes[$layout] ?? $alignment_classes['center'];
 ?>
 
-<section class="relative h-[400px] overflow-hidden">
+<section class="relative h-[520px] md:h-[620px] overflow-hidden">
 
     <?php if ($video): ?>
         <video autoplay muted loop playsinline

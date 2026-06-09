@@ -51,6 +51,14 @@ function theme_enqueue_assets()
         true
     );
 
+    wp_enqueue_script(
+        'productusbs-script',
+        get_template_directory_uri() . '/resources/scripts/productusbs.js',
+        ['theme-app'],
+        filemtime(get_template_directory() . '/resources/scripts/productusbs.js'),
+        true
+    );
+
     // Initialize Swiper
     wp_add_inline_script('theme-app', '
     document.addEventListener("DOMContentLoaded", function() {

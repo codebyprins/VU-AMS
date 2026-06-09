@@ -74,7 +74,7 @@ $ratio = ($first_slide['w'] > 0 && $first_slide['h'] > 0)
 	? $first_slide['w'] . ' / ' . $first_slide['h']
 	: '16 / 9';
 
-$arrow_classes = 'imgcarousel__arrow flex items-center justify-center rounded-base border-[2px] border-primary text-primary bg-white transition hover:bg-primary hover:text-white';
+$arrow_classes = 'flex-shrink-0 flex items-center justify-center text-primary transition-opacity hover:opacity-60';
 ?>
 
 <section class="px-4 py-10 md:py-14">
@@ -86,7 +86,7 @@ $arrow_classes = 'imgcarousel__arrow flex items-center justify-center rounded-ba
 
 		<div id="<?php echo esc_attr($carousel_id); ?>" class="imgcarousel relative" style="--imgc-ratio: <?php echo esc_attr($ratio); ?>;">
 
-			<div class="flex items-center justify-center gap-3 sm:gap-4 md:gap-8">
+			<div class="flex items-center gap-2 sm:gap-4">
 
 				<?php if ($has_nav) : ?>
 					<button type="button" class="carousel-prev <?php echo esc_attr($arrow_classes); ?>" aria-label="Vorige afbeelding" aria-controls="<?php echo esc_attr($carousel_id); ?>">
@@ -96,7 +96,7 @@ $arrow_classes = 'imgcarousel__arrow flex items-center justify-center rounded-ba
 					</button>
 				<?php endif; ?>
 
-				<div class="carousel-viewport relative w-full rounded-base overflow-hidden max-h-[300px]">
+				<div class="carousel-viewport relative flex-1 rounded-base overflow-hidden max-h-[300px]">
 					<?php foreach ($slides as $i => $slide) :
 						$is_active = 0 === $i;
 						$has_link  = !empty($slide['href']);
@@ -154,8 +154,10 @@ $arrow_classes = 'imgcarousel__arrow flex items-center justify-center rounded-ba
 <style>
 	#<?php echo $carousel_id; ?> .imgcarousel__arrow {
 		flex: 0 0 auto;
-		width: 40px; height: 44px;
+		width: 40px; height: 40px;
 		box-shadow: 0 1px 3px rgba(16, 25, 53, .12);
+		border-color: rgba(16, 25, 53, .08);
+		background-color: #ffffff;
 	}
 	#<?php echo $carousel_id; ?> .imgcarousel__arrow:hover { box-shadow: 0 4px 12px rgba(0, 182, 203, .35); }
 	#<?php echo $carousel_id; ?> .imgcarousel__arrow:focus-visible { outline: 2px solid #00B6CB; outline-offset: 2px; }
