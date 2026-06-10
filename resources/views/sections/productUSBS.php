@@ -1,18 +1,8 @@
 <?php
 
 $title = get_sub_field('title_productusbs');
-$projecthighlight = get_sub_field('highlights_productUSBS');
+$projecthighlight = get_sub_field('highlights_productusbs');
 $image = get_sub_field('image_productusbs');
-
-if (!$title) {
-    $title = get_sub_field('title_productUSBS');
-}
-if (!$projecthighlight) {
-    $projecthighlight = get_sub_field('highlights_productusbs');
-}
-if (!$image) {
-    $image = get_sub_field('image_productUSBS');
-}
 
 $highlights = [];
 if (is_array($projecthighlight)) {

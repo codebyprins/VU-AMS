@@ -50,8 +50,6 @@ function theme_enqueue_assets()
         filemtime(get_template_directory() . '/public/js/main.js'),
         true
     );
-
-    // Timeline JS fallback (standalone loader for timeline read-more buttons)
     wp_enqueue_script(
         'timeline-script',
         get_template_directory_uri() . '/resources/scripts/timeline.js',
