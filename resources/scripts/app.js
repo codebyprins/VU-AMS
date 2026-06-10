@@ -15,5 +15,4 @@ import './map.js';
 import './popup.js';
 import './imgcarousel.js';
 import './productCardAnimation.js';
-import './timeline.js';
 import './publications-filter.js';
