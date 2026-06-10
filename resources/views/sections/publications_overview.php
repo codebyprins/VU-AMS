@@ -243,7 +243,7 @@ if (is_wp_error($keywords)) {
                                 <div class="tags flex flex-wrap gap-2 mb-4">
                                     <?php foreach ($publication_tags as $tag) : ?>
                                         <a
-                                            href="?keyword=<?= esc_attr($tag->slug); ?>"
+                                            href="?keyword=<?= esc_attr($tag->slug) . '#publications-overview'; ?>"
                                             class="tag bg-primary_light border border-black text-black px-3 py-1 rounded-full text-sm w-fit hover:bg-[#01B4C9] transition">
 
                                             <?= esc_html($tag->name); ?>
