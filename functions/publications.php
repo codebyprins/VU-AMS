@@ -670,12 +670,7 @@ function sync_google_scholar_publications()
   $api_key   = get_field('serpapi_api_key', 'option');
   $author_id = get_field('google_scholar_author_id', 'option');
 
-  if (!$api_key || !$author_id) {
-    publication_sync_update_status([
-      'log_entry' => 'Google Scholar sync failed: Missing API key or author ID configuration',
-    ]);
-    return publication_sync_result(0, false);
-  }
+  if (!$api_key || !$author_id) return publication_sync_result(0, false);
 
   $start = 0;
   $limit = 20;
@@ -692,20 +687,9 @@ function sync_google_scholar_publications()
     $response = wp_remote_get($url, [
       'timeout' => 20,
     ]);
-    
-    if (is_wp_error($response)) {
-      publication_sync_update_status([
-        'log_entry' => 'Google Scholar API error: ' . $response->get_error_message(),
-      ]);
-      return publication_sync_result($updated, false);
-    }
+    if (is_wp_error($response)) return publication_sync_result($updated, false);
 
-    $status_code = wp_remote_retrieve_response_code($response);
-    if ($status_code !== 200) {
-      $body = wp_remote_retrieve_body($response);
-      publication_sync_update_status([
-        'log_entry' => 'Google Scholar API returned status ' . $status_code . ': ' . substr($body, 0, 100),
-      ]);
+    if (wp_remote_retrieve_response_code($response) !== 200) {
       return publication_sync_result($updated, false);
     }
 
