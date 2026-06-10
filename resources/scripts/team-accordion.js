@@ -2,16 +2,12 @@ const teamCards = Array.from(document.querySelectorAll('.team-card'));
 const accordionButtons = Array.from(document.querySelectorAll('.accordion-toggle'));
 
 if (teamCards.length) {
-    const syncOpenAccordions = () => {
-        document.querySelectorAll('.accordion-body').forEach(body => {
-            if (body.style.maxHeight && body.style.maxHeight !== '0px') {
-                body.style.maxHeight = body.scrollHeight + 'px';
-            }
+    const setCardHeights = () => {
+        // Measure with all accordions closed
+        accordionButtons.forEach(btn => {
+            btn.nextElementSibling.style.maxHeight = '0px';
         });
-    };
 
-    const syncCardHeights = () => {
-        syncOpenAccordions();
         teamCards.forEach(card => {
             card.style.minHeight = '';
         });
@@ -23,30 +19,44 @@ if (teamCards.length) {
         });
     };
 
+    const closeAccordion = (btn) => {
+        const b = btn.nextElementSibling;
+        b.style.maxHeight = '0px';
+        btn.textContent = 'Read more';
+    };
+
     accordionButtons.forEach(button => {
         button.addEventListener('click', () => {
             const body = button.nextElementSibling;
             const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
 
+            // Close all other open accordions first
+            accordionButtons.forEach(otherBtn => {
+                if (otherBtn !== button) {
+                    const otherBody = otherBtn.nextElementSibling;
+                    if (otherBody.style.maxHeight && otherBody.style.maxHeight !== '0px') {
+                        closeAccordion(otherBtn);
+                    }
+                }
+            });
+
             if (isOpen) {
                 body.style.maxHeight = '0px';
                 button.textContent = 'Read more';
-                body.addEventListener('transitionend', syncCardHeights, { once: true });
             } else {
                 body.style.maxHeight = body.scrollHeight + 'px';
                 button.textContent = 'Read less';
-                requestAnimationFrame(syncCardHeights);
             }
         });
     });
 
     window.addEventListener('load', () => {
-        syncCardHeights();
+        setCardHeights();
     });
 
     window.addEventListener('resize', () => {
-        syncCardHeights();
+        setCardHeights();
     });
 
-    syncCardHeights();
+    setCardHeights();
 }

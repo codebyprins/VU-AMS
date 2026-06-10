@@ -5,8 +5,9 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.productusbs-section details').forEach(function(details) {
+            var summary = details.querySelector('summary');
             var icon = details.querySelector('.productusbs-toggle-icon');
-            if (!icon) {
+            if (!summary || !icon) {
                 return;
             }
 
@@ -15,7 +16,9 @@
             };
 
             updateIcon();
-            details.addEventListener('toggle', updateIcon);
+            summary.addEventListener('click', function() {
+                setTimeout(updateIcon, 0);
+            });
         });
     });
 })();

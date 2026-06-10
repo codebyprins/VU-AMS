@@ -1,6 +1,8 @@
 <?php
-$back_url = wp_get_referer();
-$default  = home_url();
+$publications_page = get_page_by_path('publications');
+$publications_url = $publications_page ? get_permalink($publications_page) : home_url();
+$back_url = wp_get_referer() ?: $publications_url;
+$default  = $publications_url;
 ?>
 
 <?php get_header(); ?>
