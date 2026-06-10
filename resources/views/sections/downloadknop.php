@@ -1,5 +1,7 @@
 <?php
 $button_value = get_sub_field('button');
+$product_name = get_sub_field('product_naam');
+$download_description = get_sub_field('description');
 
 $file_id = 0;
 $file_url = '';
@@ -53,7 +55,7 @@ $is_image = $file_mime && strpos($file_mime, 'image/') === 0;
 <section class="w-full bg-[#f8f8f8] py-section_base">
 	<div class="mx-auto max-w-7xl px-container_xs sm:px-container_sm lg:px-container_lg">
 		<div class="mx-auto max-w-3xl overflow-hidden rounded-base border border-accent/10 bg-white">
-			<div class="border-b border-accent/10 bg-surface p-6 sm:p-8">
+			<div class="hidden sm:block border-b border-accent/10 bg-surface p-6 sm:p-8">
 				<?php if ($is_image): ?>
 					<img
 						src="<?php echo esc_url($file_url); ?>"
@@ -71,7 +73,14 @@ $is_image = $file_mime && strpos($file_mime, 'image/') === 0;
 			</div>
 
 			<div class="flex flex-col gap-4 p-6 sm:p-8">
-				<p class="max-w-[65ch] text-base leading-7 text-accent/80">De knop start een directe download en bewaart de bestandsnaam.</p>
+				<?php if ($product_name): ?>
+					<h2 class="text-xl font-semibold text-black"><?php echo esc_html($product_name); ?></h2>
+				<?php endif; ?>
+				<?php if ($download_description): ?>
+					<p class="max-w-[65ch] text-base leading-7 text-accent/80"><?php echo esc_html($download_description); ?></p>
+				<?php else: ?>
+					<p class="max-w-[65ch] text-base leading-7 text-accent/80">De knop start een directe download en bewaart de bestandsnaam.</p>
+				<?php endif; ?>
 				<a
 					href="<?php echo esc_url($file_url); ?>"
 					download="<?php echo esc_attr($download_name); ?>"

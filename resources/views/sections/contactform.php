@@ -61,45 +61,7 @@ if ($shortcode !== '') {
 					"
 				>
 					<?php echo do_shortcode($shortcode); ?>
-						<?php
-						$social_links = get_field('company_socials', 'option') ?: [];
-						$social_keys = [
-							'youtube' => 'YouTube',
-							'linkedin' => 'LinkedIn',
-							'facebook' => 'Facebook',
-							'instagram' => 'Instagram',
-							'x' => 'X',
-						];
-
-						$valid_socials = [];
-						foreach ($social_keys as $key => $label) {
-							$url = $social_links['company_' . $key] ?? null;
-							if (!empty($url)) {
-								$valid_socials[$key] = [
-									'url' => $url,
-									'label' => $label,
-								];
-							}
-						}
-						?>
-
-						<?php if (!empty($valid_socials)) : ?>
-							<div class="mt-12 border-t border-accent/10 pt-8"> 
-								<div class="mt-4 flex flex-wrap items-center gap-3">
-									<?php foreach ($valid_socials as $key => $social) : ?>
-										<a
-											href="<?php echo esc_url($social['url']); ?>"
-											target="_blank"
-											rel="noopener noreferrer"
-											class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-accent/10 bg-slate-100 text-accent transition hover:border-primary/30 hover:bg-primary/10 hover:text-primary"
-										>
-											<span class="sr-only"><?php echo esc_html($social['label']); ?></span>
-											<?php echo theme_svg($key, 'w-5 h-5'); ?>
-										</a>
-									<?php endforeach; ?>
-								</div>
-							</div>
-						<?php endif; ?>				</div>
+				</div>
 			</div>
 		</div>
 	</section>
