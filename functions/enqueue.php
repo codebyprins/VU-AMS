@@ -51,6 +51,15 @@ function theme_enqueue_assets()
         true
     );
 
+    // Timeline JS fallback (standalone loader for timeline read-more buttons)
+    wp_enqueue_script(
+        'timeline-script',
+        get_template_directory_uri() . '/resources/scripts/timeline.js',
+        ['theme-app'],
+        filemtime(get_template_directory() . '/resources/scripts/timeline.js'),
+        true
+    );
+
     // Initialize Swiper
     wp_add_inline_script('theme-app', '
     document.addEventListener("DOMContentLoaded", function() {
