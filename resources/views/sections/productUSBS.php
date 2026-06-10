@@ -1,101 +1,94 @@
 <?php
+$button_value = get_sub_field('button');
+$product_name = get_sub_field('product_naam');
+$download_description = get_sub_field('description');
 
-$projecthighlight = get_sub_field('highlights_productUSBS');
-$image = get_sub_field('image_productusbs');
+$file_id = 0;
+$file_url = '';
+$file_mime = '';
 
-if (!$projecthighlight) {
-    $projecthighlight = get_sub_field('highlights_productusbs');
-}
-if (!$image) {
-    $image = get_sub_field('image_productUSBS');
-}
-
-$highlights = [];
-
-if (have_rows('highlights_productUSBS')) {
-    while (have_rows('highlights_productUSBS')) {
-        the_row();
-        $highlights[] = [
-            'title' => get_sub_field('title'),
-            'content' => get_sub_field('content'),
-        ];
-    }
-} elseif (have_rows('highlights_productusbs')) {
-    while (have_rows('highlights_productusbs')) {
-        the_row();
-        $highlights[] = [
-            'title' => get_sub_field('title'),
-            'content' => get_sub_field('content'),
-        ];
-    }
-} elseif (is_array($projecthighlight)) {
-    foreach ($projecthighlight as $row) {
-        if (!is_array($row)) {
-            continue;
-        }
-
-        $highlights[] = [
-            'title' => $row['title'] ?? '',
-            'content' => $row['content'] ?? '',
-        ];
-    }
+if (is_numeric($button_value)) {
+	$file_id = (int) $button_value;
+} elseif (is_array($button_value)) {
+	$file_id = !empty($button_value['ID']) ? (int) $button_value['ID'] : 0;
+	$file_url = !empty($button_value['url']) ? $button_value['url'] : '';
+	$file_mime = !empty($button_value['mime_type']) ? $button_value['mime_type'] : '';
+} elseif (is_object($button_value)) {
+	$file_id = !empty($button_value->ID) ? (int) $button_value->ID : 0;
+	$file_url = !empty($button_value->url) ? $button_value->url : '';
+	$file_mime = !empty($button_value->mime_type) ? $button_value->mime_type : '';
+} elseif (is_string($button_value)) {
+	$file_url = trim($button_value);
 }
 
-$hero_image_url = '';
-$hero_image_alt = '';
-$image_id = 0;
-
-if (is_array($image)) {
-    $image_id = (int) ($image['ID'] ?? $image['id'] ?? 0);
-    $hero_image_url = $image['url'] ?? '';
-    $hero_image_alt = $image['alt'] ?? '';
-} elseif (is_numeric($image)) {
-    $image_id = (int) $image;
-} elseif (is_string($image)) {
-    $hero_image_url = $image;
+if ($file_id && !$file_url) {
+	$file_url = wp_get_attachment_url($file_id);
 }
 
-$last = count($highlights) - 1;
+if ($file_id && !$file_mime) {
+	$file_mime = get_post_mime_type($file_id) ?: '';
+}
 
+if (!$file_url) {
+	$post_id = get_the_ID();
+	$file_url = get_post_meta($post_id, 'source_url', true) ?: get_post_meta($post_id, 'publication_url', true);
+	if (!$file_mime && $file_url) {
+		$file_mime = wp_check_filetype($file_url)['type'] ?? '';
+	}
+}
+
+if (!$file_url) {
+	return;
+}
+
+$download_name = '';
+$file_path = wp_parse_url($file_url, PHP_URL_PATH);
+if ($file_path) {
+	$download_name = basename($file_path);
+}
+if ($download_name === '') {
+	$download_name = 'download.pdf';
+}
+
+$is_image = $file_mime && strpos($file_mime, 'image/') === 0;
 ?>
+<section class="w-full bg-[#f8f8f8] py-section_base">
+	<div class="mx-auto max-w-7xl px-container_xs sm:px-container_sm lg:px-container_lg">
+		<div class="mx-auto max-w-3xl overflow-hidden rounded-base border border-accent/10 bg-white">
+			<div class="hidden sm:block border-b border-accent/10 bg-surface p-6 sm:p-8">
+				<?php if ($is_image): ?>
+					<img
+						src="<?php echo esc_url($file_url); ?>"
+						alt="PDF preview"
+						class="h-[500px] w-full rounded-base object-cover"
+					/>
+				<?php else: ?>
+					<iframe
+						src="<?php echo esc_url($file_url); ?>#view=FitH"
+						title="PDF preview"
+						class="h-[500px] w-full border-0"
+						loading="lazy"
+					></iframe>
+				<?php endif; ?>
+			</div>
 
-<section class="productusbs-section min-h-[78vh] bg-gradient-to-br from-slate-50 via-white to-emerald-50 py-20" aria-label="Product hero">
-    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
-
-            <div class="space-y-8 md:pr-6">
-                <?php if ($image_id || $hero_image_url) : ?>
-                    <div class="aspect-square w-full max-w-[380px] overflow-hidden rounded-3xl border-2 border-secondary bg-white p-0 shadow-lg">
-                        <?php if ($image_id) : ?>
-                            <?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'block h-full w-full object-cover']); ?>
-                        <?php else : ?>
-                            <img class="block h-full w-full object-cover"
-                                 src="<?php echo esc_url($hero_image_url); ?>"
-                                 alt="<?php echo esc_attr($hero_image_alt); ?>"
-                                 loading="eager" fetchpriority="high" decoding="async">
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-
-            <div>
-                <?php foreach ($highlights as $i => $h) : ?>
-                    <div class="py-5 border-b border-secondary last:border-b-0">
-                        <details class="group">
-                            <summary class="flex cursor-pointer items-center justify-between gap-4 list-none text-left">
-                                <span class="text-xl font-semibold text-accent"><?php echo esc_html($h['title'] ?? ''); ?></span>
-                                <span class="text-secondary transition duration-200 productusbs-toggle-icon">+</span>
-                            </summary>
-                            <?php if (!empty($h['content'])) : ?>
-                                <div class="mt-2 text-base leading-relaxed text-slate-600">
-                                    <?php echo wp_kses_post($h['content']); ?>
-                                </div>
-                            <?php endif; ?>
-                        </details>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-        </div>
-    </div>
+			<div class="flex flex-col gap-4 p-6 sm:p-8">
+				<?php if ($product_name): ?>
+					<h2 class="text-xl font-semibold text-black"><?php echo esc_html($product_name); ?></h2>
+				<?php endif; ?>
+				<?php if ($download_description): ?>
+					<p class="max-w-[65ch] text-base leading-7 text-accent/80"><?php echo esc_html($download_description); ?></p>
+				<?php else: ?>
+					<p class="max-w-[65ch] text-base leading-7 text-accent/80">De knop start een directe download en bewaart de bestandsnaam.</p>
+				<?php endif; ?>
+				<a
+					href="<?php echo esc_url($file_url); ?>"
+					download="<?php echo esc_attr($download_name); ?>"
+					class="inline-flex w-fit items-center justify-center rounded-base bg-primary px-6 py-3.5 text-base font-medium text-white transition hover:bg-primary_dark"
+				>
+					Download PDF
+				</a>
+			</div>
+		</div>
+	</div>
 </section>
