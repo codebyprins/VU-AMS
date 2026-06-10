@@ -1,7 +1,7 @@
 <?php
 $show_popup = get_field('toggle_visibility', 'option');
 
-if (! $show_popup) {
+if (! $show_popup || ! is_front_page()) {
     return;
 }
 
