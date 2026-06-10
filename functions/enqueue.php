@@ -50,6 +50,20 @@ function theme_enqueue_assets()
         filemtime(get_template_directory() . '/public/js/main.js'),
         true
     );
+    wp_enqueue_script(
+        'timeline-script',
+        get_template_directory_uri() . '/resources/scripts/timeline.js',
+        ['theme-app'],
+        filemtime(get_template_directory() . '/resources/scripts/timeline.js'),
+        true
+    );
+    wp_enqueue_script(
+        'productusbs-script',
+        get_template_directory_uri() . '/resources/scripts/productusbs.js',
+        ['theme-app'],
+        filemtime(get_template_directory() . '/resources/scripts/productusbs.js'),
+        true
+    );
 
     wp_enqueue_script(
         'productusbs-script',
@@ -105,5 +119,12 @@ function theme_enqueue_admin_assets()
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('publication_sync'),
     ]);
+        wp_enqueue_script(
+        'productusbs-script',
+        get_template_directory_uri() . '/resources/scripts/productusbs.js',
+        ['theme-app'],
+        filemtime(get_template_directory() . '/resources/scripts/productusbs.js'),
+        true
+    );
 }
 add_action('admin_enqueue_scripts', 'theme_enqueue_admin_assets');
