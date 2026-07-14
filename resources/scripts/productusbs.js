@@ -1,24 +1,39 @@
-(function() {
-    if (typeof document === 'undefined') {
-        return;
-    }
+document.querySelectorAll('.productus-toggle').forEach(button => {
+    button.addEventListener('click', () => {
+        const wrapper = button.parentElement;
+        const content = wrapper.querySelector('.productus-content');
+        const icon = button.querySelector('.productus-toggle-icon');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.productusbs-section details').forEach(function(details) {
-            var summary = details.querySelector('summary');
-            var icon = details.querySelector('.productusbs-toggle-icon');
-            if (!summary || !icon) {
-                return;
+        const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+        // close all others
+        document.querySelectorAll('.productus-toggle').forEach(otherButton => {
+            if (otherButton !== button) {
+                const otherWrapper = otherButton.parentElement;
+                const otherContent = otherWrapper.querySelector('.productus-content');
+                const otherIcon = otherButton.querySelector('.productus-toggle-icon');
+
+                otherContent.style.maxHeight = null;
+                otherContent.classList.add('max-h-0', 'hidden');
+
+                otherButton.setAttribute('aria-expanded', 'false');
+                otherIcon.textContent = '+';
             }
-
-            var updateIcon = function() {
-                icon.textContent = details.open ? '−' : '+';
-            };
-
-            updateIcon();
-            summary.addEventListener('click', function() {
-                setTimeout(updateIcon, 0);
-            });
         });
+
+        // toggle current
+        if (isOpen) {
+            content.style.maxHeight = null;
+            content.classList.add('max-h-0', 'hidden');
+
+            button.setAttribute('aria-expanded', 'false');
+            icon.textContent = '+';
+        } else {
+            content.classList.remove('max-h-0', 'hidden');
+            content.style.maxHeight = content.scrollHeight + 'px';
+
+            button.setAttribute('aria-expanded', 'true');
+            icon.textContent = '−';
+        }
     });
-})();
+});

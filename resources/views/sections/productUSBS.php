@@ -56,11 +56,12 @@ if (is_array($image)) {
 }
 
 $last = count($highlights) - 1;
-
+$title = get_sub_field('title_productusbs');
 ?>
 
 <section class="productusbs-section min-h-[78vh] bg-gradient-to-br from-slate-50 via-white to-emerald-50 py-20" aria-label="Product hero">
     <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 class="mb-4"><?php echo esc_html($title); ?></h2>
         <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
 
             <div class="space-y-8 md:pr-6">
@@ -70,9 +71,9 @@ $last = count($highlights) - 1;
                             <?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'block h-full w-full object-contain']); ?>
                         <?php else : ?>
                             <img class="block h-full w-full object-contain"
-                                 src="<?php echo esc_url($hero_image_url); ?>"
-                                 alt="<?php echo esc_attr($hero_image_alt); ?>"
-                                 loading="eager" fetchpriority="high" decoding="async">
+                                src="<?php echo esc_url($hero_image_url); ?>"
+                                alt="<?php echo esc_attr($hero_image_alt); ?>"
+                                loading="eager" fetchpriority="high" decoding="async">
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
