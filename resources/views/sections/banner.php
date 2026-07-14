@@ -7,21 +7,21 @@ $small = get_sub_field('small');
 <section class="bg-[#F8F8F8] w-full h-full">
   <?php if ($bigsmall) : ?>
 
-    <div class="container mx-auto relative flex flex-col md:flex-row items-center w-full"
+    <div class="container mx-auto relative flex flex-col lg:flex-row items-center w-full"
       style="min-height: 491px;">
 
-      <div class="w-full md:w-1/2 flex-shrink-0 px-6 pt-8 pb-6 md:pl-[20px] md:pt-[89px] md:pb-[91px] md:pr-8">
-
-        <?php if ($big['subtitle']) : ?>
-          <p class="font-sans text-[16px] md:text-[24px] text-black mb-2 animate-fade-in-up delay-1">
-            <?php echo esc_html($big['subtitle']); ?>
-          </p>
-        <?php endif; ?>
+      <div class="w-full lg:w-1/2 flex-shrink-0 px-6 pt-8 pb-6 lg:pl-[20px] lg:pt-[89px] lg:pb-[91px] lg:pr-8">
 
         <?php if ($big['title']) : ?>
-          <h1 class="font-sans text-[32px] md:text-[48px] font-bold leading-tight text-black mb-4 animate-fade-in-up delay-2">
+          <h1 class="font-sans text-[32px] md:text-[48px] font-bold leading-tight text-black animate-fade-in-up delay-2">
             <?php echo esc_html($big['title']); ?>
           </h1>
+        <?php endif; ?>
+
+         <?php if ($big['subtitle']) : ?>
+          <p class="font-sans text-[16px] md:text-[24px] text-black mb-6 animate-fade-in-up delay-1">
+            <?php echo esc_html($big['subtitle']); ?>
+          </p>
         <?php endif; ?>
 
         <?php if ($big['content']) : ?>
@@ -40,14 +40,14 @@ $small = get_sub_field('small');
       </div>
 
       <?php if ($big['image_or_bubbles'] && $big['image']) : ?>
-        <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
+        <div class="w-full lg:flex-1 flex items-center justify-center px-8 pb-8 pt-4 lg:p-12">
           <img class="max-h-[220px] md:max-h-[350px] w-auto object-contain"
             src="<?php echo esc_url($big['image']['url']); ?>"
             alt="<?php echo esc_html($big['image']['alt']); ?>">
         </div>
       <?php elseif (!$big['image_or_bubbles'] && $big['bubbles']) : ?>
-        <div class="w-full md:flex-1 flex items-center justify-center px-8 md:pb-8 pb-20 md:pt-4 pt-7 md:p-12">
-          <div class="bubble_container relative flex flex-row gap-5 sm:mr-[80px] mr-0">
+        <div class="w-full lg:flex-1 flex items-center justify-center px-8 lg:pb-8 pb-20 lg:pt-4 pt-7 lg:p-12">
+          <div class="bubble_container flex flex-row gap-5 w-full">
             <?php foreach ($big['bubbles'] as $index => $bubble) : ?>
               <?php
               if (!is_array($bubble)) {
@@ -79,9 +79,9 @@ $small = get_sub_field('small');
                 }
               }
               ?>
-              <div class="relative flex flex-col justify-center items-center gap-4 <?php echo $is_top ? 'pb-[100px]' : 'pt-[100px]'; ?>">
+              <div class="flex-1 min-w-0 flex flex-col justify-center items-center gap-4 <?php echo $is_top ? 'pb-[100px]' : 'pt-[100px]'; ?>">
                 <?php if ($is_top && $bubble['text']) : ?>
-                  <p class="absolute top-[-45px] text-2xl md:text-3xl"><?php echo esc_html($bubble['text']); ?></p>
+                  <p class="text-lg md:text-xl text-center break-words max-w-full"><?php echo esc_html($bubble['text']); ?></p>
                 <?php endif; ?>
                 <div class="rounded-full bg-primary min-w-[85px] min-h-[85px] flex items-center justify-center w-fit">
                   <?php if ($display_number) : ?>
@@ -89,14 +89,14 @@ $small = get_sub_field('small');
                   <?php endif; ?>
                 </div>
                 <?php if (!$is_top && $bubble['text']) : ?>
-                  <p class="absolute bottom-[-45px] text-2xl md:text-3xl"><?php echo esc_html($bubble['text']); ?></p>
+                  <p class="text-lg md:text-xl text-center break-words max-w-full"><?php echo esc_html($bubble['text']); ?></p>
                 <?php endif; ?>
               </div>
             <?php endforeach; ?>
           </div>
         </div>
       <?php elseif ($big['image']) : ?>
-        <div class="w-full md:flex-1 flex items-center justify-center px-8 pb-8 pt-4 md:p-12">
+        <div class="w-full lg:flex-1 flex items-center justify-center px-8 pb-8 pt-4 lg:p-12">
           <img class="max-h-[220px] md:max-h-[350px] w-auto object-contain"
             src="<?php echo esc_url($big['image']['url']); ?>"
             alt="<?php echo esc_html($big['image']['alt']); ?>">

@@ -17,8 +17,8 @@ $alignment_classes = [
 
 $height_classes = [
     '400px' => 'h-[400px]',
-    '500px' => 'h-[500px]',
-    '650px' => 'h-[650px]',
+    '500px' => 'h-[400px] sm:h-[500px]',
+    '650px' => 'h-[400px] sm:h-[600px]',
 ];
 
 
@@ -38,13 +38,13 @@ $height = $height_classes[$video_height] ?? $height_classes['400px'];
         <div class="relative z-20 h-full flex flex-col p-10 text-white bg-gradient-to-t from-black/60 to-transparent <?php echo $align; ?>">
 
             <?php if ($title): ?>
-                <h1 class="hero-title text-5xl md:text-7xl font-bold fade-in-up delay-1">
+                <h1 class="hero-title text-4xl md:text-6xl font-bold fade-in-up delay-1">
                     <?php echo wp_kses_post($title); ?>
                 </h1>
             <?php endif; ?>
 
             <?php if ($text): ?>
-                <div class="leading-[1.2] hero-text mt-4 text-1xl text-[1.875rem] max-w-[600px] fade-in-up delay-2">
+                <div class="hero-text mt-4 max-w-[600px] fade-in-up delay-2">
                     <?php echo apply_filters('the_content', $text); ?>
                 </div>
             <?php endif; ?>
