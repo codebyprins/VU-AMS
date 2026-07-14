@@ -3,7 +3,7 @@ $timeline_gradient = 'linear-gradient(180deg,#ffffff 0%,rgba(225,252,255,0.46) 5
 $timeline_items = get_sub_field('timeline') ?: [];
 $timeline_previewwords = 50;
 ?>
-<div class="relative w-full border-t border-black/5" style="background: <?php echo esc_attr($timeline_gradient); ?>;">
+<div class="relative w-full" style="background: <?php echo esc_attr($timeline_gradient); ?>;">
 	<div class="mx-auto max-w-7xl px-6 py-20 lg:px-16 lg:py-28">
 		<div class="relative">
 			<div
@@ -27,12 +27,12 @@ $timeline_previewwords = 50;
 					$excerpt = $has_more ? implode(' ', array_slice($words, 0, $timeline_previewwords)) : '';
 					$rest = $has_more ? implode(' ', array_slice($words, $timeline_previewwords)) : '';
 
-					$card_classes = 'w-full max-w-[600px] rounded-2xl bg-white p-6 text-black shadow-sm ring-1 ring-black/5'
+					$card_classes = 'w-full max-w-[600px] rounded-2xl bg-white p-6 text-black border border-black border-[1px]'
 						. ($align_right ? '' : ' lg:ml-auto');
 				?>
 					<li class="relative">
 						<span
-							class="absolute top-6 z-10 inline-flex h-[22px] w-[22px] -translate-x-1/2 rounded-full border-2 border-[#f7c80c] bg-[#01b4c9] left-5 lg:left-1/2"
+							class="absolute top-6 z-10 inline-flex h-[22px] w-[22px] -translate-x-1/2 rounded-full border-2 border-secondary bg-secondary left-5 lg:left-1/2"
 							aria-hidden="true"
 						></span>
 
@@ -43,28 +43,28 @@ $timeline_previewwords = 50;
 
 							<article class="<?php echo esc_attr($card_classes); ?>">
 								<?php if ($image_id || $image_url !== ''): ?>
-									<div class="mb-4 overflow-hidden rounded-xl bg-black/5">
+									<div class="mb-4 overflow-hidden rounded-xl">
 										<?php if ($image_id): ?>
-											<?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'h-auto max-h-[200px] w-full object-cover']); ?>
+											<?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'h-auto max-h-[400px] w-full object-contain']); ?>
 										<?php else: ?>
 											<img
 												src="<?php echo esc_url($image_url); ?>"
 												alt="<?php echo esc_attr($image_alt); ?>"
-												class="h-auto max-h-[200px] w-full object-cover"
+												class="h-auto max-h-[400px] w-full object-contain"
 											/>
 										<?php endif; ?>
 									</div>
 								<?php endif; ?>
 
-								<h3 class="text-xl font-normal leading-tight text-black"><?php echo esc_html($title); ?></h3>
+								<h3 class="text-xl text-center"><?php echo esc_html($title); ?></h3>
 
-								<div class="mt-3 max-w-[65ch] text-base leading-7 text-black [&_p]:mb-2 [&_p:last-child]:mb-0">
+								<div class="mt-3 max-w-[65ch] text-base [&_p]:mb-2 [&_p:last-child]:mb-0">
 									<?php if ($has_more): ?>
-										<p class="timeline-read-more-text">
-											<span class="timeline-read-more-excerpt"><?php echo esc_html($excerpt); ?></span><span class="timeline-read-more-ellipsis">...</span><span class="timeline-read-more-rest hidden"> <?php echo esc_html($rest); ?></span>
-										</p>
-										<div class="mt-4 flex justify-end">
-											<button type="button" class="timeline-read-more-js-toggle inline-flex w-fit cursor-pointer items-center rounded-full bg-[#01B4C9] px-6 py-2 text-sm font-semibold text-white transition-colors duration-100 hover:bg-[#0d7a86] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#01B4C9] focus-visible:ring-offset-2 focus-visible:ring-offset-white" aria-expanded="false">
+										<div class="timeline-read-more-full hidden overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;">
+											<p><?php echo esc_html($body_plain); ?></p>
+										</div>
+										<div class="mt-4 flex justify-center">
+											<button type="button" class="timeline-read-more-js-toggle btn btn-primary" aria-expanded="false">
 												Read more
 											</button>
 										</div>
@@ -78,7 +78,6 @@ $timeline_previewwords = 50;
 								<div class="hidden lg:block" aria-hidden="true"></div>
 							<?php endif; ?>
 						</div>
-						<div class="mt-4 h-px bg-black/10 lg:hidden"></div>
 					</li>
 				<?php endforeach; ?>
 			</ol>
