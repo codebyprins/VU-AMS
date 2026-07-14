@@ -65,11 +65,11 @@ $last = count($highlights) - 1;
 
             <div class="space-y-8 md:pr-6">
                 <?php if ($image_id || $hero_image_url) : ?>
-                    <div class="aspect-square w-full max-w-[380px] overflow-hidden rounded-3xl border-2 border-secondary bg-white p-0 shadow-lg">
+                    <div class="aspect-square w-full max-w-[380px] overflow-hidden rounded-3xl p-0">
                         <?php if ($image_id) : ?>
-                            <?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'block h-full w-full object-cover']); ?>
+                            <?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'block h-full w-full object-contain']); ?>
                         <?php else : ?>
-                            <img class="block h-full w-full object-cover"
+                            <img class="block h-full w-full object-contain"
                                  src="<?php echo esc_url($hero_image_url); ?>"
                                  alt="<?php echo esc_attr($hero_image_alt); ?>"
                                  loading="eager" fetchpriority="high" decoding="async">
@@ -80,14 +80,14 @@ $last = count($highlights) - 1;
 
             <div>
                 <?php foreach ($highlights as $i => $h) : ?>
-                    <div class="py-5 border-b border-secondary last:border-b-0">
+                    <div class="py-5 border-b border-primary last:border-b-0">
                         <details class="group">
                             <summary class="flex cursor-pointer items-center justify-between gap-4 list-none text-left">
-                                <span class="text-xl font-semibold text-accent"><?php echo esc_html($h['title'] ?? ''); ?></span>
-                                <span class="text-secondary transition duration-200 productusbs-toggle-icon">+</span>
+                                <span class="text-xl font-bold"><?php echo esc_html($h['title'] ?? ''); ?></span>
+                                <span class="text-primary transition duration-200 productusbs-toggle-icon">+</span>
                             </summary>
                             <?php if (!empty($h['content'])) : ?>
-                                <div class="mt-2 text-base leading-relaxed text-slate-600">
+                                <div class="mt-2">
                                     <?php echo wp_kses_post($h['content']); ?>
                                 </div>
                             <?php endif; ?>
