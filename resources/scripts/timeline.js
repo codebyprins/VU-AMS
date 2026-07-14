@@ -11,27 +11,23 @@
 
 			const fullText = card.querySelector('.timeline-read-more-full');
 			const willExpand = button.getAttribute('aria-expanded') !== 'true';
-			const allCards = document.querySelectorAll('article');
+			const openButtons = document.querySelectorAll('.timeline-read-more-js-toggle[aria-expanded="true"]');
 
-			if (willExpand) {
-				allCards.forEach((otherCard) => {
-					if (otherCard === card) return;
+			openButtons.forEach((openButton) => {
+				if (openButton === button) return;
 
-					const otherButton = otherCard.querySelector('.timeline-read-more-js-toggle');
-					const otherText = otherCard.querySelector('.timeline-read-more-full');
+				const openCard = openButton.closest('article');
+				const openText = openCard?.querySelector('.timeline-read-more-full');
 
-					if (otherButton && otherButton.getAttribute('aria-expanded') === 'true') {
-						otherButton.setAttribute('aria-expanded', 'false');
-						otherButton.textContent = 'Read more';
-					}
+				openButton.setAttribute('aria-expanded', 'false');
+				openButton.textContent = 'Read more';
 
-					if (otherText) {
-						otherText.style.maxHeight = '0px';
-						otherText.style.opacity = '0';
-						otherText.classList.add('hidden');
-					}
-				});
-			}
+				if (openText) {
+					openText.style.maxHeight = '0px';
+					openText.style.opacity = '0';
+					openText.classList.add('hidden');
+				}
+			});
 
 			button.setAttribute('aria-expanded', willExpand ? 'true' : 'false');
 			button.textContent = willExpand ? 'Read less' : 'Read more';
