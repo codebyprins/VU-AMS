@@ -9,14 +9,41 @@
 			const card = button.closest('article');
 			if (!card) return;
 
-			const ellipsis = card.querySelector('.timeline-read-more-ellipsis');
-			const rest = card.querySelector('.timeline-read-more-rest');
+			const fullText = card.querySelector('.timeline-read-more-full');
 			const willExpand = button.getAttribute('aria-expanded') !== 'true';
+			const openButtons = document.querySelectorAll('.timeline-read-more-js-toggle[aria-expanded="true"]');
+
+			openButtons.forEach((openButton) => {
+				if (openButton === button) return;
+
+				const openCard = openButton.closest('article');
+				const openText = openCard?.querySelector('.timeline-read-more-full');
+
+				openButton.setAttribute('aria-expanded', 'false');
+				openButton.textContent = 'Read more';
+
+				if (openText) {
+					openText.style.maxHeight = '0px';
+					openText.style.opacity = '0';
+					openText.classList.add('hidden');
+				}
+			});
 
 			button.setAttribute('aria-expanded', willExpand ? 'true' : 'false');
 			button.textContent = willExpand ? 'Read less' : 'Read more';
 
-			if (ellipsis) ellipsis.classList.toggle('hidden', willExpand);
-			if (rest) rest.classList.toggle('hidden', !willExpand);
+			if (fullText) {
+				if (willExpand) {
+					fullText.classList.remove('hidden');
+					requestAnimationFrame(() => {
+						fullText.style.maxHeight = fullText.scrollHeight + 'px';
+						fullText.style.opacity = '1';
+					});
+				} else {
+					fullText.style.maxHeight = '0px';
+					fullText.style.opacity = '0';
+					setTimeout(() => fullText.classList.add('hidden'), 300);
+				}
+			}
 		});
 	})();

@@ -30,7 +30,7 @@ $faq_posts = get_posts($query_args);
 
 <section class="bg-white py-10">
     <div id="faq" class="container mx-auto px-4 flex justify-center items-center">
-        <div class="faq_items max-w-[600px]">
+        <div class="faq_items max-w-3xl">
             <h2 class="text-4xl font-bold mb-14 text-center"><?php echo esc_html($title); ?></h2>
             <?php foreach ($faq_posts as $faq_post) : ?>
                 <div class="faq_item mb-5 border-b border-black">

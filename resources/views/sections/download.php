@@ -81,7 +81,7 @@ $releases = get_posts([
                     </a>
                 </div>
 
-                <div id="small-text" class="text-sm text-gray-500 max-w-[600px]"></div>
+                <div id="small-text" class="text-sm text-gray-500 max-w-3xl"></div>
 
                 <button id="changelog-toggle"
                         class="btn btn-primary-outline w-full md:w-auto md:ml-auto">

@@ -51,4 +51,6 @@ wp-config.php
 /package-lock.json
 /public/.vite
 /public
+/public/css
+/public/js
 /dist

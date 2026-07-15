@@ -1,7 +1,7 @@
 <?php
 $title = get_sub_field('title');
 $subtitle = get_sub_field('subtitle');
-$content = get_sub_field('content');
+$content = get_sub_field('text_block_content');
 $alignment = get_sub_field('position');
 
 if (! in_array($alignment, ['left', 'center', 'right'], true)) {
@@ -15,20 +15,24 @@ $alignment_classes = [
 ];
 
 $content_alignment_class = $alignment_classes[$alignment];
+
+// var_dump($content);
 ?>
 
 <section class="bg-[#F8F8F8] py-10">
 	<div class="container mx-auto px-4 flex flex-col gap-3 md:gap-5 <?php echo esc_attr($content_alignment_class); ?>">
-		<?php if ($title) : ?>
-			<h2 class="text-2xl md:text-4xl font-bold"><?php echo esc_html($title); ?></h2>
-		<?php endif; ?>
+		<div class="prose max-w-[800px] [&_p]:mb-2 [&_p:last-child]:mb-0">
+			<?php if ($title) : ?>
+				<h2 class="text-2xl md:text-4xl font-bold mb-4"><?php echo esc_html($title); ?></h2>
+			<?php endif; ?>
 
-		<?php if ($subtitle) : ?>
-			<p class="text-lg md:text-xl text-accent/80"><?php echo esc_html($subtitle); ?></p>
-		<?php endif; ?>
+			<?php if ($subtitle) : ?>
+				<p class="text-lg md:text-xl text-accent/80"><?php echo esc_html($subtitle); ?></p>
+			<?php endif; ?>
 
-		<?php if ($content) : ?>
-			<div class="max-w-[600px]"><?php echo wp_kses_post($content); ?></div>
-		<?php endif; ?>
+			<?php if ($content) : ?>
+				<div class="max-w-3xl prose	"><?php echo wp_kses_post($content); ?></div>
+			<?php endif; ?>
+		</div>
 	</div>
 </section>

@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       fontSize: {
         'base': '16px',
-        'h1': '48px', 
+        'h1': '48px',
         'h2': '36px',
         'h3': '30px',
         'h4': '24px',
@@ -56,5 +56,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
