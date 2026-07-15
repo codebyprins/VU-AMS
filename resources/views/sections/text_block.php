@@ -9,14 +9,12 @@ if (! in_array($alignment, ['left', 'center', 'right'], true)) {
 }
 
 $alignment_classes = [
-	'left' => 'text-left items-start',
-	'center' => 'text-center items-center',
-	'right' => 'text-right items-end',
+	'left' => 'items-start',
+	'center' => 'items-center',
+	'right' => 'items-end',
 ];
 
 $content_alignment_class = $alignment_classes[$alignment];
-
-// var_dump($content);
 ?>
 
 <section class="bg-[#F8F8F8] py-10">

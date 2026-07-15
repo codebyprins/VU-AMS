@@ -9,7 +9,6 @@ $link_cards = get_sub_field('link_cards');
       <div class="grid grid-cols-12 gap-4">
         <?php foreach ($link_cards as $card):
 
-          // var_dump($card); 
         ?>
           <a href="<?php echo esc_url($card['link_card_link']['url']); ?>"
             class="col-span-12 sm:col-span-6 xl:col-span-4 flex flex-col justify-end border-[1px] border-black rounded-base p-5 md:p-10 transform hover:bg-[#F8F8F8] hover:translate-y-[-5px] ease-in-out hover:duration-300">
