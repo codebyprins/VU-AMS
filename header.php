@@ -7,24 +7,45 @@
     <?php wp_head(); ?>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col overflow-x-hidden">
     <?php wp_body_open(); ?>
 
-    <?php
-    $topbar_content = get_field('content', 'option');
-    if ($topbar_content) : ?>
-        <div class="hidden lg:block bg-[#ABE0E6] text-black text-xs py-3.5 overflow-hidden">
-            <div id="topbar-marquee-wrap" class="flex">
-                <span id="topbar-marquee-inner" class="whitespace-nowrap shrink-0 flex flex-row"><?php
-                    $clean = wp_strip_all_tags($topbar_content);
-                    for ($i = 0; $i < 30; $i++) {
-                        echo '<span class="px-12">' . wp_kses_post($topbar_content) . '</span>';
-                    }
-                    ?>
-                </span>
-            </div>
-        </div>
-    <?php endif; ?>
+ <?php
+$topbar_items = get_field('topbar_content', 'option');
+
+if ($topbar_items):
+?>
+
+<div class="hidden lg:block w-full overflow-hidden bg-[#ABE0E6] text-black text-xs py-3.5">
+    <div id="topbar-marquee-wrap" class="flex">
+        <span id="topbar-marquee-inner" class="inline-flex whitespace-nowrap shrink-0 items-center">
+            <?php for ($i = 0; $i < 10; $i++): ?>
+                <?php foreach ($topbar_items as $item): ?>
+                    <span class="px-12 inline-flex items-center gap-2">
+                        <?php if (!empty($item['topbar_link'])): ?>
+                            <a 
+                                href="<?php echo esc_url($item['topbar_link']['url']); ?>"
+                                target="<?php echo esc_attr($item['topbar_link']['target'] ?: '_self'); ?>"
+                                class="hover:underline"
+                            >
+                                <?php echo esc_html($item['topbar_link']['title']); ?>
+                            </a>
+
+                        <?php elseif (!empty($item['topbar_text'])): ?>
+                            <?php echo esc_html($item['topbar_text']); ?>
+                        <?php endif; ?>
+                    </span>
+
+                    <?php if (!empty($item['seperator'])): ?>
+                        <i class="<?php echo esc_attr($item['seperator']); ?> text-[8px]"></i>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endfor; ?>
+        </span>
+    </div>
+</div>
+
+<?php endif; ?>
 
     <header class="bg-gradient-to-r from-[#01B4C9] from-[62%] to-[#0F1733]">
         <div class="container mx-auto px-4 py-6 flex items-center gap-4 lg:gap-8">

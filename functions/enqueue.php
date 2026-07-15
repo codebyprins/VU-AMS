@@ -113,3 +113,23 @@ function theme_enqueue_admin_assets()
     ]);
 }
 add_action('admin_enqueue_scripts', 'theme_enqueue_admin_assets');
+
+require_once get_template_directory() . '/resources/views/components/acf-map-position/acf-map-position.php';
+
+add_action('acf/input/admin_enqueue_scripts', function () {
+
+    wp_enqueue_script(
+        'acf-map-position',
+        get_template_directory_uri() . '/resources/scripts/acf-map-position.js',
+        ['jquery'],
+        null,
+        true
+    );
+
+
+    wp_enqueue_style(
+        'acf-map-position',
+        get_template_directory_uri() . '/resources/styles/components/acf-map-position.css'
+    );
+
+});

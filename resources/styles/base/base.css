@@ -39,3 +39,7 @@
  .rich-editor li {
    @apply pl-2;
  }
+
+ .swiper {
+    overflow: hidden;
+}

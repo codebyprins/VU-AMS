@@ -135,3 +135,4 @@ $small = get_sub_field('small');
     </div>
 
 <?php endif; ?>
+</section>
