@@ -139,11 +139,11 @@ $search_results = new WP_Query($args);
                                                     } else {
                                                         the_permalink();
                                                     }
-                                                    ?>" class="text-xl text-[#01B4C9] max-w-[600px] overflow-hidden text-ellipsis whitespace-nowrap hover:text-[#F7C80C] transition-colors">
+                                                    ?>" class="text-xl text-[#01B4C9] max-w-3xloverflow-hidden text-ellipsis whitespace-nowrap hover:text-[#F7C80C] transition-colors">
                                             <?php the_title(); ?>
                                         </a>
                                     </div>
-                                    <p class="text-gray-700 line-clamp-2 max-w-[600px]">
+                                    <p class="text-gray-700 line-clamp-2 max-w-3xl">
                                         <?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?>
                                     </p>
                                 </div>
@@ -184,7 +184,7 @@ $search_results = new WP_Query($args);
 <section class="bg-[#F8F8F8] py-10">
     <div class="container mx-auto px-4 text-center flex flex-col gap-3 md:gap-5 items-center">
         <h2 class="text-2xl md:text-4xl font-bold">Interested in VU-AMS?</h2>
-        <div class="max-w-[600px]">Want to learn more or see how VU-AMS can support your research? Get in touch with us.</div>
+        <div class="max-w-3xl">Want to learn more or see how VU-AMS can support your research? Get in touch with us.</div>
         <a class="btn btn-primary w-fit" href="/contact" target="_blank">Contact us</a>
     </div>
 </section>

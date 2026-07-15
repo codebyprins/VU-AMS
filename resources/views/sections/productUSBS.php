@@ -88,7 +88,7 @@ $title = get_sub_field('title_productusbs');
                                 <span class="text-primary transition duration-200 productusbs-toggle-icon">+</span>
                             </summary>
                             <?php if (!empty($h['content'])) : ?>
-                                <div class="mt-2">
+                                <div class="mt-2 prose">
                                     <?php echo wp_kses_post($h['content']); ?>
                                 </div>
                             <?php endif; ?>

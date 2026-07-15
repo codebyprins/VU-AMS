@@ -57,7 +57,7 @@
                 </div>
 
                 <?php if (!empty($item['content'])): ?>
-                    <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300 m-[6px] pl-[5px]">
+                    <div class="panel max-h-0 overflow-hidden transition-[max-height] duration-300 m-[6px] pl-[5px] prose">
                             <?php echo $item['content']; ?>
                     </div>
                 <?php endif; ?>

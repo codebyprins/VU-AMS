@@ -19,10 +19,13 @@
   /* Remove list styles (optional) */
   ul,
   ol {
-    list-style: none;
     padding: 0;
     margin: 0;
   }
+
+  .prose ul {
+    list-style: disc;
+   }
 
   /* Reset links (optional, depends on design) */
   a {

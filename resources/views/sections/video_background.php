@@ -1,11 +1,19 @@
 <?php
-$video  = get_sub_field('video_file');
+$background = get_sub_field('background_selection') ?: [];
+
+$background_type = strtolower($background['style_option'] ?? '');
+
+$video_file = $background['video_file'] ?? null;
+$image_file = $background['image_file'] ?? null;
+
+$title = get_sub_field('title');
+$text = get_sub_field('text_field');
 $title  = get_sub_field('title');
 $text   = get_sub_field('text_field');
 $layout = get_sub_field('text_alignment') ?: 'top';
 $video_height = get_sub_field('video_height') ?: '400px';
 
-if (!$video && empty($title) && empty($text)) {
+if (empty($title) && empty($text)) {
     return;
 }
 
@@ -27,11 +35,18 @@ $height = $height_classes[$video_height] ?? $height_classes['400px'];
 ?>
 
 <section class="relative <?php echo $height; ?> overflow-hidden">
-    <?php if ($video): ?>
+    <?php if ($background_type === 'video' && $video_file): ?>
         <video autoplay muted loop playsinline
             class="absolute inset-0 w-full h-full object-cover z-10">
-            <source src="<?php echo esc_url($video); ?>" type="video/mp4">
+            <source src="<?php echo esc_url($video_file); ?>" type="video/mp4">
         </video>
+    <?php endif; ?>
+
+    <?php if ($background_type === 'image' && $image_file): ?>
+        <img
+            src="<?php echo esc_url($image_file['url']); ?>"
+            alt="<?php echo esc_attr($image_file['alt'] ?? ''); ?>"
+            class="absolute inset-0 w-full h-full object-cover z-10">
     <?php endif; ?>
 
     <?php if ($title || $text): ?>
@@ -44,7 +59,7 @@ $height = $height_classes[$video_height] ?? $height_classes['400px'];
             <?php endif; ?>
 
             <?php if ($text): ?>
-                <div class="hero-text mt-4 max-w-[600px] fade-in-up delay-2">
+                <div class="hero-text mt-4 max-w-3xl fade-in-up delay-2">
                     <?php echo apply_filters('the_content', $text); ?>
                 </div>
             <?php endif; ?>
