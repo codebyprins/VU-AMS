@@ -28,7 +28,7 @@ if (!is_wp_error($year_terms) && !empty($year_terms)) {
     <?php endif; ?>
 
     <?php if ($beschrijving) : ?>
-        <p class="font-sans text-[16px] text-gray-600 mb-8 fade-in-up delay-2 max-w-2xl"><?php echo esc_html($beschrijving); ?></p>
+        <p class="mb-8 fade-in-up delay-2 max-w-3xl"><?php echo esc_html($beschrijving); ?></p>
     <?php endif; ?>
 
     <?php if (!empty($jaren)) : ?>

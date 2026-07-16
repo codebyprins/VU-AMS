@@ -26,10 +26,6 @@ if(isset($colors[$pin_color_input])) {
 } else {
     $pin_color = 'primary';
 }
-
-var_dump($pin_color_input);
-var_dump($pin_color);
-
 ?>
 <section class="bg-[#F8F8F8] py-10">
     <div class="container mx-auto px-4">
