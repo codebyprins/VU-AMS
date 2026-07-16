@@ -1,6 +1,6 @@
 <?php
-$title = get_sub_field('title');
-$content = get_sub_field('content');
+$title = get_sub_field('map_section_title');
+$content = get_sub_field('map_section_text');
 
 $map_image = get_field('map_image', 'option');
 $pin_color_input = get_field('pin_color', 'option') ?: 'primary';
@@ -26,6 +26,7 @@ if(isset($colors[$pin_color_input])) {
 } else {
     $pin_color = 'primary';
 }
+
 ?>
 <section class="bg-[#F8F8F8] py-10">
     <div class="container mx-auto px-4">
