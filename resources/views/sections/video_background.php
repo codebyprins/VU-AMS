@@ -6,6 +6,16 @@ $background_type = strtolower($background['style_option'] ?? '');
 $video_file = $background['video_file'] ?? null;
 $image_file = $background['image_file'] ?? null;
 
+$video_url = '';
+
+if (is_array($video_file)) {
+    $video_url = $video_file['url'] ?? '';
+} elseif (is_numeric($video_file)) {
+    $video_url = wp_get_attachment_url($video_file);
+} elseif (is_string($video_file)) {
+    $video_url = $video_file;
+}
+
 $title = get_sub_field('title');
 $text = get_sub_field('text_field');
 $title  = get_sub_field('title');
@@ -35,10 +45,10 @@ $height = $height_classes[$video_height] ?? $height_classes['400px'];
 ?>
 
 <section class="relative <?php echo $height; ?> overflow-hidden">
-    <?php if ($background_type === 'video' && $video_file): ?>
+    <?php if ($background_type === 'video' && $video_url): ?>
         <video autoplay muted loop playsinline
             class="absolute inset-0 w-full h-full object-cover z-10">
-            <source src="<?php echo esc_url($video_file); ?>" type="video/mp4">
+            <source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
         </video>
     <?php endif; ?>
 
