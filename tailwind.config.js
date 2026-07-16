@@ -24,6 +24,10 @@ module.exports = {
         secondary_light: '#EDE1B4',
         accent: '#101935',
         surface: '#F3F3F3',
+        cstm_red: '#d11c1c',
+        cstm_green: '#72df72',
+        cstm_black: '#000000',
+        cstm_white: '#FFFFFF',
       },
       fontFamily: {
         sans: ['Heebo', 'sans-serif'],

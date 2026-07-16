@@ -3,6 +3,7 @@ $title = get_sub_field('title');
 $content = get_sub_field('content');
 
 $map_image = get_field('map_image', 'option');
+$pin_color_input = get_field('pin_color', 'option') ?: 'primary';
 
 $locations = get_posts([
     'post_type' => 'location',
@@ -10,6 +11,25 @@ $locations = get_posts([
     'orderby' => 'menu_order',
     'order' => 'ASC'
 ]);
+
+$colors = [
+    'red' => 'bg-cstm_red',
+    'blue' => 'bg-primary',
+    'green' => 'bg-cstm_green',
+    'yellow' => 'bg-secondary',
+    'black' => 'bg-cstm_black',
+    'white' => 'bg-cstm_white',
+];
+
+if(isset($colors[$pin_color_input])) {
+    $pin_color = $colors[$pin_color_input];
+} else {
+    $pin_color = 'primary';
+}
+
+var_dump($pin_color_input);
+var_dump($pin_color);
+
 ?>
 <section class="bg-[#F8F8F8] py-10">
     <div class="container mx-auto px-4">
@@ -47,11 +67,11 @@ $locations = get_posts([
                 $y = $position['y'] ?? 50;
             ?>
                 <div
-                    class="map_item absolute -translate-x-1/2 -translate-y-1/2 bg-[#00b3ff6c] w-4 h-4 cursor-pointer rounded-full flex justify-center items-center"
+                    class="map_item absolute -translate-x-1/2 -translate-y-1/2 <?php echo esc_attr($pin_color); ?> w-4 h-4 cursor-pointer rounded-full flex justify-center items-center"
                     style="left: <?php echo esc_attr($x); ?>%; top: <?php echo esc_attr($y); ?>%;"
                     data-location-id="<?php echo esc_attr($location->ID); ?>"
                 >
-                    <div class="map_item-inner bg-[#00B2FF] rounded-full w-3 h-3"></div>
+                    <div class="map_item-inner <?php echo esc_attr($pin_color); ?> rounded-full w-3 h-3"></div>
                     <div
                         id="map_info_<?php echo esc_attr($location->ID); ?>"
                         class="map_information z-[1] absolute bottom-[25px] left-1/2 -translate-x-1/2 bg-white sm:px-6 px-4 sm:py-4 py-2 rounded-xl shadow-lg cursor-auto opacity-0 pointer-events-none transition-opacity duration-300"
