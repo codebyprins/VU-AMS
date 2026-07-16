@@ -32,7 +32,7 @@ if ($topbar_items):
                             </a>
 
                         <?php elseif (!empty($item['topbar_text'])): ?>
-                            <?php echo esc_html($item['topbar_text']); ?>
+                            <?php echo wp_kses_post($item['topbar_text']); ?>
                         <?php endif; ?>
                     </span>
 
