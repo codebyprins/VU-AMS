@@ -64,14 +64,15 @@ if(isset($colors[$pin_color_input])) {
                 $y = $position['y'] ?? 50;
             ?>
                 <div
-                    class="map_item absolute -translate-x-1/2 -translate-y-1/2 <?php echo esc_attr($pin_color); ?> w-4 h-4 cursor-pointer rounded-full flex justify-center items-center"
+                    class="map_item absolute -translate-x-1/2 -translate-y-1/2 <?php echo esc_attr($pin_color); ?> w-2.5 h-2.5 cursor-pointer rounded-full flex justify-center items-center"
                     style="left: <?php echo esc_attr($x); ?>%; top: <?php echo esc_attr($y); ?>%;"
                     data-location-id="<?php echo esc_attr($location->ID); ?>"
                 >
-                    <div class="map_item-inner <?php echo esc_attr($pin_color); ?> rounded-full w-3 h-3"></div>
+                    <div class="map_item-inner <?php echo esc_attr($pin_color); ?> rounded-full w-1.5 h-1.5"></div>
                     <div
                         id="map_info_<?php echo esc_attr($location->ID); ?>"
-                        class="map_information z-[1] absolute bottom-[25px] left-1/2 -translate-x-1/2 bg-white sm:px-6 px-4 sm:py-4 py-2 rounded-xl shadow-lg cursor-auto opacity-0 pointer-events-none transition-opacity duration-300"
+                        class="map_information absolute z-50 bottom-full mb-6 left-1/2 -translate-x-1/2 bg-white sm:px-6 px-4 sm:py-4 py-2 rounded-xl shadow-lg cursor-auto opacity-0 pointer-events-none transition-opacity duration-300"
+                        style="white-space:nowrap;"
                     >
                         <?php if ($location->post_title): ?>
                             <h4 class="font-bold text-[#00B2FF] whitespace-nowrap">
